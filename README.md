@@ -1,2 +1,2 @@
 Repositório de testes:
-alterar apenas main.cpp
+alterar apenas mainwindow.cpp
