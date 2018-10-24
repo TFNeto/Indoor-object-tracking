@@ -24,8 +24,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
-INCLUDEPATH += /usr/local/include/opencv
-LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui
+INCLUDEPATH += -I/usr/include/opencv # found in: pkg-config --cflags opencv
+LIBS += -L/usr/lib/ -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc #found in: pkg-config --libs opencv
 
 SOURCES += \
         main.cpp \
