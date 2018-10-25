@@ -24,8 +24,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
-INCLUDEPATH += -I/usr/include/opencv -I/usr/include/opencv2 # found in: pkg-config --cflags opencv
-LIBS += -L/usr/lib/ -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc #found in: pkg-config --libs opencv
+INCLUDEPATH += -I/usr/include # found in: pkg-config --cflags opencv #found in: pkg-config --libs opencv
+LIBS += -L/usr/lib/ -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_video -lopencv_videostab
+#LIBS += -L/usr/local/lib
+#LIBS += -lopencv_ml
+#LIBS += -lopencv_features2d
+#LIBS += -lopencv_calib3d
+#LIBS += -lopencv_objdetect
+#LIBS += -lopencv_flann
+LIBS += -lopencv_videoio
 
 SOURCES += \
         main.cpp \
