@@ -10,13 +10,40 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    cv::Mat inputImage = cv::imread("/home/bruno/Desktop/kittens.jpg");
+    VideoCapture cap(0);
+    if (!cap.isOpened())  // if not success, exit program
+        cout << "ERROR INITIALIZING VIDEO CAPTURE" << endl;
 
-    if(!inputImage.empty())
-        cv::imshow("Display Image", inputImage);
-    else
-        std::cout << "No image found";
+    namedWindow("Webcam Feed",CV_WINDOW_AUTOSIZE); //create a window to display our webcam feed
+
+    int stop=0;
+    while (0==stop) {
+
+        Mat frame;
+
+        bool bSuccess = cap.read(frame); // read a new frame from camera feed
+
+        if (!bSuccess) //test if frame successfully read
+        {
+            cout << "ERROR READING FRAME FROM CAMERA FEED" << endl;
+            break;
+        }
+
+
+        imshow("Webcam Feed", frame); //show the frame in "MyVideo" window
+
+        //EVENT HANDLING
+        switch(waitKey(10)){ //listen for 10ms for a key to be pressed
+
+        case 27:
+            //'esc' has been pressed (ASCII value for 'esc' is 27)
+            //exit program.
+            stop=1;
+            break;
+        }
+    }
 }
+
 
 MainWindow::~MainWindow()
 {
