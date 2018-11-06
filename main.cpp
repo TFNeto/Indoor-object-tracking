@@ -9,17 +9,17 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include <stdio.h>
 #include <stdlib.h>
-using namespace cv; 
+using namespace cv;
 using namespace std;
 
 //initial min and max HSV filter values.
 //these will be changed using trackbars
-int H_MIN = 0;
-int H_MAX = 256;
-int S_MIN = 0;
-int S_MAX = 256;
-int V_MIN = 0;
-int V_MAX = 256;
+static int H_MIN = 0;
+static int H_MAX = 256;
+static int S_MIN = 0;
+static int S_MAX = 256;
+static int V_MIN = 0;
+static int V_MAX = 256;
 //default capture width and height
 const int FRAME_WIDTH = 640;
 const int FRAME_HEIGHT = 480;
@@ -27,7 +27,7 @@ const int FRAME_HEIGHT = 480;
 const int MAX_NUM_OBJECTS=50;
 //minimum and maximum object area
 const int MIN_OBJECT_AREA = 40*40;
-const int MAX_OBJECT_AREA = FRAME_HEIGHT*FRAME_WIDTH/1.5;
+const int MAX_OBJECT_AREA = static_cast<int>(FRAME_HEIGHT*FRAME_WIDTH/1.5);
 //names that will appear at the top of each window
 const string windowName = "Original Image";
 const string windowName1 = "HSV Image";
@@ -47,7 +47,6 @@ string intToString(int number){
 }
 void createTrackbars(){
     //create window for trackbars
-
 
     namedWindow(trackbarWindowName,0);
     //create memory to store trackbar name on window
@@ -70,7 +69,9 @@ void createTrackbars(){
     createTrackbar( "V_MIN", trackbarWindowName, &V_MIN, V_MAX, on_trackbar );
     createTrackbar( "V_MAX", trackbarWindowName, &V_MAX, V_MAX, on_trackbar );
 
-
+    //orange has hue 12-40 (apox.), set position of trackbar
+    setTrackbarPos("H_MIN", trackbarWindowName, 17); //12*360/255
+    setTrackbarPos("H_MAX", trackbarWindowName, 57); //40*360/255
 }
 void drawObject(int x,int y,Mat &frame){
 
@@ -168,7 +169,8 @@ int main()
     capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
     //start an infinite loop where webcam feed is copied to cameraFeed matrix
     //all of our operations will be performed within this loop
-    while(1){
+    int stop=0;
+        while (0==stop){
         //store image to matrix
         capture.read(cameraFeed);
         //convert frame from BGR to HSV colorspace
@@ -189,48 +191,19 @@ int main()
         imshow(windowName,cameraFeed);
         //imshow(windowName1,HSV);
 
-
-        //delay 30ms so that screen can refresh.
         //image will not appear without this waitKey() command
-        waitKey(30);
+
+        switch(waitKey(10))//listen for 10ms for a key to be pressed and so that screen can refresh
+        {
+        case 27:
+                   //'esc' has been pressed (ASCII value for 'esc' is 27)
+                   //exit program.
+            cout << "esc has been pressed\n";
+            stop=1;
+            break;
+
+        }
     }
 
-
-
-
-
-
     return 0;
 }
-
-
-
-/*
-#include "opencv2/objdetect/objdetect.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-using namespace cv;
-
-int main()
-{
-    VideoCapture capture(0);
-    VideoCapture capture2(1); //ls -ltr /dev/video*
-    Mat frame, frame2;
-
-    namedWindow("Video", CV_WINDOW_AUTOSIZE);
-    namedWindow("Video2", CV_WINDOW_AUTOSIZE);
-
-    while( 1 ){
-        capture >> frame;
-        capture2 >> frame2;
-
-        if(!frame.empty())  imshow("Video",frame);
-        if(!frame2.empty()) imshow("Video2",frame2);
-
-        // Press 'c' to escape
-        int c = waitKey(1); //wait 1ms for key
-        if( (char)c == 'c' ) { break; }
-        }
-    return 0;
-}
-*/
