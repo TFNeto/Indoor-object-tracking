@@ -100,7 +100,7 @@ void morphOps(Mat &thresh){
 }
 void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
 
-    int x,y;
+    int x=0,y=0;
 
     Mat temp;
     threshold.copyTo(temp);
@@ -163,16 +163,24 @@ int main()
     //video capture object to acquire webcam feed
     VideoCapture capture;
     //open capture object at location zero (default location for webcam)
-    capture.open(0);
+    if(!capture.open(0))
+    {
+        cout << "Problem opening camera main.cpp:166";
+        return 0;
+    }
     //set height and width of capture frame
     capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
     capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
     //start an infinite loop where webcam feed is copied to cameraFeed matrix
     //all of our operations will be performed within this loop
     int stop=0;
-        while (0==stop){
+    while (0==stop){
         //store image to matrix
-        capture.read(cameraFeed);
+        if(!capture.read(cameraFeed))
+        {
+            cout << "couldnt read feed";
+            continue;
+        }
         //convert frame from BGR to HSV colorspace
         cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
 
