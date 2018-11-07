@@ -1,2 +1,3 @@
-Repositório de testes:
-alterar apenas mainwindow.cpp
+qtcreator: sudo apt install qtcreator
+opencv: sudo apt install libopencv-dev
+needed: serial com library
