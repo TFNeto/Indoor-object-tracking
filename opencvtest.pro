@@ -14,5 +14,9 @@ LIBS += -L/usr/lib/ -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_i
 LIBS += -lopencv_videoio -lopencv_video -lopencv_videostab #for videocapture
 LIBS += -L/usr/local/lib #for continuityflag
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    marker.cpp
+
+HEADERS += \
+    marker.h
 
