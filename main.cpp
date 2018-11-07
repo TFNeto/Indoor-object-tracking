@@ -77,7 +77,8 @@ void createTrackbars(){
     setTrackbarPos("H_MAX", trackbarWindowName, 57); //40*360/255
 }
 void drawObject(vector<marker> markers,Mat &frame){
-    for(int i=0;i <markers.size();i++)
+    unsigned int i=0;
+    for(i=0;i <markers.size();i++)
     {
         int x=markers.at(i).get_xPOS();
         int y=markers.at(i).get_yPOS();
@@ -155,18 +156,17 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
 
 int main()
 {
-    bool usingVideo = false;
+    bool usingVideo = true;
 
-    bool calibrationMode = true; //if we would like to calibrate our filter values, set to true.
+    bool calibrationMode = false; //if we would like to calibrate our filter values, set to true.
 
     //Matrix to store each frame of the webcam feed
 
-    Mat cameraFeed;
-    Mat threshold;
-    Mat HSV;
-
     if(usingVideo)
     {
+        Mat cameraFeed;
+        Mat threshold;
+        Mat HSV;
 
         if(calibrationMode){
             //create slider bars for HSV filtering
@@ -183,6 +183,8 @@ int main()
         //set height and width of capture frame
         capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
         capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
+
+
         //start an infinite loop where webcam feed is copied to cameraFeed matrix
         //all of our operations will be performed within this loop
         int stop=0;
@@ -213,7 +215,7 @@ int main()
 
             //image will not appear without this waitKey() command
 
-            switch(waitKey(10))//listen for 10ms for a key to be pressed and so that screen can refresh
+            switch(waitKey(0))//listen for 10ms for a key to be pressed and so that screen can refresh
             {
             case 27:
                 //'esc' has been pressed (ASCII value for 'esc' is 27)
@@ -226,39 +228,41 @@ int main()
         }
     }
 
-    else //not using video NAO FUNCIONOU :(
+
+
+
+
+
+
+    else //not using video
     {
         Mat inputImage = cv::imread("/home/bruno/Desktop/fruits.jpg");
+        Mat HSV;
+        Mat threshold;
 
-        cout << "im here BAITCHES";
         if(!inputImage.empty())
+        {
             imshow("Display Image", inputImage);
+        }
         else
         {
             cout << "\nNo image found\n";
             return 0;
         }
 
+        //waitKey(0);
+
         cvtColor(inputImage,HSV,COLOR_BGR2HSV);
 
         if(calibrationMode==true){
             //if in calibration mode, we track objects based on the HSV slider values.
-            cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
+            cvtColor(inputImage,HSV,COLOR_BGR2HSV);
             inRange(HSV,Scalar(H_MIN,S_MIN,V_MIN),Scalar(H_MAX,S_MAX,V_MAX),threshold);
             morphOps(threshold);
             imshow(windowName2,threshold);
-            trackFilteredObject(threshold,HSV,cameraFeed);
+            trackFilteredObject(threshold,HSV,inputImage);
         }
-
-        //show frames
-        //imshow(windowName2,threshold);
-
-        imshow(windowName,cameraFeed);
-        //imshow(windowName1,HSV);
-
-        //image will not appear without this waitKey() command
-
-        waitKey(10);
+        waitKey(0);
     }
 
     return 0;
