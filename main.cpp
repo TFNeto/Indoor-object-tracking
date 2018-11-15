@@ -42,8 +42,6 @@ void on_trackbar( int, void* )
     // trackbar position is changed
 }
 string intToString(int number){
-
-
     std::stringstream ss;
     ss << number;
     return ss.str();
@@ -113,12 +111,13 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
     vector< vector<Point> > contours;
     vector<Vec4i> hierarchy;
     //find contours of filtered image using openCV findContours function
+    //temp=image input, contours = output array of arrays of points, hierarchy=array output of parent and child(?), mode, method
     findContours(temp,contours,hierarchy,CV_RETR_CCOMP,CV_CHAIN_APPROX_SIMPLE );
     //use moments method to find our filtered object
     double refArea = 0;
     bool objectFound = false;
     if (hierarchy.size() > 0) {
-        int numObjects = hierarchy.size();
+        unsigned int numObjects = hierarchy.size();
         //if number of objects greater than MAX_NUM_OBJECTS we have a noisy filter
         if(numObjects<MAX_NUM_OBJECTS){
 
@@ -126,6 +125,14 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
 
                 Moments moment = moments((cv::Mat)contours[index]);
                 double area = moment.m00;
+                //refArea = arcLength(contours,true);
+
+                Point2f center;
+                float radius = 0;
+                minEnclosingCircle(contours[index], center, radius); //does this work?
+//https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#ga8d26483c636be6b35c3ec6335798a47c
+                circle(temp, center, cvRound(radius), Scalar(0, 255, 255), 1, LINE_AA);
+                imshow( "circles", temp );
 
                 //if the area is less than 20 px by 20px then it is probably just noise
                 //if the area is the same as the 3/2 of the image size, probably just a bad filter
@@ -156,8 +163,7 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
 
 int main()
 {
-    bool usingVideo = true;
-
+    bool usingVideo = false; //if false, using image (make sure you change the path)
     bool calibrationMode = false; //if we would like to calibrate our filter values, set to true.
 
     //Matrix to store each frame of the webcam feed
@@ -214,7 +220,6 @@ int main()
             //imshow(windowName1,HSV);
 
             //image will not appear without this waitKey() command
-
             switch(waitKey(0))//listen for 10ms for a key to be pressed and so that screen can refresh
             {
             case 27:
@@ -223,20 +228,14 @@ int main()
                 cout << "esc has been pressed\n";
                 stop=1;
                 break;
-
             }
         }
     }
 
 
-
-
-
-
-
     else //not using video
     {
-        Mat inputImage = cv::imread("/home/bruno/Desktop/fruits.jpg");
+        Mat inputImage = cv::imread("/home/bruno/Desktop/ducks.jpeg");
         Mat HSV;
         Mat threshold;
 
@@ -254,14 +253,14 @@ int main()
 
         cvtColor(inputImage,HSV,COLOR_BGR2HSV);
 
-        if(calibrationMode==true){
-            //if in calibration mode, we track objects based on the HSV slider values.
-            cvtColor(inputImage,HSV,COLOR_BGR2HSV);
-            inRange(HSV,Scalar(H_MIN,S_MIN,V_MIN),Scalar(H_MAX,S_MAX,V_MAX),threshold);
-            morphOps(threshold);
-            imshow(windowName2,threshold);
-            trackFilteredObject(threshold,HSV,inputImage);
-        }
+        createTrackbars(); //these dont work on images (static) but has values for orange hue
+        //if in calibration mode, we track objects based on the HSV slider values.
+        cvtColor(inputImage,HSV,COLOR_BGR2HSV);
+        inRange(HSV,Scalar(H_MIN,S_MIN,V_MIN),Scalar(H_MAX,S_MAX,V_MAX),threshold);
+        morphOps(threshold);
+        imshow(windowName2,threshold);
+        trackFilteredObject(threshold,HSV,inputImage);
+
         waitKey(0);
     }
 
