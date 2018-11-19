@@ -235,7 +235,7 @@ int main()
 
     else //not using video
     {
-        Mat inputImage = cv::imread("/home/bruno/Desktop/ducks.jpeg");
+        Mat inputImage = cv::imread("/home/bruno/Desktop/test.jpg");
         Mat HSV;
         Mat threshold;
 
