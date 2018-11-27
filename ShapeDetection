@@ -1,0 +1,92 @@
+#include <opencv/highgui.h>
+#include <opencv/cv.h>
+#include <opencv2/opencv.hpp>
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <vector>
+#include <features.h>
+
+using namespace cv;
+using namespace std;
+
+/**
+ * OpenCV SimpleBlobDetector Example
+ *
+ * Copyright 2015 by Satya Mallick <spmallick@gmail.com>
+ *
+ * https://www.learnopencv.com/blob-detection-using-opencv-python-c/
+ * https://github.com/opencv/opencv/blob/3.4/modules/features2d/src/blobdetector.cpp
+ */
+
+
+int main( int argc, char** argv )
+{
+
+    // Read image
+    Mat im = imread( "/home/bruno/Desktop/blob.jpg", IMREAD_GRAYSCALE );
+
+    // Setup SimpleBlobDetector parameters.
+    SimpleBlobDetector::Params params;
+
+    // Change thresholds
+    params.minThreshold = 10;
+    params.maxThreshold = 220; //higher threshold makes it so we can find lighter objects
+
+    // Filter by Area.
+    params.filterByArea = true; //not working very well, depends on resolution?
+    params.minArea = 150;
+
+    // Filter by Circularity
+    params.filterByCircularity = true;
+    params.minCircularity = 0.85; //not working very well
+
+    /**
+     * convexity and inertia are not needed when we have circularity, but since circularity
+     * doesnt work very well (some circles are not included in max circuarity) we can use
+     * these to lower circularity (maybe?)
+    */
+
+    // Filter by Convexity
+    params.filterByConvexity = true;
+    params.minConvexity = 0.95;
+
+    // Filter by Inertia
+    params.filterByInertia = true;
+    params.minInertiaRatio = 0.95;
+
+
+    // Storage for blobs
+    vector<KeyPoint> keypoints;
+
+
+#if CV_MAJOR_VERSION < 3   // If you are using OpenCV 2
+
+    // Set up detector with params
+    SimpleBlobDetector detector(params);
+
+    // Detect blobs
+    detector.detect( im, keypoints);
+#else
+
+    // Set up detector with params
+    Ptr<SimpleBlobDetector> detector = SimpleBlobDetector::create(params);
+
+    // Detect blobs
+    detector->detect( im, keypoints);
+#endif
+
+    // Draw detected blobs as red circles.
+    // DrawMatchesFlags::DRAW_RICH_KEYPOINTS flag ensures
+    // the size of the circle corresponds to the size of blob
+
+    Mat im_with_keypoints;
+    drawKeypoints( im, keypoints, im_with_keypoints, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
+
+    // Show blobs
+    imshow("keypoints", im_with_keypoints );
+    waitKey(0);
+
+}
