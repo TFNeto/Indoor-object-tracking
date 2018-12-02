@@ -56,6 +56,30 @@ public:
     }
   }
 
+  /**
+     * Start sync process
+     * sends the normal mode command with the specified fps value
+     * \param fps
+     *
+     */
+  void startSync(int fps)
+  {
+      std::string command = "n" + std::to_string(fps);
+      this->writeString(command);
+  }
+
+  /**
+     * Start sync calibration process
+     * sends the calibration mode command with the specified cameraid
+     * \param fps
+     *
+     */
+  void startSyncCalibration(int cameraId)
+  {
+      std::string command = "c" + std::to_string(cameraId);
+      this->writeString(command);
+  }
+
 private:
   boost::asio::io_service io;
   boost::asio::serial_port serial;

@@ -20,8 +20,8 @@ int main(int argc, char *argv[])
       // Create new serial object
       SimpleSerial serial("/dev/ttyS6", 115200);
 
-      serial.writeString("n2");
-      std::cout << "Sent n2" << std::endl;
+      serial.startSync(10);
+      std::cout << "Sent n10" << std::endl;
 
       // Read back
       // cout << "Received " << serial.readLine() << endl;
