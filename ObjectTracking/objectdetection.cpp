@@ -5,8 +5,8 @@
 #include <opencv/cv.h>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <stdio.h>
 #include <stdlib.h>
 #include "marker.h"
@@ -49,7 +49,7 @@ string intToString(int number){
 void createTrackbars(){
     //create window for trackbars
 
-    namedWindow(trackbarWindowName,0);
+    cv::namedWindow(trackbarWindowName,0);
     //create memory to store trackbar name on window
     char TrackbarName[50];
     sprintf( TrackbarName, "H_MIN", H_MIN);
@@ -161,7 +161,7 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
     }
 }
 
-int main()
+int start()
 {
     bool usingVideo = false; //if false, using image (make sure you change the path)
     bool calibrationMode = false; //if we would like to calibrate our filter values, set to true.
@@ -235,7 +235,7 @@ int main()
 
     else //not using video
     {
-        Mat inputImage = cv::imread("/home/bruno/Desktop/test.jpg");
+        Mat inputImage = cv::imread("test.png");
         Mat HSV;
         Mat threshold;
 
