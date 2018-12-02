@@ -4,7 +4,7 @@
 #include <QDialog>
 
 namespace Ui {
-class RealTimeTracking;
+    class RealTimeTracking;
 }
 
 class RealTimeTracking : public QDialog

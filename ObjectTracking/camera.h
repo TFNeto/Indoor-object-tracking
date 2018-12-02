@@ -2,6 +2,7 @@
 #define CAMERA_H
 #include <stdio.h>
 #include <string>
+
 class Camera
 {
 private:
@@ -9,6 +10,7 @@ private:
     std::string IPaddress;
     float xPosition, yPosition, zPosition;
     float pointingAngle;
+
 public:
     Camera(std::string name, std::string IPaddress, float xPosition, float yPosition, float zPosition, float pointingAngle);
     std::string getName(void);

@@ -4,7 +4,7 @@
 #include <QDialog>
 
 namespace Ui {
-class TrackingLog;
+    class TrackingLog;
 }
 
 class TrackingLog : public QDialog

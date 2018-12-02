@@ -15,8 +15,6 @@ Calibrate::~Calibrate()
     delete ui;
 }
 
-
-
 void Calibrate::on_close_button_clicked()
 {
     this->close();

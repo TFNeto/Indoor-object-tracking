@@ -14,8 +14,6 @@ Configuration::~Configuration()
     delete ui;
 }
 
-
-
 void Configuration::on_close_pushButton_clicked()
 {
     this->close();

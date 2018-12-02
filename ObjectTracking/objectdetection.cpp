@@ -1,16 +1,19 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <vector>
+#include <cstdio>
+#include <cstdlib>
+
 #include <opencv/highgui.h>
 #include <opencv/cv.h>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "marker.h"
-#include <vector>
+
 
 using namespace cv;
 using namespace std;
@@ -161,7 +164,7 @@ void trackFilteredObject(Mat threshold,Mat HSV, Mat &cameraFeed){
     }
 }
 
-int start()
+int startObjectDetection()
 {
     bool usingVideo = false; //if false, using image (make sure you change the path)
     bool calibrationMode = false; //if we would like to calibrate our filter values, set to true.

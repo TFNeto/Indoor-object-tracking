@@ -4,9 +4,11 @@
 #include <QDialog>
 #include <string>
 #include "camera.h"
+
 using namespace std;
+
 namespace Ui {
-class Calibrate;
+    class Calibrate;
 }
 
 class Calibrate : public QDialog

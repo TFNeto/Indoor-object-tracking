@@ -1,17 +1,16 @@
+#include <string>
+#include <vector>
+#include <utility>
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "calibrate.h"
 #include "configuration.h"
-#include <QMessageBox>
 #include "realtimetracking.h"
 #include "trackinglog.h"
-#include <string>
-#include <vector>
 #include "camera.h"
-#include <utility>
 
 using namespace std;
-
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,8 +29,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-
 void MainWindow::on_configure_pushButton_clicked() {
 
     configWindow.setModal(true);
@@ -41,9 +38,6 @@ void MainWindow::on_configure_pushButton_clicked() {
 
 void MainWindow::on_start_pushButton_clicked()
 {
-    trackWindow.setModal(true);
-    trackWindow.exec();
-    /*
     if (this->camerasCalibrated) {
         trackWindow.setModal(true);
         trackWindow.exec();
@@ -51,7 +45,6 @@ void MainWindow::on_start_pushButton_clicked()
     else {
         QMessageBox::critical(this, tr("Error"), tr("Cameras must be calibrated first."));
     }
-    */
 }
 
 
@@ -101,6 +94,10 @@ vector<Camera> MainWindow::loadCameraMock(){
     mockCameras.push_back(cam1);
     mockCameras.push_back(cam2);
     return mockCameras;
-
 }
 
+
+void MainWindow::on_objectdetection_clicked()
+{
+    // int a = startObjectDetection();
+}

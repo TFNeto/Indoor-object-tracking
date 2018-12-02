@@ -11,6 +11,7 @@
 
 int main(int argc, char *argv[])
 {
+    /*
     // Init serial communication
     try
     {
@@ -29,6 +30,7 @@ int main(int argc, char *argv[])
         std::cout << e.what() << ": " << e.code() << " - " << e.code().message() << std::endl;
         return 1;
     }
+    */
 
     QApplication a(argc, argv);
     MainWindow w;
