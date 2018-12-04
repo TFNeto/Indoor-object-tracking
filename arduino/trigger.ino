@@ -1,15 +1,7 @@
-// Define camera trigger pins
-#define cam1pin 4
-#define cam2pin 5
-#define cam3pin 6
-#define cam4pin 7
-
 void setup() {
   // Set outputs for the 4 cameras
-  pinMode(cam1pin, OUTPUT);
-  pinMode(cam2pin, OUTPUT);
-  pinMode(cam3pin, OUTPUT);
-  pinMode(cam4pin, OUTPUT);
+  DDRD = DDRD | B11110000;
+  PORTD = PORTD | B00000000;
   // Start Serial com
   Serial.begin(115200);
   while (!Serial) {
@@ -54,42 +46,15 @@ void sendPWMtoAll(int fps) {
       return menu();
     }
     // unsigned long timeNow = millis();
-    digitalWrite(cam1pin, HIGH);
-    digitalWrite(cam2pin, HIGH);
-    digitalWrite(cam3pin, HIGH);
-    digitalWrite(cam4pin, HIGH);
-    // while (millis() <= timeNow + halfPeriodInMs) { ; }
+    PORTD = PORTD | B11110000;
     delay(halfPeriodInMs);
-    digitalWrite(cam1pin, LOW);
-    digitalWrite(cam2pin, LOW);
-    digitalWrite(cam3pin, LOW);
-    digitalWrite(cam4pin, LOW);
-    // while (millis() <= timeNow + 2 * halfPeriodInMs) { ; }
+    PORTD = PORTD & B00000000;
     delay(halfPeriodInMs);
   }
 }
 
-void sendSingleSignalToSingleCamera(int cameraId)
-{
-  int cameraPin = 0;
-  switch (cameraId)
-  {
-    case 1:
-      cameraPin = cam1pin;
-      break;
-    case 2:
-      cameraPin = cam2pin;
-      break;
-    case 3:
-      cameraPin = cam3pin;
-      break;
-    case 4:
-      cameraPin = cam4pin;
-      break;
-    default:
-      break;
-  }
-  digitalWrite(cameraPin, HIGH);
+void sendSingleSignalToSingleCamera(int cameraId) {
+  PORTD = PORTD | (B00000000 | (1 << (cameraId + 3)));
   delay(10); // This delay can probably be (a lot?) less. I'm using 10 to test on LED's
-  digitalWrite(cameraPin, LOW);
+  PORTD = PORTD & B00000000;
 }
