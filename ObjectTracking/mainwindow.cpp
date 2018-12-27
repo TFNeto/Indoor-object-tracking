@@ -57,10 +57,12 @@ void MainWindow::on_calibrate_pushButton_clicked()
 {
     /*if (listOfCameras.size()!=0)
     {
+    */
         calibrationWindow.setCameraInfo(this->loadCameraMock());
         calibrationWindow.setCameraInfo(listOfCameras);
         calibrationWindow.setModal(true);
         calibrationWindow.exec();
+    /*
     }
     else
     {
