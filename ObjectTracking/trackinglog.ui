@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TrackingLog</class>
+ <widget class="QDialog" name="TrackingLog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>849</width>
+    <height>539</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QGraphicsView" name="graphicsView">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>521</width>
+     <height>401</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="objectData">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>190</y>
+     <width>241</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>120</number>
+   </attribute>
+   <row>
+    <property name="text">
+     <string>Name</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>New Row</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>Physical Position</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>Angle</string>
+    </property>
+   </row>
+   <column>
+    <property name="text">
+     <string>Object Data</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>40</y>
+     <width>241</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>150</number>
+   </attribute>
+   <attribute name="verticalHeaderDefaultSectionSize">
+    <number>100</number>
+   </attribute>
+   <row>
+    <property name="text">
+     <string>Date and time</string>
+    </property>
+   </row>
+   <column>
+    <property name="text">
+     <string/>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="close_pushButton">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>460</y>
+     <width>171</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
