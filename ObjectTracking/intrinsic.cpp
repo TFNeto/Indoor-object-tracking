@@ -46,12 +46,14 @@ void Intrinsic::on_pictureButton_clicked()  // here is where the MAIGC HAPPENS
 
     if  (counter == ui->verticalSlider->maximum())
     {
+        double errorVal = 10.3243;
+
         //end of picture-taking phase
         ui->pictureButton->setVisible(false);
         ui->verticalSlider->setValue(0);
 
-        // intrinsic_compute(); //calculate intrinsic parameters
-        double errorVal = 10.3243;
+        //errorVal = intrinsic_compute::run(); //compute intrinsic calibration for a single camera
+
         ui->label_3->setVisible(true);
         ui->label_4->setVisible(true);
         ui->label_4->setText(QString::fromStdString(to_string(errorVal)));

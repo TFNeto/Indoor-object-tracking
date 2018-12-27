@@ -27,7 +27,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11 #use c++11 for compatibility
 INCLUDEPATH += /usr/include/opencv # found in: pkg-config --cflags opencv
 INCLUDEPATH += /usr/include/flycapture # flycapture
-LIBS += -L/usr/lib/ -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc #found in: pkg-config --libs opencv
+LIBS += -L/usr/lib/ -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_calib3d #found in: pkg-config --libs opencv
 LIBS += -lopencv_videoio -lopencv_video -lopencv_videostab #for videocapture
 LIBS += -L/usr/local/lib #for continuityflag
 LIBS += -lboost_system # serial communication
@@ -43,8 +43,8 @@ SOURCES += \
     trackinglog.cpp \
     intrinsic.cpp \
     extrinsic.cpp \
-    #intrinsic_compute.cpp \
-    stdafx.cpp # flycapture
+    intrinsic_compute.cpp \
+    stdafx.cpp \
 
 HEADERS += \
     mainwindow.h \
@@ -56,10 +56,10 @@ HEADERS += \
     global.h \
     intrinsic.h \
     extrinsic.h \
-    intrinsic_compute.h \
+    intrinsic_compute.h \ # computations for intrinsic parameters
     serial.h \ # for serial communication
     resource.h \ # flycapture
-    stdafx.h # flycapture
+    stdafx.h \ # flycapture
 
 FORMS += \
     mainwindow.ui \
