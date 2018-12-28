@@ -4,7 +4,6 @@
 #include <QIODevice>
 #include <QDataStream>
 
-#include <iomanip>
 #include <iostream>
 #include <sstream>
 
@@ -12,8 +11,10 @@
 #include "ui_configuration.h"
 #include "global.h"
 
-#include "stdafx.h"
-#include "FlyCapture2.h"
+#include "camerafly.h"
+
+//#include "stdafx.h"
+//#include "FlyCapture2.h"
 
 //using namespace FlyCapture2;
 using namespace std;
@@ -160,96 +161,10 @@ void Configuration::updateTable(vector<Camera> newListOfCameras)
     }
 }
 
-void PrintError(FlyCapture2::Error error) { error.PrintErrorTrace(); }
-
-void PrintCameraInfo(FlyCapture2::CameraInfo *pCamInfo)
-{
-    ostringstream macAddress;
-    macAddress << hex << setw(2) << setfill('0')
-               << static_cast<unsigned int>(pCamInfo->macAddress.octets[0]) << ":" << hex
-               << setw(2) << setfill('0')
-               << static_cast<unsigned int>(pCamInfo->macAddress.octets[1]) << ":" << hex
-               << setw(2) << setfill('0')
-               << static_cast<unsigned int>(pCamInfo->macAddress.octets[2]) << ":" << hex
-               << setw(2) << setfill('0')
-               << static_cast<unsigned int>(pCamInfo->macAddress.octets[3]) << ":" << hex
-               << setw(2) << setfill('0')
-               << static_cast<unsigned int>(pCamInfo->macAddress.octets[4]) << ":" << hex
-               << setw(2) << setfill('0')
-               << static_cast<unsigned int>(pCamInfo->macAddress.octets[5]);
-
-    ostringstream ipAddress;
-    ipAddress << static_cast<unsigned int>(pCamInfo->ipAddress.octets[0]) << "."
-              << static_cast<unsigned int>(pCamInfo->ipAddress.octets[1]) << "."
-              << static_cast<unsigned int>(pCamInfo->ipAddress.octets[2]) << "."
-              << static_cast<unsigned int>(pCamInfo->ipAddress.octets[3]);
-
-    ostringstream subnetMask;
-    subnetMask << static_cast<unsigned int>(pCamInfo->subnetMask.octets[0]) << "."
-               << static_cast<unsigned int>(pCamInfo->subnetMask.octets[1]) << "."
-               << static_cast<unsigned int>(pCamInfo->subnetMask.octets[2]) << "."
-               << static_cast<unsigned int>(pCamInfo->subnetMask.octets[3]);
-
-    ostringstream defaultGateway;
-    defaultGateway << static_cast<unsigned int>(pCamInfo->defaultGateway.octets[0]) << "."
-                   << static_cast<unsigned int>(pCamInfo->defaultGateway.octets[1]) << "."
-                   << static_cast<unsigned int>(pCamInfo->defaultGateway.octets[2]) << "."
-                   << static_cast<unsigned int>(pCamInfo->defaultGateway.octets[3]);
-
-    cout << endl;
-    cout << "*** CAMERA INFORMATION ***" << endl;
-    cout << "Serial number - " << pCamInfo->serialNumber << endl;
-    cout << "Camera model - " << pCamInfo->modelName << endl;
-    cout << "Camera vendor - " << pCamInfo->vendorName << endl;
-    cout << "Sensor - " << pCamInfo->sensorInfo << endl;
-    cout << "Resolution - " << pCamInfo->sensorResolution << endl;
-    cout << "Firmware version - " << pCamInfo->firmwareVersion << endl;
-    cout << "Firmware build time - " << pCamInfo->firmwareBuildTime << endl;
-    cout << "GigE version - " << pCamInfo->gigEMajorVersion << "."
-         << pCamInfo->gigEMinorVersion << endl;
-    cout << "User defined name - " << pCamInfo->userDefinedName << endl;
-    cout << "XML URL 1 - " << pCamInfo->xmlURL1 << endl;
-    cout << "XML URL 2 - " << pCamInfo->xmlURL2 << endl;
-    cout << "MAC address - " << macAddress.str() << endl;
-    cout << "IP address - " << ipAddress.str() << endl;
-    cout << "Subnet mask - " << subnetMask.str() << endl;
-    cout << "Default gateway - " << defaultGateway.str() << endl << endl;
-    listOfCameras.push_back(Camera(pCamInfo->modelName, ipAddress.str(), 0, 0, 0, 0));
-}
-
 void Configuration::on_scan_push_clicked()
 {
     // Clear list of cameras before scanning, to avoid duplication
     listOfCameras.clear();
-
-    // TODO: Move the code below to a function ?
-    FlyCapture2::Error error;
-    FlyCapture2::BusManager busMgr;
-
-    FlyCapture2::CameraInfo camInfo[10];
-    unsigned int numCamInfo = 10;
-    error = FlyCapture2::BusManager::DiscoverGigECameras(camInfo, &numCamInfo);
-    if (error != FlyCapture2::PGRERROR_OK)
-    {
-        PrintError(error);
-        return;
-    }
-
-    cout << "DEBUG: Number of GigE cameras discovered: " << numCamInfo << endl;
-
-    for (unsigned int i = 0; i < numCamInfo; i++)
-    {
-        PrintCameraInfo(&camInfo[i]);
-    }
-
-    // No cameras found
-    if (numCamInfo == 0)
-    {
-        // TODO: Show error message
-        cout << "No suitable GigE cameras found. Press Enter to exit..."
-             << endl;
-        cin.ignore();
-    } else {
-        this->updateTable(listOfCameras);
-    }
+    vector<Camera> camerasList = scanCameras();
+    this->updateTable(camerasList);
 }

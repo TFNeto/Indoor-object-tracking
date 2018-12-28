@@ -45,6 +45,7 @@ SOURCES += \
     extrinsic.cpp \
     intrinsic_compute.cpp \
     stdafx.cpp \
+    camerafly.cpp \
 
 HEADERS += \
     mainwindow.h \
@@ -60,6 +61,7 @@ HEADERS += \
     serial.h \ # for serial communication
     resource.h \ # flycapture
     stdafx.h \ # flycapture
+    camerafly.h \
 
 FORMS += \
     mainwindow.ui \
