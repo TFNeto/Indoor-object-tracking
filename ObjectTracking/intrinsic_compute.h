@@ -25,6 +25,14 @@ public:
                               const vector< Mat >& rvecs, const vector< Mat >& tvecs,
                               const Mat& cameraMatrix , const Mat& distCoeffs);
     double run(int num_imgs, char* imgs_directory, char* imgs_filename);
+private:
+    vector<vector<Point3f>> object_points;
+    vector<vector< Point2f>> image_points;
+    vector<Point2f> corners;
+    vector<vector<Point2f>> left_img_points;
+
+    Mat img, gray;
+    Size im_size;
 };
 
 #endif // INTRINSIC_COMPUTE_H
