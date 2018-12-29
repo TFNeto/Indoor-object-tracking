@@ -1,7 +1,11 @@
 #include "intrinsic.h"
 #include "ui_intrinsic.h"
 #include "global.h"
+#include "camerafly.h"
 // #include "intrinsic_compute.h"
+
+#include <iostream>
+#include <sstream>
 
 int counter = 0;
 
@@ -13,15 +17,17 @@ Intrinsic::Intrinsic(QWidget *parent) :
     for (uint i = 0; i<listOfCameras.size();i++ )
     {
         Camera cam = listOfCameras[i];
-        ui->comboBox->addItem(QString::fromStdString(cam.getName()));
+        ui->cameraDropdown->addItem(QString::fromStdString(cam.getName()));
     }
     ui->verticalSlider->setVisible(false);
     ui->pictureButton->setVisible(false);
-    ui->spinBox->setValue(30);
+    ui->numPicsDropdown->setValue(30);
     ui->label_3->setVisible(false);
     ui->label_4->setVisible(false);
     ui->saveButton->setVisible(false);
     ui->repeatButton->setVisible(false);
+    //QPixmap pix;
+    //ui->label_CameraFeed->setPixmap(pix.scaled(420, 280, Qt::KeepAspectRatio));
 }
 
 Intrinsic::~Intrinsic()
@@ -66,12 +72,14 @@ void Intrinsic::on_pictureButton_clicked()  // here is where the MAIGC HAPPENS
 void Intrinsic::calibrateCamera()
 {
     // calibrate camera is misleading - actually starts a picture-taking routine for future calibration
+
+    /*
     ui->label_3->setVisible(false);
     ui->label_4->setVisible(false);
     ui->saveButton->setVisible(false);
     ui->repeatButton->setVisible(false);
-    int numOfPic = ui->spinBox->value();
-    uint i = ui->comboBox->currentIndex();
+    int numOfPic = ui->numPicsDropdown->value();
+    uint i = ui->cameraDropdown->currentIndex();
     Camera cam = listOfCameras[i];
     counter = 0;
 
@@ -79,6 +87,37 @@ void Intrinsic::calibrateCamera()
     ui->verticalSlider->setVisible(true);
     ui->verticalSlider->setMaximum(numOfPic);
     ui->pictureButton->setVisible(true);
+    */
+    cout << "AAAAAAAAAAAAAAAAA" << endl;
+    // Get camera index from the dropdown menu
+    //int cameraIndex = ui->cameraDropdown->currentIndex();
+    //string ip = listOfCameras[cameraIndex].getIP();
+
+    // Get number of pictures required
+    //int numOfPic = ui->numPicsDropdown->value();
+    // Show live feed
+    string fileName;
+    cout << "0000000000000" << endl;
+    FlyCapture2::IPAddress ipa = 2852045226;
+    for (int i = 0; i < 10; i++)
+    {
+        cout << "11111111111111" << endl;
+        fileName = takeSinglePictureFromSingleCamera(ipa);
+        cout << "fileName" << fileName << endl;
+        QPixmap pix(QString::fromStdString(fileName));
+        cout << "333333333333333" << endl;
+        ui->label_CameraFeed->setPixmap(pix.scaled(420, 280, Qt::KeepAspectRatio));
+        cout << "44444444444444" << endl;
+    }
+    // string fileName = takeSinglePictureFromSingleCamera(0);
+    //QPixmap pix(QString::fromStdString(fileName));
+    //ui->label_CameraFeed->setPixmap(pix.scaled(420, 280, Qt::KeepAspectRatio));
+
+
+    // Loop over the number of pictures required (default is 30)
+        // In each iteration:
+            // Show the picture on the labelPic component
+            // Increase the slider count by 1
 }
 
 void Intrinsic::on_closeButton_clicked()

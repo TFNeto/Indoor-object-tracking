@@ -1,6 +1,8 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <stdlib.h>
+#include <string>
 
 #include "camerafly.h"
 #include "camera.h"
@@ -106,4 +108,96 @@ vector<Camera> scanCameras()
     }
 
     return listOfCameras;
+}
+
+string takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress)
+{
+    FlyCapture2::Error error;
+    FlyCapture2::BusManager busMgr;
+    FlyCapture2::PGRGuid guid;
+
+    // FlyCapture2::IPAddress();
+    error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        return nullptr;
+    }
+
+    // Connect to a camera
+    FlyCapture2::GigECamera cam;
+    error = cam.Connect(&guid);
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        return nullptr;
+    }
+
+    cout << "Starting image capture..." << endl;
+
+    // Start capturing images
+    error = cam.StartCapture();
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        return nullptr;
+    }
+
+    FlyCapture2::Image rawImage;
+    FlyCapture2::Image convertedImage;
+
+    // Retrieve an image
+    error = cam.RetrieveBuffer(&rawImage);
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        return nullptr;
+    }
+
+    cout << "Grabbed image " << endl;
+
+    // Convert the raw image
+    error = rawImage.Convert(FlyCapture2::PIXEL_FORMAT_RGBU, &convertedImage);
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        return nullptr;
+    }
+
+    // ostringstream filename;
+
+    string filename = "teste" + to_string(rand() % 100) + ".png";
+    /*
+    filename << "FlyCapture2Test-" << camInfo.serialNumber << "-"
+             << imageCnt << ".png";
+    */
+
+    // Save the image. If a file format is not passed in, then the file
+    // extension is parsed to attempt to determine the file format.
+    //error = convertedImage.Save(filename.str().c_str());
+    error = convertedImage.Save(filename.c_str());
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        return nullptr;
+    }
+
+    cout << "Stopping capture" << endl;
+
+    // Stop capturing images
+    error = cam.StopCapture();
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        return nullptr;
+    }
+
+    // Disconnect the camera
+    error = cam.Disconnect();
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        return nullptr;
+    }
+    return filename;
 }

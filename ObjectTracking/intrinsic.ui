@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Intrinsic calibration</string>
   </property>
-  <widget class="QComboBox" name="comboBox">
+  <widget class="QComboBox" name="cameraDropdown">
    <property name="geometry">
     <rect>
      <x>250</x>
@@ -62,7 +62,7 @@
     <string>Photo count</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="spinBox">
+  <widget class="QSpinBox" name="numPicsDropdown">
    <property name="geometry">
     <rect>
      <x>250</x>
@@ -193,6 +193,19 @@
    </property>
    <property name="text">
     <string>Load</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_CameraFeed">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>140</y>
+     <width>420</width>
+     <height>280</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

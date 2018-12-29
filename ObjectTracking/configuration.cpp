@@ -163,8 +163,7 @@ void Configuration::updateTable(vector<Camera> newListOfCameras)
 
 void Configuration::on_scan_push_clicked()
 {
-    // Clear list of cameras before scanning, to avoid duplication
-    // listOfCameras.clear();
+    // Note: By doing this, we are deleting/ignoring the previous list cameras
     listOfCameras = scanCameras();
     this->updateTable(listOfCameras);
 }

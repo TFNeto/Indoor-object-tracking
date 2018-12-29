@@ -26,7 +26,7 @@ extrinsic::extrinsic(QWidget *parent) :
         ui->comboBox_2->addItem(QString::fromStdString(cam.getName()));
     }
     ui->verticalSlider->setVisible(false);
-    ui->spinBox->setValue(30);
+    ui->numPicsDropdown->setValue(30);
     ui->label_3->setVisible(false);
     ui->label_4->setVisible(false);
 }
@@ -41,7 +41,7 @@ void extrinsic::on_closeButton_clicked()
     this->close();
 }
 
-void extrinsic::on_comboBox_currentIndexChanged(int index)
+void extrinsic::on_cameraDropdown_currentIndexChanged(int index)
 {
     ui->comboBox_2->clear();
     for (uint i = 0; i < listOfCameras.size(); i++)
@@ -77,7 +77,7 @@ void extrinsic::calibrateCameraPair()
 {
     ui->label_3->setVisible(false);
     ui->label_4->setVisible(false);
-    int numOfPic = ui->spinBox->value();
+    int numOfPic = ui->numPicsDropdown->value();
 
     // open cameras
     ui->verticalSlider->setVisible(true);
