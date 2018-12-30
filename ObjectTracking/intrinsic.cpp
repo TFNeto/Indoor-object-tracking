@@ -43,13 +43,10 @@ Intrinsic::Intrinsic(QWidget *parent) :
     ui->repeatButton->setVisible(false);
     ui->saveImage->setVisible(false);
     ui->saveImageButton->setVisible(false);
-<<<<<<< HEAD
-=======
     ui->discardImageButton->setVisible(false);
     ui->lcdNumPhotos->setVisible(false);
     //QPixmap pix;
     //ui->label_CameraFeed->setPixmap(pix.scaled(420, 280, Qt::KeepAspectRatio));
->>>>>>> b850c4da1a34a5e24afd7ff407550c71050a2b51
 }
 
 Intrinsic::~Intrinsic()
@@ -70,7 +67,6 @@ void Intrinsic::on_pictureButton_clicked()  // here is where the MAIGC HAPPENS
     // counter = counter + 1;
     ui->pictureButton->setVisible(false);
 
-<<<<<<< HEAD
     // Get selected camera index
     int index = ui->cameraDropdown->currentIndex();
     // Get its IP (in decimal)
@@ -78,13 +74,6 @@ void Intrinsic::on_pictureButton_clicked()  // here is where the MAIGC HAPPENS
     // Take picture (and save it)
     string fileName = takeSinglePictureFromSingleCamera(camIpNumber);
     // Show picture
-=======
-    string fileName;
-    FlyCapture2::IPAddress ipa = 2852045226;
-
-    fileName = takeSinglePictureFromSingleCamera(ipa);
-
->>>>>>> b850c4da1a34a5e24afd7ff407550c71050a2b51
     QImage myImage;
     myImage.load(QString::fromStdString(fileName), "png");
     ui->label_CameraFeed->setPixmap(QPixmap::fromImage(myImage).scaled(630, 420, Qt::KeepAspectRatio));
@@ -92,19 +81,13 @@ void Intrinsic::on_pictureButton_clicked()  // here is where the MAIGC HAPPENS
 
     ui->saveImage->setVisible(true);
     ui->saveImageButton->setVisible(true);
-<<<<<<< HEAD
-=======
     ui->discardImageButton->setVisible(true);
 
    // tempFiliname.assign(fileName);
->>>>>>> b850c4da1a34a5e24afd7ff407550c71050a2b51
 }
 
 void Intrinsic::calibrateCamera()
 {
-<<<<<<< HEAD
-     ui->pictureButton->setVisible(true);
-=======
     // calibrate camera is misleading - actually starts a picture-taking routine for future calibration
 
     /*
@@ -149,7 +132,6 @@ void Intrinsic::calibrateCamera()
     ui->imageProgressBar->setVisible(true);
     ui->imageProgressBar->setValue(0);
     ui->pictureButton->setVisible(true);
->>>>>>> b850c4da1a34a5e24afd7ff407550c71050a2b51
 }
 
 void Intrinsic::on_closeButton_clicked()
