@@ -32,7 +32,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="labelSelectCam">
    <property name="geometry">
     <rect>
      <x>40</x>
@@ -53,7 +53,7 @@
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="labelNumberPhoto">
    <property name="geometry">
     <rect>
      <x>690</x>
@@ -68,13 +68,13 @@
     </font>
    </property>
    <property name="text">
-    <string>Photo count</string>
+    <string>Number of Photos</string>
    </property>
   </widget>
   <widget class="QSpinBox" name="numPicsDropdown">
    <property name="geometry">
     <rect>
-     <x>830</x>
+     <x>880</x>
      <y>30</y>
      <width>48</width>
      <height>26</height>
@@ -90,8 +90,8 @@
   <widget class="QPushButton" name="startCalibrButton">
    <property name="geometry">
     <rect>
-     <x>720</x>
-     <y>70</y>
+     <x>730</x>
+     <y>80</y>
      <width>151</width>
      <height>25</height>
     </rect>
@@ -137,19 +137,6 @@
    </property>
    <property name="text">
     <string>Calibration error:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>796</x>
-     <y>230</y>
-     <width>151</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="repeatButton">
@@ -225,23 +212,82 @@
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
    </property>
   </widget>
-  <widget class="QDialogButtonBox" name="saveImageButton">
+  <widget class="QPushButton" name="saveImageButton">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>220</x>
      <y>80</y>
-     <width>281</width>
+     <width>89</width>
      <height>25</height>
     </rect>
    </property>
-   <property name="focusPolicy">
-    <enum>Qt::ClickFocus</enum>
+   <property name="text">
+    <string>Save</string>
    </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::No|QDialogButtonBox::Save</set>
+  </widget>
+  <widget class="QPushButton" name="discardImageButton">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>80</y>
+     <width>89</width>
+     <height>25</height>
+    </rect>
    </property>
-   <property name="centerButtons">
+   <property name="text">
+    <string>Discard</string>
+   </property>
+  </widget>
+  <widget class="QProgressBar" name="imageProgressBar">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>80</y>
+     <width>118</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="value">
+    <number>24</number>
+   </property>
+  </widget>
+  <widget class="QLCDNumber" name="lcdNumPhotos">
+   <property name="geometry">
+    <rect>
+     <x>880</x>
+     <y>30</y>
+     <width>64</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="autoFillBackground">
     <bool>true</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">@QLCDNumber { color: red;  font: 57 italic 11pt &quot;Ubuntu&quot;;}@
+</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Panel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="lineWidth">
+    <number>0</number>
+   </property>
+   <property name="smallDecimalPoint">
+    <bool>false</bool>
+   </property>
+   <property name="segmentStyle">
+    <enum>QLCDNumber::Filled</enum>
    </property>
   </widget>
  </widget>
