@@ -23,6 +23,7 @@ public:
     float getY(void);
     float getZ(void);
     float getAngle(void);
+    uint getIpNumber(void);
 };
 
 QDataStream &operator<<(QDataStream &out, const Camera &cam);
