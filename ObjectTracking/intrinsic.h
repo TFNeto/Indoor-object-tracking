@@ -23,6 +23,8 @@ private slots:
     void on_repeatButton_clicked();
     void on_saveButton_clicked();
     void on_loadButton_clicked();
+    void on_saveImageButton_clicked();
+    void on_discardImageButton_clicked();
 
 private:
     Ui::Intrinsic *ui;
