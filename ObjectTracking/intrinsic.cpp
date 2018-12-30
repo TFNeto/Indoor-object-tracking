@@ -1,7 +1,10 @@
 #include "intrinsic.h"
 #include "ui_intrinsic.h"
 #include "global.h"
-// #include "intrinsic_compute.h"
+#include "intrinsic_compute.h"
+#include <string>
+
+using namespace std;
 
 int counter = 0;
 
@@ -46,13 +49,19 @@ void Intrinsic::on_pictureButton_clicked()  // here is where the MAIGC HAPPENS
 
     if  (counter == ui->verticalSlider->maximum())
     {
-        double errorVal = 10.3243;
+        intrinsic_compute i;
+        double errorVal = 1;
 
         //end of picture-taking phase
         ui->pictureButton->setVisible(false);
         ui->verticalSlider->setValue(0);
 
-        //errorVal = intrinsic_compute::run(); //compute intrinsic calibration for a single camera
+        //test vars
+        int counter = 27; //overriding for tests
+        string imgs_directory = "../intrinsic_right";
+        string imgs_filename = "right";
+
+        errorVal = i.run(counter, imgs_directory, imgs_filename); //compute intrinsic calibration for a single camera
 
         ui->label_3->setVisible(true);
         ui->label_4->setVisible(true);

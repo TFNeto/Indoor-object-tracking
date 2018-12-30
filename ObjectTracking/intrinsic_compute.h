@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <sys/stat.h>
+#include <string>
 
 using namespace std;
 using namespace cv;
@@ -19,12 +20,13 @@ public:
     explicit intrinsic_compute();
 
     bool doesExist(const std::string& name);
-    float setupCalibration(int board_width, int board_height, int num_imgs, float square_size, char* imgs_directory, char* imgs_filename, char* extension);
+    void setupCalibration(int board_width, int board_height, int num_imgs, float square_size, string imgs_directory, string imgs_filename, string extension);
     double computeReprojectionErrors(const vector< vector< Point3f > >& objectPoints,
                               const vector< vector< Point2f > >& imagePoints,
                               const vector< Mat >& rvecs, const vector< Mat >& tvecs,
                               const Mat& cameraMatrix , const Mat& distCoeffs);
-    double run(int num_imgs, char* imgs_directory, char* imgs_filename);
+    double run(int num_imgs, string imgs_directory, string imgs_filename);
+
 private:
     vector<vector<Point3f>> object_points;
     vector<vector< Point2f>> image_points;
