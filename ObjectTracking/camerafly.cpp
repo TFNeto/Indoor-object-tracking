@@ -99,10 +99,10 @@ vector<Camera> scanCameras()
     {
         PrintCameraInfo(&camInfo[i]); // DEBUG
         ostringstream ipAddress;
-        ipAddress << static_cast<unsigned int>(camInfo->ipAddress.octets[0]) << "."
-                  << static_cast<unsigned int>(camInfo->ipAddress.octets[1]) << "."
-                  << static_cast<unsigned int>(camInfo->ipAddress.octets[2]) << "."
-                  << static_cast<unsigned int>(camInfo->ipAddress.octets[3]);
+        ipAddress << static_cast<unsigned int>(camInfo[i].ipAddress.octets[0]) << "."
+                  << static_cast<unsigned int>(camInfo[i].ipAddress.octets[1]) << "."
+                  << static_cast<unsigned int>(camInfo[i].ipAddress.octets[2]) << "."
+                  << static_cast<unsigned int>(camInfo[i].ipAddress.octets[3]);
         // Create Camera obj and add it to the listOfCameras vector
         listOfCameras.push_back(Camera(camInfo->modelName, ipAddress.str(), 0, 0, 0, 0));
     }
@@ -116,7 +116,6 @@ string takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress)
     FlyCapture2::BusManager busMgr;
     FlyCapture2::PGRGuid guid;
 
-    // FlyCapture2::IPAddress();
     error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
     if (error != FlyCapture2::PGRERROR_OK)
     {
@@ -164,18 +163,10 @@ string takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress)
         return nullptr;
     }
 
-
-    // ostringstream filename;
-
     string filename = "teste" + to_string(rand() % 100) + ".png";
-/*
-    filename << "FlyCapture2Test-" << camInfo.serialNumber << "-"
-             << imageCnt << ".png";
-*/
 
     // Save the image. If a file format is not passed in, then the file
     // extension is parsed to attempt to determine the file format.
-    //error = convertedImage.Save(filename.str().c_str());
     error = convertedImage.Save(filename.c_str());
     if (error != FlyCapture2::PGRERROR_OK)
     {
