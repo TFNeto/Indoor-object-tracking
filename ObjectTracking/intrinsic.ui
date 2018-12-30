@@ -6,18 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
-    <height>506</height>
+    <width>1000</width>
+    <height>650</height>
    </rect>
+  </property>
+  <property name="mouseTracking">
+   <bool>false</bool>
   </property>
   <property name="windowTitle">
    <string>Intrinsic calibration</string>
   </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
   <widget class="QComboBox" name="cameraDropdown">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>40</y>
+     <x>230</x>
+     <y>30</y>
      <width>391</width>
      <height>25</height>
     </rect>
@@ -26,8 +35,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>40</y>
+     <x>40</x>
+     <y>30</y>
      <width>181</width>
      <height>20</height>
     </rect>
@@ -47,8 +56,8 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>90</y>
+     <x>690</x>
+     <y>30</y>
      <width>181</width>
      <height>17</height>
     </rect>
@@ -65,8 +74,8 @@
   <widget class="QSpinBox" name="numPicsDropdown">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>90</y>
+     <x>830</x>
+     <y>30</y>
      <width>48</width>
      <height>26</height>
     </rect>
@@ -81,21 +90,21 @@
   <widget class="QPushButton" name="startCalibrButton">
    <property name="geometry">
     <rect>
-     <x>490</x>
-     <y>90</y>
+     <x>720</x>
+     <y>70</y>
      <width>151</width>
      <height>25</height>
     </rect>
    </property>
    <property name="text">
-    <string>Calibrate</string>
+    <string>Start</string>
    </property>
   </widget>
   <widget class="QPushButton" name="closeButton">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>450</y>
+     <x>800</x>
+     <y>460</y>
      <width>89</width>
      <height>25</height>
     </rect>
@@ -104,24 +113,11 @@
     <string>Close</string>
    </property>
   </widget>
-  <widget class="QSlider" name="verticalSlider">
-   <property name="geometry">
-    <rect>
-     <x>500</x>
-     <y>140</y>
-     <width>20</width>
-     <height>271</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-  </widget>
   <widget class="QPushButton" name="pictureButton">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>450</y>
+     <x>270</x>
+     <y>600</y>
      <width>201</width>
      <height>25</height>
     </rect>
@@ -133,8 +129,8 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>540</x>
-     <y>190</y>
+     <x>790</x>
+     <y>200</y>
      <width>121</width>
      <height>17</height>
     </rect>
@@ -146,8 +142,8 @@
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>546</x>
-     <y>220</y>
+     <x>796</x>
+     <y>230</y>
      <width>151</width>
      <height>20</height>
     </rect>
@@ -159,8 +155,8 @@
   <widget class="QPushButton" name="repeatButton">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>260</y>
+     <x>800</x>
+     <y>270</y>
      <width>89</width>
      <height>25</height>
     </rect>
@@ -172,8 +168,8 @@
   <widget class="QPushButton" name="saveButton">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>310</y>
+     <x>800</x>
+     <y>320</y>
      <width>89</width>
      <height>25</height>
     </rect>
@@ -185,8 +181,8 @@
   <widget class="QPushButton" name="loadButton">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>360</y>
+     <x>800</x>
+     <y>370</y>
      <width>89</width>
      <height>25</height>
     </rect>
@@ -198,14 +194,54 @@
   <widget class="QLabel" name="label_CameraFeed">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>140</y>
-     <width>420</width>
-     <height>280</height>
+     <x>60</x>
+     <y>160</y>
+     <width>630</width>
+     <height>420</height>
     </rect>
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="saveImage">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>80</y>
+     <width>181</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Save image ?</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+  </widget>
+  <widget class="QDialogButtonBox" name="saveImageButton">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>80</y>
+     <width>281</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::No|QDialogButtonBox::Save</set>
+   </property>
+   <property name="centerButtons">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
