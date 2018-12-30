@@ -88,41 +88,6 @@ void Intrinsic::on_pictureButton_clicked()  // here is where the MAIGC HAPPENS
 
 void Intrinsic::calibrateCamera()
 {
-    // calibrate camera is misleading - actually starts a picture-taking routine for future calibration
-
-    /*
-    ui->saveButton->setVisible(false);
-    ui->repeatButton->setVisible(false);
-    int numOfPic = ui->numPicsDropdown->value();
-    uint i = ui->cameraDropdown->currentIndex();
-    Camera cam = listOfCameras[i];
-    counter = 0;
-
-    //open camera frame with open cv
-    ui->verticalSlider->setVisible(true);
-    ui->verticalSlider->setMaximum(numOfPic);
-
-    */
-
-    // Get camera index from the dropdown menu
-    //int cameraIndex = ui->cameraDropdown->currentIndex();
-    //string ip = listOfCameras[cameraIndex].getIP();
-
-    // Get number of pictures required
-    //int numOfPic = ui->numPicsDropdown->value();
-    // Show live feed
-
-
-    // string fileName = takeSinglePictureFromSingleCamera(0);
-    //QPixmap pix(QString::fromStdString(fileName));
-    //ui->label_CameraFeed->setPixmap(pix.scaled(420, 280, Qt::KeepAspectRatio));
-
-
-    // Loop over the number of pictures required (default is 30)
-        // In each iteration:
-            // Show the picture on the labelPic component
-            // Increase the slider count by 1
-
     numPhoto=ui->numPicsDropdown->value();
     cout <<" Photos to be taken :"<< numPhoto<<endl;
     ui->startCalibrButton->setVisible(false);
