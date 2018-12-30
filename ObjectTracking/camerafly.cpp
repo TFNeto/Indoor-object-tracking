@@ -164,13 +164,14 @@ string takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress)
         return nullptr;
     }
 
+
     // ostringstream filename;
 
     string filename = "teste" + to_string(rand() % 100) + ".png";
-    /*
+/*
     filename << "FlyCapture2Test-" << camInfo.serialNumber << "-"
              << imageCnt << ".png";
-    */
+*/
 
     // Save the image. If a file format is not passed in, then the file
     // extension is parsed to attempt to determine the file format.

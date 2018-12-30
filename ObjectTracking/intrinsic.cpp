@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <unistd.h>
+
 
 int counter = 0;
 
@@ -101,13 +103,15 @@ void Intrinsic::calibrateCamera()
     FlyCapture2::IPAddress ipa = 2852045226;
     for (int i = 0; i < 10; i++)
     {
-        cout << "11111111111111" << endl;
+      //  cout << "11111111111111" << endl;
         fileName = takeSinglePictureFromSingleCamera(ipa);
-        cout << "fileName" << fileName << endl;
-        QPixmap pix(QString::fromStdString(fileName));
-        cout << "333333333333333" << endl;
-        ui->label_CameraFeed->setPixmap(pix.scaled(420, 280, Qt::KeepAspectRatio));
-        cout << "44444444444444" << endl;
+    //    cout << "fileName" << fileName << endl;
+        QImage myImage;
+        myImage.load(QString::fromStdString(fileName),"png");
+
+        ui->label_CameraFeed->setPixmap(QPixmap::fromImage(myImage).scaled(420,280,Qt::KeepAspectRatio));
+        ui->label_CameraFeed->repaint();
+     //   cout << "44444444444444" << endl;
     }
     // string fileName = takeSinglePictureFromSingleCamera(0);
     //QPixmap pix(QString::fromStdString(fileName));
