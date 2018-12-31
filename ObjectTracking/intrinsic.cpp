@@ -44,7 +44,7 @@ Intrinsic::Intrinsic(QWidget *parent) :
     ui->saveImage->setVisible(false);
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
-    ui->lcdNumPhotos->setVisible(false);
+    ui->numPics->setVisible(false);
 }
 
 Intrinsic::~Intrinsic()
@@ -94,7 +94,7 @@ void Intrinsic::on_pictureButton_clicked()
         ui->repeatButton->setVisible(true);
     }
     */
-
+/*
     // Get selected camera index
     int index = ui->cameraDropdown->currentIndex();
     // Get its IP (in decimal)
@@ -106,7 +106,7 @@ void Intrinsic::on_pictureButton_clicked()
     myImage.load(QString::fromStdString(fileName), "png");
     ui->label_CameraFeed->setPixmap(QPixmap::fromImage(myImage).scaled(630, 420, Qt::KeepAspectRatio));
     ui->label_CameraFeed->repaint();
-
+*/
     ui->saveImage->setVisible(true);
     ui->saveImageButton->setVisible(true);
     ui->discardImageButton->setVisible(true);
@@ -117,11 +117,14 @@ void Intrinsic::on_pictureButton_clicked()
 void Intrinsic::calibrateCamera()
 {
     numPhoto=ui->numPicsDropdown->value();
+    counter=0;
     cout <<" Photos to be taken :"<< numPhoto<<endl;
     ui->startCalibrButton->setVisible(false);
     ui->numPicsDropdown->setVisible(false);
-    ui->lcdNumPhotos->display(numPhoto);
-    ui->lcdNumPhotos->setVisible(true);
+    ui->numPics->setVisible(true);
+    ui->numPics->setText(QString::fromStdString(std::to_string(numPhoto)));
+    ui->imageProgressBar->setRange(0,numPhoto);
+    ui->imageProgressBar->setFormat("%v");
     ui->imageProgressBar->setVisible(true);
     ui->imageProgressBar->setValue(0);
     ui->pictureButton->setVisible(true);
@@ -160,12 +163,12 @@ void Intrinsic::on_saveImageButton_clicked()
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
     ui->pictureButton->setVisible(true);
-    ui->imageProgressBar->setValue( (int) ( (float)counter/(float)numPhoto*100 ) );
-    /*
+    ui->imageProgressBar->setValue( counter );
+
     if(counter==numPhoto)
     {
        //função para calibração intrinseca
-    }*/
+    }
 }
 
 void Intrinsic::on_discardImageButton_clicked()

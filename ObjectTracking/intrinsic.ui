@@ -251,43 +251,17 @@
     <number>24</number>
    </property>
   </widget>
-  <widget class="QLCDNumber" name="lcdNumPhotos">
+  <widget class="QLabel" name="numPics">
    <property name="geometry">
     <rect>
      <x>880</x>
      <y>30</y>
-     <width>64</width>
-     <height>23</height>
+     <width>67</width>
+     <height>17</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <pointsize>11</pointsize>
-     <weight>50</weight>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="autoFillBackground">
-    <bool>true</bool>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">@QLCDNumber { color: red;  font: 57 italic 11pt &quot;Ubuntu&quot;;}@
-</string>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Panel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Plain</enum>
-   </property>
-   <property name="lineWidth">
-    <number>0</number>
-   </property>
-   <property name="smallDecimalPoint">
-    <bool>false</bool>
-   </property>
-   <property name="segmentStyle">
-    <enum>QLCDNumber::Filled</enum>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>
