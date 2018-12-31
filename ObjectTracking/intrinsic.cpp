@@ -49,6 +49,7 @@ Intrinsic::Intrinsic(QWidget *parent) :
     ui->cancelCalibrationButton->setVisible(false);
     ui->cameraDropdown->setVisible(true);
     ui->cameraChosen->setVisible(false);
+    ui->infoCalibration->setVisible(false);
 }
 
 Intrinsic::~Intrinsic()
@@ -176,9 +177,10 @@ void Intrinsic::on_saveImageButton_clicked()
 
     if(counter==numPhoto)
     {
-       //função para calibração intrinseca
         ui->cameraDropdown->setVisible(true);
         ui->cameraChosen->setVisible(false);
+        ui->infoCalibration->setVisible(true);
+        //função para calibração intrinseca
     }
 }
 
