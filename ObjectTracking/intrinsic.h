@@ -25,6 +25,7 @@ private slots:
     void on_loadButton_clicked();
     void on_saveImageButton_clicked();
     void on_discardImageButton_clicked();
+    void on_cancelCalibrationButton_clicked();
 
 private:
     Ui::Intrinsic *ui;

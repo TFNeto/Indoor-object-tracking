@@ -126,7 +126,7 @@
     <string>Take picture</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="labelCalibrationError">
    <property name="geometry">
     <rect>
      <x>790</x>
@@ -258,6 +258,32 @@
      <y>30</y>
      <width>67</width>
      <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancelCalibrationButton">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>80</y>
+     <width>151</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="cameraChosen">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>30</y>
+     <width>381</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
