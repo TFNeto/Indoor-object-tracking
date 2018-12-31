@@ -65,6 +65,12 @@ void Intrinsic::on_pictureButton_clicked()
     // counter = counter + 1;
     ui->pictureButton->setVisible(false);
 
+    /*
+     *
+     * @TiagoA: Nós mudamos o slider para um mostrador, e mudamos os nomes dos componentes para algo mais óbvio.
+     * Esta lógica que estás a aplicar aqui devia ser mudada para uma funcao separada. No fim de tirar as fotos todas,
+     * mostramos um botao a dizer "calibrar" ou algo do género, e o onClick desse botão executa esta parte.
+
     if  (counter == ui->verticalSlider->maximum())
     {
         intrinsic_compute i;
@@ -87,6 +93,7 @@ void Intrinsic::on_pictureButton_clicked()
         ui->saveButton->setVisible(true);
         ui->repeatButton->setVisible(true);
     }
+    */
 
     // Get selected camera index
     int index = ui->cameraDropdown->currentIndex();
