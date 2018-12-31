@@ -1,30 +1,50 @@
 #include "intrinsic.h"
 #include "ui_intrinsic.h"
 #include "global.h"
+#include "camerafly.h"
+
 #include "intrinsic_compute.h"
 #include <string>
 
-using namespace std;
+#include <iostream>
+#include <sstream>
+#include <unistd.h>
+#include <stdio.h>
 
 int counter = 0;
+int numPhoto= 0;
+
+string tempFiliname;
 
 Intrinsic::Intrinsic(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Intrinsic)
 {
     ui->setupUi(this);
-    for (uint i = 0; i<listOfCameras.size();i++ )
+    for (uint i = 0; i<listOfCameras.size(); i++)
     {
         Camera cam = listOfCameras[i];
-        ui->comboBox->addItem(QString::fromStdString(cam.getName()));
+        ui->cameraDropdown->addItem(
+                    QString::fromStdString(cam.getIP()) +
+                    " ( " +
+                    QString::fromStdString(std::to_string(cam.getX())) +
+                    " , " +
+                    QString::fromStdString(std::to_string(cam.getY())) +
+                    " , " +
+                    QString::fromStdString(std::to_string(cam.getZ())) +
+                    " )"
+        );
     }
-    ui->verticalSlider->setVisible(false);
+
     ui->pictureButton->setVisible(false);
-    ui->spinBox->setValue(30);
-    ui->label_3->setVisible(false);
-    ui->label_4->setVisible(false);
+    ui->numPicsDropdown->setValue(30);
+    ui->imageProgressBar->setVisible(false);
     ui->saveButton->setVisible(false);
     ui->repeatButton->setVisible(false);
+    ui->saveImage->setVisible(false);
+    ui->saveImageButton->setVisible(false);
+    ui->discardImageButton->setVisible(false);
+    ui->lcdNumPhotos->setVisible(false);
 }
 
 Intrinsic::~Intrinsic()
@@ -40,12 +60,10 @@ void Intrinsic::on_startCalibrButton_clicked()
     calibrateCamera();
 }
 
-void Intrinsic::on_pictureButton_clicked()  // here is where the MAIGC HAPPENS
+void Intrinsic::on_pictureButton_clicked()
 {
-    counter = counter + 1;
-    //take picture with open cv, save the picture to %foldername%
-    //check if images are corrupt?
-    ui->verticalSlider->setValue(counter);
+    // counter = counter + 1;
+    ui->pictureButton->setVisible(false);
 
     if  (counter == ui->verticalSlider->maximum())
     {
@@ -70,23 +88,35 @@ void Intrinsic::on_pictureButton_clicked()  // here is where the MAIGC HAPPENS
         ui->repeatButton->setVisible(true);
     }
 
+    // Get selected camera index
+    int index = ui->cameraDropdown->currentIndex();
+    // Get its IP (in decimal)
+    uint camIpNumber = listOfCameras[index].getIpNumber();
+    // Take picture (and save it)
+    string fileName = takeSinglePictureFromSingleCamera(camIpNumber);
+    // Show picture
+    QImage myImage;
+    myImage.load(QString::fromStdString(fileName), "png");
+    ui->label_CameraFeed->setPixmap(QPixmap::fromImage(myImage).scaled(630, 420, Qt::KeepAspectRatio));
+    ui->label_CameraFeed->repaint();
+
+    ui->saveImage->setVisible(true);
+    ui->saveImageButton->setVisible(true);
+    ui->discardImageButton->setVisible(true);
+
+   // tempFiliname.assign(fileName);
 }
 
 void Intrinsic::calibrateCamera()
 {
-    // calibrate camera is misleading - actually starts a picture-taking routine for future calibration
-    ui->label_3->setVisible(false);
-    ui->label_4->setVisible(false);
-    ui->saveButton->setVisible(false);
-    ui->repeatButton->setVisible(false);
-    int numOfPic = ui->spinBox->value();
-    uint i = ui->comboBox->currentIndex();
-    Camera cam = listOfCameras[i];
-    counter = 0;
-
-    //open camera frame with open cv
-    ui->verticalSlider->setVisible(true);
-    ui->verticalSlider->setMaximum(numOfPic);
+    numPhoto=ui->numPicsDropdown->value();
+    cout <<" Photos to be taken :"<< numPhoto<<endl;
+    ui->startCalibrButton->setVisible(false);
+    ui->numPicsDropdown->setVisible(false);
+    ui->lcdNumPhotos->display(numPhoto);
+    ui->lcdNumPhotos->setVisible(true);
+    ui->imageProgressBar->setVisible(true);
+    ui->imageProgressBar->setValue(0);
     ui->pictureButton->setVisible(true);
 }
 
@@ -102,7 +132,7 @@ void Intrinsic::on_repeatButton_clicked()
     //erase previous pictures from %foldername%
     //other important parameters reset?
     //"are you sure?" pop up box
-    calibrateCamera();
+    // calibrateCamera();
 }
 
 void Intrinsic::on_saveButton_clicked()
@@ -114,3 +144,29 @@ void Intrinsic::on_loadButton_clicked()
 {
     //load parameters from xml file
 }
+
+void Intrinsic::on_saveImageButton_clicked()
+{
+    counter++;
+    cout <<"Photo number "<< counter<<" saved"<<endl;
+    ui->saveImage->setVisible(false);
+    ui->saveImageButton->setVisible(false);
+    ui->discardImageButton->setVisible(false);
+    ui->pictureButton->setVisible(true);
+    ui->imageProgressBar->setValue( (int) ( (float)counter/(float)numPhoto*100 ) );
+    /*
+    if(counter==numPhoto)
+    {
+       //função para calibração intrinseca
+    }*/
+}
+
+void Intrinsic::on_discardImageButton_clicked()
+{
+    ui->saveImage->setVisible(false);
+    ui->saveImageButton->setVisible(false);
+    ui->discardImageButton->setVisible(false);
+    ui->pictureButton->setVisible(true);
+  //  std::remove(tempFiliname.c_str());
+}
+

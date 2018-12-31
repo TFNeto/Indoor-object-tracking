@@ -1,4 +1,8 @@
 #include "camera.h"
+#include <arpa/inet.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 Camera::Camera(string name, string IPaddress, float xPosition, float yPosition, float zPosition, float pointingAngle)
 {
@@ -20,36 +24,55 @@ Camera::Camera()
     this->pointingAngle = 0;
 }
 
-string Camera::getName(void) {
+string Camera::getName(void)
+{
     return this->name;
 }
 
-string Camera::getIP(void){
+string Camera::getIP(void)
+{
     return this->IPaddress;
 }
 
-float Camera::getX(void){
+float Camera::getX(void)
+{
     return this->xPosition;
 }
 
-float Camera::getY(void){
+float Camera::getY(void)
+{
     return this->yPosition;
 }
 
-float Camera::getZ(void){
+float Camera::getZ(void)
+{
     return this->zPosition;
 }
 
-float Camera::getAngle(void) {
+float Camera::getAngle(void)
+{
     return this->pointingAngle;
 }
 
-QDataStream &operator<<(QDataStream &out, const Camera &cam){
+// Converts IP in string format to decimal format
+uint Camera::getIpNumber(void)
+{
+    struct sockaddr_in ip4addr;
+
+    ip4addr.sin_family = AF_INET;
+    inet_pton(AF_INET, this->getIP().c_str(), &ip4addr.sin_addr);
+
+    return htonl(ip4addr.sin_addr.s_addr);
+}
+
+QDataStream &operator<<(QDataStream &out, const Camera &cam)
+{
     out.writeRawData(reinterpret_cast<const char*>(&cam), sizeof(cam));
     return out;
 }
 
-QDataStream &operator>>(QDataStream &in, Camera &cam){
+QDataStream &operator>>(QDataStream &in, Camera &cam)
+{
     in.readRawData(reinterpret_cast<char*>(&cam), sizeof(cam));
     return in;
 }

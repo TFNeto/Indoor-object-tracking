@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Extrinsic calibration</string>
   </property>
-  <widget class="QSpinBox" name="spinBox">
+  <widget class="QSpinBox" name="numPicsDropdown">
    <property name="geometry">
     <rect>
      <x>230</x>

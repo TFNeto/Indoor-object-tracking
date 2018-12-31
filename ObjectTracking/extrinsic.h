@@ -18,7 +18,7 @@ public:
 
 private slots:
     void on_closeButton_clicked();
-    void on_comboBox_currentIndexChanged(int index);
+    void on_cameraDropdown_currentIndexChanged(int index);
     void on_calibrateButton_clicked();
     void on_comboBox_2_currentIndexChanged();
 
