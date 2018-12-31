@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <sys/stat.h>
+#include <string>
 
 #include "intrinsic_compute.h"
 
@@ -22,7 +23,7 @@ bool intrinsic_compute::doesExist(const std::string& name) {
   return (stat (name.c_str(), &buffer) == 0);
 }
 
-float intrinsic_compute::setupCalibration(int board_width, int board_height, int num_imgs, float square_size, char* imgs_directory, char* imgs_filename, char* extension)
+void intrinsic_compute::setupCalibration(int board_width, int board_height, int num_imgs, float square_size, string imgs_directory, string imgs_filename, string extension)
 {
   Size board_size = Size(board_width, board_height);
   // int board_n = board_width * board_height;
@@ -31,7 +32,7 @@ float intrinsic_compute::setupCalibration(int board_width, int board_height, int
   for (int k = 1; k <= num_imgs; k++) {
     bool found = false;
     char img_file[100];
-    sprintf(img_file, "%s%s%d.%s", imgs_directory, imgs_filename, k, extension);
+    sprintf(img_file, "%s%s%d.%s", imgs_directory.c_str(), imgs_filename.c_str(), k, extension.c_str());
 
     if(!doesExist(img_file)) //skips current iteration if img does not exist?
       continue;
@@ -85,13 +86,13 @@ double intrinsic_compute::computeReprojectionErrors(const vector< vector< Point3
 }
 
 
-double intrinsic_compute::run(int num_imgs, char* imgs_directory, char* imgs_filename) //nr of images to read, %foldername%, "left" or "right"
+double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_filename) //nr of images to read, %foldername%, "left" or "right"
 {
         //some of these could be constant
         int board_width = 0, board_height = 0; //checkerboard width heigth
         float square_size = 0.0; //checkerboard square size
         char* out_file = nullptr;
-        char* extension = nullptr;
+        string extension = "jpg";
         double err = 0;
         Mat K;
         Mat D;

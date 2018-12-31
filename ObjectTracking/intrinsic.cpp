@@ -2,14 +2,14 @@
 #include "ui_intrinsic.h"
 #include "global.h"
 #include "camerafly.h"
-// #include "intrinsic_compute.h"
+
+#include "intrinsic_compute.h"
+#include <string>
 
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
 #include <stdio.h>
-
-
 
 int counter = 0;
 int numPhoto= 0;
@@ -45,8 +45,6 @@ Intrinsic::Intrinsic(QWidget *parent) :
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
     ui->lcdNumPhotos->setVisible(false);
-    //QPixmap pix;
-    //ui->label_CameraFeed->setPixmap(pix.scaled(420, 280, Qt::KeepAspectRatio));
 }
 
 Intrinsic::~Intrinsic()
@@ -62,10 +60,33 @@ void Intrinsic::on_startCalibrButton_clicked()
     calibrateCamera();
 }
 
-void Intrinsic::on_pictureButton_clicked()  // here is where the MAIGC HAPPENS
+void Intrinsic::on_pictureButton_clicked()
 {
     // counter = counter + 1;
     ui->pictureButton->setVisible(false);
+
+    if  (counter == ui->verticalSlider->maximum())
+    {
+        intrinsic_compute i;
+        double errorVal = 1;
+
+        //end of picture-taking phase
+        ui->pictureButton->setVisible(false);
+        ui->verticalSlider->setValue(0);
+
+        //test vars
+        int counter = 27; //overriding for tests
+        string imgs_directory = "../intrinsic_right";
+        string imgs_filename = "right";
+
+        errorVal = i.run(counter, imgs_directory, imgs_filename); //compute intrinsic calibration for a single camera
+
+        ui->label_3->setVisible(true);
+        ui->label_4->setVisible(true);
+        ui->label_4->setText(QString::fromStdString(to_string(errorVal)));
+        ui->saveButton->setVisible(true);
+        ui->repeatButton->setVisible(true);
+    }
 
     // Get selected camera index
     int index = ui->cameraDropdown->currentIndex();
