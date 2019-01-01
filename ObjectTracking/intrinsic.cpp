@@ -116,7 +116,7 @@ void Intrinsic::on_pictureButton_clicked()
     ui->saveImageButton->setVisible(true);
     ui->discardImageButton->setVisible(true);
 
-   // tempFiliname.assign(fileName);
+    tempFiliname.assign(fileName);
 }
 
 void Intrinsic::calibrateCamera()
@@ -190,7 +190,7 @@ void Intrinsic::on_discardImageButton_clicked()
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
     ui->pictureButton->setVisible(true);
-  //  std::remove(tempFiliname.c_str());
+    std::remove(tempFiliname.c_str());
 }
 
 void Intrinsic::on_cancelCalibrationButton_clicked()
