@@ -26,13 +26,12 @@ bool intrinsic_compute::doesExist(const std::string& name) {
 void intrinsic_compute::setupCalibration(int board_width, int board_height, int num_imgs, float square_size, string imgs_directory, string imgs_filename, string extension)
 {
   Size board_size = Size(board_width, board_height);
-  // int board_n = board_width * board_height;
-
   // compute stuff for every single image in the folder
   for (int k = 1; k <= num_imgs; k++) {
     bool found = false;
     char img_file[100];
-    sprintf(img_file, "%s%s%d.%s", imgs_directory.c_str(), imgs_filename.c_str(), k, extension.c_str());
+
+    sprintf(img_file, "%s/%s%d.%s", imgs_directory.c_str(), imgs_filename.c_str(), k, extension.c_str());
 
     if(!doesExist(img_file)) //skips current iteration if img does not exist?
       continue;
@@ -58,7 +57,6 @@ void intrinsic_compute::setupCalibration(int board_width, int board_height, int 
         object_points.push_back(obj);
       }
   }
-  // TODO @TiagoA: Add return (this function is defined as returning a float)
 }
 
 double intrinsic_compute::computeReprojectionErrors(const vector< vector< Point3f > >& objectPoints,
@@ -88,9 +86,10 @@ double intrinsic_compute::computeReprojectionErrors(const vector< vector< Point3
 
 double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_filename) //nr of images to read, %foldername%, "left" or "right"
 {
+
         //some of these could be constant
-        int board_width = 0, board_height = 0; //checkerboard width heigth
-        float square_size = 0.0; //checkerboard square size
+        int board_width = 9, board_height = 6;
+        float square_size = 0.02423;
         char* out_file = nullptr;
         string extension = "jpg";
         double err = 0;
@@ -106,13 +105,14 @@ double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_f
 
         calibrateCamera(object_points, image_points, img.size(), K, D, rvecs, tvecs, flag);
         err = computeReprojectionErrors(object_points, image_points, rvecs, tvecs, K, D);
+        cout << err << "\n";
 
-        FileStorage fs(out_file, FileStorage::WRITE);
+        /*FileStorage fs(out_file, FileStorage::WRITE);
         fs << "K" << K;
         fs << "D" << D;
         fs << "board_width" << board_width;
         fs << "board_height" << board_height;
-        fs << "square_size" << square_size;
+        fs << "square_size" << square_size;*/
 
         return err;
 }

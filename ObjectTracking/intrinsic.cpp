@@ -144,7 +144,7 @@ void Intrinsic::on_loadButton_clicked()
 void Intrinsic::on_saveImageButton_clicked()
 {
     counter++;
-    cout <<"Photo number "<< counter<<" saved"<<endl;
+    cout << "Photo number "<< counter<<" saved"<<endl;
     ui->saveImage->setVisible(false);
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
@@ -156,7 +156,12 @@ void Intrinsic::on_saveImageButton_clicked()
         ui->cameraDropdown->setVisible(true);
         ui->cameraChosen->setVisible(false);
         ui->infoCalibration->setVisible(true);
-        //função para calibração intrinseca
+
+        //CORRER ROTINA DE CALIBRAÇÃO
+        //intrinsic_compute i
+        //error = i.run(nr_imagens, img_folder, img_filename)
+        //este filename pode ser o IP ou assim?
+
     }
 }
 
