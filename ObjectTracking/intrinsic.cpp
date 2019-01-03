@@ -10,6 +10,8 @@
 #include <sstream>
 #include <unistd.h>
 #include <stdio.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 int counter = 0;
 int numPhoto= 0;
@@ -67,56 +69,30 @@ void Intrinsic::on_startCalibrButton_clicked()
 
 void Intrinsic::on_pictureButton_clicked()
 {
-    // counter = counter + 1;
     ui->pictureButton->setVisible(false);
-
-    /*
-     *
-     * @TiagoA: Nós mudamos o slider para um mostrador, e mudamos os nomes dos componentes para algo mais óbvio.
-     * Esta lógica que estás a aplicar aqui devia ser mudada para uma funcao separada. No fim de tirar as fotos todas,
-     * mostramos um botao a dizer "calibrar" ou algo do género, e o onClick desse botão executa esta parte.
-
-    if  (counter == ui->verticalSlider->maximum())
-    {
-        intrinsic_compute i;
-        double errorVal = 1;
-
-        //end of picture-taking phase
-        ui->pictureButton->setVisible(false);
-        ui->verticalSlider->setValue(0);
-
-        //test vars
-        int counter = 27; //overriding for tests
-        string imgs_directory = "../intrinsic_right";
-        string imgs_filename = "right";
-
-        errorVal = i.run(counter, imgs_directory, imgs_filename); //compute intrinsic calibration for a single camera
-
-        ui->label_3->setVisible(true);
-        ui->label_4->setVisible(true);
-        ui->label_4->setText(QString::fromStdString(to_string(errorVal)));
-        ui->saveButton->setVisible(true);
-        ui->repeatButton->setVisible(true);
-    }
-    */
-
     // Get selected camera index
     int index = ui->cameraDropdown->currentIndex();
     // Get its IP (in decimal)
     uint camIpNumber = listOfCameras[index].getIpNumber();
     // Take picture (and save it)
-    string fileName = takeSinglePictureFromSingleCamera(camIpNumber);
-    // Show picture
-    QImage myImage;
-    myImage.load(QString::fromStdString(fileName), "png");
-    ui->label_CameraFeed->setPixmap(QPixmap::fromImage(myImage).scaled(630, 420, Qt::KeepAspectRatio));
-    ui->label_CameraFeed->repaint();
 
+    while(1) {
+
+        cv::Mat imgcv = takeSinglePictureFromSingleCamera(camIpNumber);
+        cv::imshow("image", imgcv);
+        cv::waitKey(1);
+        // Show picture
+        QImage img((uchar*)imgcv.data, imgcv.cols, imgcv.rows, imgcv.step, QImage::Format_BGR30);
+
+        //ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img).scaled(630, 420, Qt::KeepAspectRatio));
+        //ui->label_CameraFeed->repaint();
+        ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img));
+    }
     ui->saveImage->setVisible(true);
     ui->saveImageButton->setVisible(true);
     ui->discardImageButton->setVisible(true);
 
-    tempFiliname.assign(fileName);
+  //  tempFiliname.assign(fileName);
 }
 
 void Intrinsic::calibrateCamera()

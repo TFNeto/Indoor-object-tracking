@@ -7,6 +7,9 @@
 #include "camerafly.h"
 #include "camera.h"
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
 using namespace std;
 
 // Utility function to print FlyCapture errors
@@ -110,59 +113,79 @@ vector<Camera> scanCameras()
     return listOfCameras;
 }
 
-string takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress)
+bool a = false;
+FlyCapture2::GigECamera cam;
+
+cv::Mat takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress)
 {
     FlyCapture2::Error error;
-    FlyCapture2::BusManager busMgr;
-    FlyCapture2::PGRGuid guid;
+    if (!a) {
 
-    error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
-    if (error != FlyCapture2::PGRERROR_OK)
-    {
-        PrintError(error);
-        return nullptr;
+        FlyCapture2::BusManager busMgr;
+        FlyCapture2::PGRGuid guid;
+
+        error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+            throw "Couldn't get camera";
+        }
+
+        // Connect to a camera
+        // FlyCapture2::GigECamera cam;
+        error = cam.Connect(&guid);
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+            throw "Failed to connect to camera";
+        }
+
+        cout << "Starting image capture..." << endl;
+
+        // Start capturing images
+        error = cam.StartCapture();
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+            throw "Failed to start";
+        }
+        a = true;
     }
 
-    // Connect to a camera
-    FlyCapture2::GigECamera cam;
-    error = cam.Connect(&guid);
-    if (error != FlyCapture2::PGRERROR_OK)
-    {
-        PrintError(error);
-        return nullptr;
-    }
 
-    cout << "Starting image capture..." << endl;
-
-    // Start capturing images
-    error = cam.StartCapture();
-    if (error != FlyCapture2::PGRERROR_OK)
-    {
-        PrintError(error);
-        return nullptr;
-    }
 
     FlyCapture2::Image rawImage;
     FlyCapture2::Image convertedImage;
 
     // Retrieve an image
     error = cam.RetrieveBuffer(&rawImage);
-    if (error != FlyCapture2::PGRERROR_OK)
+   if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
-        return nullptr;
+        throw "Failed to retrieve buffer";
     }
 
     cout << "Grabbed image " << endl;
 
     // Convert the raw image
-    error = rawImage.Convert(FlyCapture2::PIXEL_FORMAT_RGBU, &convertedImage);
+    error = rawImage.Convert(FlyCapture2::PIXEL_FORMAT_BGR, &convertedImage);
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
-        return nullptr;
+        throw error;
     }
 
+    // convert to OpenCV Mat
+
+    unsigned int rowBytes = (double)convertedImage.GetReceivedDataSize()/(double)convertedImage.GetRows();
+    cv::Mat image = cv::Mat(convertedImage.GetRows(), convertedImage.GetCols(), CV_8UC3, convertedImage.GetData(),rowBytes);
+
+    //cv::imshow("image", image);
+    //char key = cv::waitKey(1);
+
+    return image;
+
+/*
     string filename = "teste" + to_string(rand() % 100) + ".png";
 
     // Save the image. If a file format is not passed in, then the file
@@ -184,12 +207,12 @@ string takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress)
         return nullptr;
     }
 
-    // Disconnect the camera
+   // Disconnect the camera
     error = cam.Disconnect();
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
         return nullptr;
     }
-    return filename;
+    return filename;*/
 }
