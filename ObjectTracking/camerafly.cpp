@@ -12,6 +12,10 @@
 
 using namespace std;
 
+// "Global" camera object used in several methods
+// WIP: We'll probably need 4 of these for the normal mode
+FlyCapture2::GigECamera cam;
+
 // Utility function to print FlyCapture errors
 void PrintError(FlyCapture2::Error error) { error.PrintErrorTrace(); }
 
@@ -113,59 +117,80 @@ vector<Camera> scanCameras()
     return listOfCameras;
 }
 
-bool a = false;
-FlyCapture2::GigECamera cam;
-
-cv::Mat takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress)
+void connectToCameraByIp(FlyCapture2::IPAddress ipAddress)
 {
     FlyCapture2::Error error;
-    if (!a) {
+    FlyCapture2::BusManager busMgr;
+    FlyCapture2::PGRGuid guid;
 
-        FlyCapture2::BusManager busMgr;
-        FlyCapture2::PGRGuid guid;
-
-        error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
-        if (error != FlyCapture2::PGRERROR_OK)
-        {
-            PrintError(error);
-            throw "Couldn't get camera";
-        }
-
-        // Connect to a camera
-        // FlyCapture2::GigECamera cam;
-        error = cam.Connect(&guid);
-        if (error != FlyCapture2::PGRERROR_OK)
-        {
-            PrintError(error);
-            throw "Failed to connect to camera";
-        }
-
-        cout << "Starting image capture..." << endl;
-
-        // Start capturing images
-        error = cam.StartCapture();
-        if (error != FlyCapture2::PGRERROR_OK)
-        {
-            PrintError(error);
-            throw "Failed to start";
-        }
-        a = true;
+    error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        throw "Couldn't get camera";
     }
 
+    // Connect to a camera
+    // FlyCapture2::GigECamera cam;
+    error = cam.Connect(&guid);
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        throw "Failed to connect to camera";
+    }
 
+    cout << "DEBUG: Starting image capture..." << endl;
 
+    // Start capturing images
+    error = cam.StartCapture();
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        throw "Failed to start";
+    }
+}
+
+// Disconnects a single camera
+// Assumes that the camera was connected
+// Uses the "global" cam object, which is why there are no arguments
+void disconnectCamera()
+{
+    FlyCapture2::Error error;
+    // Stop capturing images
+    error = cam.StopCapture();
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        throw "Failed to stop capturing images";
+    }
+
+    // Disconnect the camera
+    error = cam.Disconnect();
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        throw "Failed to disconnect camera";
+    }
+}
+
+// Takes a single picture from a single camera
+// Assumes that the camera is already connected
+// Uses the "global" cam object, which is why there are no arguments
+FlyCapture2::Image takeSinglePictureFromSingleCamera()
+{
+    FlyCapture2::Error error;
     FlyCapture2::Image rawImage;
     FlyCapture2::Image convertedImage;
 
     // Retrieve an image
     error = cam.RetrieveBuffer(&rawImage);
-   if (error != FlyCapture2::PGRERROR_OK)
+    if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
         throw "Failed to retrieve buffer";
     }
 
-    cout << "Grabbed image " << endl;
+    cout << "DEBUG: Grabbed image" << endl;
 
     // Convert the raw image
     error = rawImage.Convert(FlyCapture2::PIXEL_FORMAT_BGR, &convertedImage);
@@ -175,44 +200,18 @@ cv::Mat takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress)
         throw error;
     }
 
-    // convert to OpenCV Mat
+    return convertedImage;
+}
 
-    unsigned int rowBytes = (double)convertedImage.GetReceivedDataSize()/(double)convertedImage.GetRows();
-    cv::Mat image = cv::Mat(convertedImage.GetRows(), convertedImage.GetCols(), CV_8UC3, convertedImage.GetData(),rowBytes);
-
-    //cv::imshow("image", image);
-    //char key = cv::waitKey(1);
-
-    return image;
-
-/*
-    string filename = "teste" + to_string(rand() % 100) + ".png";
-
-    // Save the image. If a file format is not passed in, then the file
-    // extension is parsed to attempt to determine the file format.
-    error = convertedImage.Save(filename.c_str());
+// Saves an image in png format
+void saveImage(FlyCapture2::Image img)
+{
+    string fileName = "teste" + to_string(rand() % 100) + ".png";
+    FlyCapture2::Error error;
+    error = img.Save(fileName.c_str());
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
-        return nullptr;
     }
-
-    cout << "Stopping capture" << endl;
-
-    // Stop capturing images
-    error = cam.StopCapture();
-    if (error != FlyCapture2::PGRERROR_OK)
-    {
-        PrintError(error);
-        return nullptr;
-    }
-
-   // Disconnect the camera
-    error = cam.Disconnect();
-    if (error != FlyCapture2::PGRERROR_OK)
-    {
-        PrintError(error);
-        return nullptr;
-    }
-    return filename;*/
+    cout << "DEBUG: Image saved " + fileName << endl;
 }

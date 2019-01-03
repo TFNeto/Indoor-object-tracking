@@ -3,7 +3,7 @@
 #include "global.h"
 #include "camerafly.h"
 
-#include "intrinsic_compute.h"
+// #include "intrinsic_compute.h"
 #include <string>
 
 #include <iostream>
@@ -16,7 +16,12 @@
 int counter = 0;
 int numPhoto= 0;
 string currentCamera;
-string tempFiliname;
+string tempFilename;
+
+// Save state of calibration process
+// Enables live stream, if true
+bool isCalibrating = false;
+bool saveImageFlag = false;
 
 Intrinsic::Intrinsic(QWidget *parent) :
     QDialog(parent),
@@ -61,47 +66,11 @@ Intrinsic::~Intrinsic()
 
 void Intrinsic::on_startCalibrButton_clicked()
 {
-    //check if camera is connected correctly
-    //check is picture number is above 10 - add info stating bigger errors for less pictures
-    //allow loading of external pictures
-    calibrateCamera();
-}
+    numPhoto = ui->numPicsDropdown->value();
+    counter = 0;
+    cout << "DEBUG: Photos to be taken: " << numPhoto << endl;
 
-void Intrinsic::on_pictureButton_clicked()
-{
-    ui->pictureButton->setVisible(false);
-    // Get selected camera index
-    int index = ui->cameraDropdown->currentIndex();
-    // Get its IP (in decimal)
-    uint camIpNumber = listOfCameras[index].getIpNumber();
-    // Take picture (and save it)
-
-    while(1) {
-
-        cv::Mat imgcv = takeSinglePictureFromSingleCamera(camIpNumber);
-        cv::imshow("image", imgcv);
-        cv::waitKey(1);
-        // Show picture
-        QImage img((uchar*)imgcv.data, imgcv.cols, imgcv.rows, imgcv.step, QImage::Format_BGR30);
-
-        //ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img).scaled(630, 420, Qt::KeepAspectRatio));
-        //ui->label_CameraFeed->repaint();
-        ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img));
-    }
-    ui->saveImage->setVisible(true);
-    ui->saveImageButton->setVisible(true);
-    ui->discardImageButton->setVisible(true);
-
-  //  tempFiliname.assign(fileName);
-}
-
-void Intrinsic::calibrateCamera()
-{
-    numPhoto=ui->numPicsDropdown->value();
-    counter=0;
-    cout <<" Photos to be taken :"<< numPhoto<<endl;
-
-    ui->cameraChosen->setText( ui->cameraDropdown->currentText());
+    ui->cameraChosen->setText(ui->cameraDropdown->currentText());
     ui->cameraChosen->setVisible(true);
     ui->cameraDropdown->setVisible(false);
     ui->startCalibrButton->setVisible(false);
@@ -114,6 +83,45 @@ void Intrinsic::calibrateCamera()
     ui->imageProgressBar->setVisible(true);
     ui->imageProgressBar->setValue(0);
     ui->pictureButton->setVisible(true);
+
+    // Start live video
+    isCalibrating = true;
+    // Get selected camera index
+    int index = ui->cameraDropdown->currentIndex();
+    // Get its IP (in decimal)
+    uint camIpNumber = listOfCameras[index].getIpNumber();
+    // Connect to camera
+    connectToCameraByIp(camIpNumber);
+    // Start capturing
+    while(isCalibrating) {
+        // Get image
+        FlyCapture2::Image convertedImage = takeSinglePictureFromSingleCamera();
+        unsigned int rowBytes = (double)convertedImage.GetReceivedDataSize()/(double)convertedImage.GetRows();
+        cv::Mat imgcv = cv::Mat(convertedImage.GetRows(), convertedImage.GetCols(), CV_8UC3, convertedImage.GetData(),rowBytes);
+        // DEBUG: Show image using OpenCV's image display
+        cv::imshow("image", imgcv);
+        char key = cv::waitKey(1);
+        // Show image
+        QImage img((uchar*)imgcv.data, imgcv.cols, imgcv.rows, imgcv.step, QImage::Format_BGR30);
+        ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img));
+        // Save image if the user clicks on "Save"
+        if(saveImageFlag) {
+            saveImage(convertedImage);
+            saveImageFlag = false;
+        }
+    }
+    // Disconnect from camera
+    disconnectCamera();
+}
+
+void Intrinsic::on_pictureButton_clicked()
+{
+    saveImageFlag = true;
+    ui->pictureButton->setVisible(false);
+    ui->saveImage->setVisible(true);
+    ui->saveImageButton->setVisible(true);
+    ui->discardImageButton->setVisible(true);
+  //  tempFilename.assign(fileName);
 }
 
 void Intrinsic::on_closeButton_clicked()
@@ -144,14 +152,13 @@ void Intrinsic::on_loadButton_clicked()
 void Intrinsic::on_saveImageButton_clicked()
 {
     counter++;
-    cout << "Photo number "<< counter<<" saved"<<endl;
     ui->saveImage->setVisible(false);
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
     ui->pictureButton->setVisible(true);
     ui->imageProgressBar->setValue( counter );
 
-    if(counter==numPhoto)
+    if(counter == numPhoto)
     {
         ui->cameraDropdown->setVisible(true);
         ui->cameraChosen->setVisible(false);
@@ -171,11 +178,16 @@ void Intrinsic::on_discardImageButton_clicked()
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
     ui->pictureButton->setVisible(true);
-    std::remove(tempFiliname.c_str());
+    // std::remove(tempFilename.c_str());
 }
 
 void Intrinsic::on_cancelCalibrationButton_clicked()
 {
+    // Stop calibration (this stops the live feed)
+    isCalibrating = false;
+    // DEBUG: Destroy OpenCV window
+    cv::destroyAllWindows();
+
     counter=0;
     ui->pictureButton->setVisible(false);
     ui->numPicsDropdown->setValue(30);

@@ -65,12 +65,12 @@ void Calibrate::setCameraInfo(vector<Camera> listOfCameras)
 
 void Calibrate::on_intrinsicButton_clicked()
 {
-    /*Intrinsic intrinsicWindow;
+    Intrinsic intrinsicWindow;
     intrinsicWindow.setModal(true);
-    intrinsicWindow.exec();*/
+    intrinsicWindow.exec();
 
-    intrinsic_compute i;
-    double errorVal = 1;
+    //intrinsic_compute i;
+    //double errorVal = 1;
 
     //test vars
     int counter = 27; //overriding for tests
@@ -78,8 +78,8 @@ void Calibrate::on_intrinsicButton_clicked()
     string imgs_filename = "right";
 
     //função para calibração intrinseca abaixo//
-cout << "pepe\n";
-    errorVal = i.run(counter, imgs_directory, imgs_filename); //compute intrinsic calibration for a single camera
+    // cout << "pepe\n";
+    // errorVal = i.run(counter, imgs_directory, imgs_filename); //compute intrinsic calibration for a single camera
 }
 
 void Calibrate::on_extrinsicButton_clicked()
