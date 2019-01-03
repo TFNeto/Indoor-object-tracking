@@ -70,36 +70,6 @@ void Intrinsic::on_pictureButton_clicked()
     // counter = counter + 1;
     ui->pictureButton->setVisible(false);
 
-    /*
-     *
-     * @TiagoA: Nós mudamos o slider para um mostrador, e mudamos os nomes dos componentes para algo mais óbvio.
-     * Esta lógica que estás a aplicar aqui devia ser mudada para uma funcao separada. No fim de tirar as fotos todas,
-     * mostramos um botao a dizer "calibrar" ou algo do género, e o onClick desse botão executa esta parte.
-
-    if  (counter == ui->verticalSlider->maximum())
-    {
-        intrinsic_compute i;
-        double errorVal = 1;
-
-        //end of picture-taking phase
-        ui->pictureButton->setVisible(false);
-        ui->verticalSlider->setValue(0);
-
-        //test vars
-        int counter = 27; //overriding for tests
-        string imgs_directory = "../intrinsic_right";
-        string imgs_filename = "right";
-
-        errorVal = i.run(counter, imgs_directory, imgs_filename); //compute intrinsic calibration for a single camera
-
-        ui->label_3->setVisible(true);
-        ui->label_4->setVisible(true);
-        ui->label_4->setText(QString::fromStdString(to_string(errorVal)));
-        ui->saveButton->setVisible(true);
-        ui->repeatButton->setVisible(true);
-    }
-    */
-
     // Get selected camera index
     int index = ui->cameraDropdown->currentIndex();
     // Get its IP (in decimal)
@@ -168,7 +138,7 @@ void Intrinsic::on_loadButton_clicked()
 void Intrinsic::on_saveImageButton_clicked()
 {
     counter++;
-    cout <<"Photo number "<< counter<<" saved"<<endl;
+    cout << "Photo number "<< counter<<" saved"<<endl;
     ui->saveImage->setVisible(false);
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
@@ -180,7 +150,12 @@ void Intrinsic::on_saveImageButton_clicked()
         ui->cameraDropdown->setVisible(true);
         ui->cameraChosen->setVisible(false);
         ui->infoCalibration->setVisible(true);
-        //função para calibração intrinseca
+
+        //CORRER ROTINA DE CALIBRAÇÃO
+        //intrinsic_compute i
+        //error = i.run(nr_imagens, img_folder, img_filename)
+        //este filename pode ser o IP ou assim?
+
     }
 }
 

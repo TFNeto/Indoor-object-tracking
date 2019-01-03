@@ -1,10 +1,10 @@
 #include <string>
-
 #include "calibrate.h"
 #include "ui_calibrate.h"
 #include "global.h"
 #include "intrinsic.h"
 #include "extrinsic.h"
+#include "intrinsic_compute.h"
 
 using namespace std;
 
@@ -65,9 +65,21 @@ void Calibrate::setCameraInfo(vector<Camera> listOfCameras)
 
 void Calibrate::on_intrinsicButton_clicked()
 {
-    Intrinsic intrinsicWindow;
+    /*Intrinsic intrinsicWindow;
     intrinsicWindow.setModal(true);
-    intrinsicWindow.exec();
+    intrinsicWindow.exec();*/
+
+    intrinsic_compute i;
+    double errorVal = 1;
+
+    //test vars
+    int counter = 27; //overriding for tests
+    string imgs_directory = "../intrinsic_right";
+    string imgs_filename = "right";
+
+    //função para calibração intrinseca abaixo//
+cout << "pepe\n";
+    errorVal = i.run(counter, imgs_directory, imgs_filename); //compute intrinsic calibration for a single camera
 }
 
 void Calibrate::on_extrinsicButton_clicked()

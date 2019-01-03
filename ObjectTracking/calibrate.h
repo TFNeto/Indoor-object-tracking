@@ -5,6 +5,7 @@
 #include <QDialog>
 #include <string>
 #include "camera.h"
+#include "intrinsic_compute.h"
 
 using namespace std;
 
