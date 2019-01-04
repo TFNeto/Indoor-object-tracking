@@ -12,6 +12,6 @@ FlyCapture2::Image takeSinglePictureFromSingleCamera();
 vector<Camera> scanCameras();
 void connectToCameraByIp(FlyCapture2::IPAddress ipAddress);
 void disconnectCamera();
-void saveImage(FlyCapture2::Image img);
+void saveImage(FlyCapture2::Image img, string camIp, int imgNum);
 
 #endif // CAMERAFLY_H

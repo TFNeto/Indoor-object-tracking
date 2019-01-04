@@ -204,9 +204,9 @@ FlyCapture2::Image takeSinglePictureFromSingleCamera()
 }
 
 // Saves an image in png format
-void saveImage(FlyCapture2::Image img)
+void saveImage(FlyCapture2::Image img, string camIp, int imgNum)
 {
-    string fileName = "teste" + to_string(rand() % 100) + ".png";
+    string fileName = "calib" + camIp + "_" + to_string(imgNum) + ".png";
     FlyCapture2::Error error;
     error = img.Save(fileName.c_str());
     if (error != FlyCapture2::PGRERROR_OK)
