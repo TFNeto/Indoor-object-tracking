@@ -15,6 +15,9 @@ using namespace std;
 // "Global" camera object used in several methods
 // WIP: We'll probably need 4 of these for the normal mode
 FlyCapture2::GigECamera cam;
+FlyCapture2::GigECamera cam1;
+FlyCapture2::GigECamera cam2;
+FlyCapture2::GigECamera cam3;
 
 // Utility function to print FlyCapture errors
 void PrintError(FlyCapture2::Error error) { error.PrintErrorTrace(); }

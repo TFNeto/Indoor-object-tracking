@@ -2,12 +2,13 @@
 #include "ui_extrinsic.h"
 #include "global.h"
 #include <string>
+#include <iostream>
 
 using namespace std;
 
 int count = 0;
-Camera cam1;
-Camera cam2;
+Camera camera1;
+Camera camera2;
 
 extrinsic::extrinsic(QWidget *parent) :
     QDialog(parent),
@@ -16,19 +17,19 @@ extrinsic::extrinsic(QWidget *parent) :
     ui->setupUi(this);
     for (uint i = 0; i<listOfCameras.size();i++ )
     {
-        Camera cam = listOfCameras[i];
-        ui->comboBox->addItem(QString::fromStdString(cam.getName()));
+        ui->comboBox->addItem(QString::fromStdString(listOfCameras[i].getIP()));
     }
     ui->comboBox->setCurrentIndex(0);
-    for (uint i = 1; i<listOfCameras.size();i++ )
+    for (uint i = 0; i<listOfCameras.size();i++ )
     {
-        Camera cam = listOfCameras[i];
-        ui->comboBox_2->addItem(QString::fromStdString(cam.getName()));
+        ui->comboBox_2->addItem(QString::fromStdString(listOfCameras[i].getIP()));
     }
-    ui->verticalSlider->setVisible(false);
     ui->numPicsDropdown->setValue(30);
-    ui->label_3->setVisible(false);
-    ui->label_4->setVisible(false);
+    ui->numPicsDropdown->setVisible(true);
+    ui->selectPair->setVisible(true);
+    ui->photoCount->setVisible(true);
+    ui->calibResult->setVisible(false);
+    ui->calibResultText->setVisible(false);
 }
 
 extrinsic::~extrinsic()
@@ -41,47 +42,27 @@ void extrinsic::on_closeButton_clicked()
     this->close();
 }
 
-void extrinsic::on_cameraDropdown_currentIndexChanged(int index)
-{
-    ui->comboBox_2->clear();
-    for (uint i = 0; i < listOfCameras.size(); i++)
-    {
-        int j = i;
-        if (j != index)
-        {
-            Camera cam = listOfCameras[i];
-            ui->comboBox_2->addItem(QString::fromStdString(cam.getName()));
-        }
-    }
-    cam1 = listOfCameras[index];
-}
-
 void extrinsic::on_calibrateButton_clicked()
 {
-    calibrateCameraPair();
-}
-
-void extrinsic::on_comboBox_2_currentIndexChanged()
-{
-    for (uint i = 0; i<listOfCameras.size();i++ )
+    if(ui->comboBox->currentIndex()!=ui->comboBox_2->currentIndex())
     {
-        QString name = ui->comboBox_2->currentText();
-        if (QString::compare(QString::fromStdString(listOfCameras[i].getName()), name))
-        {
-            cam2 = listOfCameras[i];
-        }
+        camera1 = listOfCameras[ui->comboBox->currentIndex()];
+        camera2 = listOfCameras[ui->comboBox_2->currentIndex()];
+        cout <<"DEBUG Selected camera with Ip : "<<camera1.getIP()<<endl;
+        cout <<"DEBUG Selected camera with IP : "<<camera2.getIP()<<endl;
+        ui->errorText->setVisible(false);
+         //calibrateCameraPair();
+        return;
     }
+    ui->errorText->setText("Chose different cameras");
+    ui->errorText->setVisible(true);
 }
 
 void extrinsic::calibrateCameraPair()
 {
-    ui->label_3->setVisible(false);
-    ui->label_4->setVisible(false);
+
     int numOfPic = ui->numPicsDropdown->value();
 
-    // open cameras
-    ui->verticalSlider->setVisible(true);
-    ui->verticalSlider->setMaximum(numOfPic);
 
     //do the calibration
 }
