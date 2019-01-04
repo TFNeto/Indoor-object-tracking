@@ -126,6 +126,19 @@ void Intrinsic::on_startCalibrButton_clicked()
             saveImage(convertedImage, camIp, counter);
             saveImageFlag = false;
             liveFlag = true;
+
+            if(counter == numPhoto)
+            {
+                ui->cameraDropdown->setVisible(true);
+                ui->cameraChosen->setVisible(false);
+                ui->infoCalibration->setVisible(true);
+
+                //CORRER ROTINA DE CALIBRAÇÃO
+                //intrinsic_compute i
+                //error = i.run(nr_imagens, img_folder, img_filename)
+                //este filename pode ser o IP ou assim?
+            isCalibrating = false;
+            }
         }
         if(discardImageFlag) {
            discardImageFlag = false;
@@ -181,18 +194,6 @@ void Intrinsic::on_saveImageButton_clicked()
     ui->pictureButton->setVisible(true);
     ui->imageProgressBar->setValue( counter );
 
-    if(counter == numPhoto)
-    {
-        ui->cameraDropdown->setVisible(true);
-        ui->cameraChosen->setVisible(false);
-        ui->infoCalibration->setVisible(true);
-
-        //CORRER ROTINA DE CALIBRAÇÃO
-        //intrinsic_compute i
-        //error = i.run(nr_imagens, img_folder, img_filename)
-        //este filename pode ser o IP ou assim?
-
-    }
 }
 
 void Intrinsic::on_discardImageButton_clicked()
