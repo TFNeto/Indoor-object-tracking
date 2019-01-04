@@ -100,16 +100,11 @@ void Intrinsic::on_startCalibrButton_clicked()
     // Start capturing
     while(isCalibrating)
     {
-<<<<<<< HEAD
-
-=======
->>>>>>> 67b53167f2b01a75357d8954e3d93b209cd6748d
         // Get image
         FlyCapture2::Image Image = takeSinglePictureFromSingleCamera();
         unsigned int rowBytes = (double)Image.GetReceivedDataSize()/(double)Image.GetRows();
         cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
         // DEBUG: Show image using OpenCV's image display
-<<<<<<< HEAD
          //cv::imshow("image", imgcv);
         //char key = cv::waitKey(1);
 
@@ -121,17 +116,6 @@ void Intrinsic::on_startCalibrButton_clicked()
             ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img).scaled(630, 420, Qt::KeepAspectRatio));
             ui->label_CameraFeed->repaint();
             convertedImage=Image;
-=======
-        cv::imshow("image", imgcv);
-        char key = cv::waitKey(1);
-
-        // Show image
-        if(liveFlag){
-          //  cv::Mat show = cvtC
-            QImage img((uchar*)imgcv.data, imgcv.cols, imgcv.rows, imgcv.step, QImage::Format_Mono);
-            ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img));
-            convertedImage = Image;
->>>>>>> 67b53167f2b01a75357d8954e3d93b209cd6748d
         }
 
         // Save image if the user clicks on "Save"
@@ -142,13 +126,8 @@ void Intrinsic::on_startCalibrButton_clicked()
             liveFlag = true;
         }
         if(discardImageFlag) {
-<<<<<<< HEAD
-            discardImageFlag = false;
-            liveFlag=true;
-=======
            discardImageFlag = false;
            liveFlag = true;
->>>>>>> 67b53167f2b01a75357d8954e3d93b209cd6748d
         }
     }
     // Disconnect from camera
