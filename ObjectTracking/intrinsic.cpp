@@ -22,6 +22,9 @@ string tempFilename;
 // Enables live stream, if true
 bool isCalibrating = false;
 bool saveImageFlag = false;
+bool discardImageFlag =false;
+bool liveFlag=true;
+FlyCapture2::Image convertedImage;
 
 Intrinsic::Intrinsic(QWidget *parent) :
     QDialog(parent),
@@ -93,21 +96,34 @@ void Intrinsic::on_startCalibrButton_clicked()
     // Connect to camera
     connectToCameraByIp(camIpNumber);
     // Start capturing
-    while(isCalibrating) {
-        // Get image
-        FlyCapture2::Image convertedImage = takeSinglePictureFromSingleCamera();
-        unsigned int rowBytes = (double)convertedImage.GetReceivedDataSize()/(double)convertedImage.GetRows();
-        cv::Mat imgcv = cv::Mat(convertedImage.GetRows(), convertedImage.GetCols(), CV_8UC3, convertedImage.GetData(),rowBytes);
-        // DEBUG: Show image using OpenCV's image display
-        cv::imshow("image", imgcv);
-        char key = cv::waitKey(1);
-        // Show image
-        QImage img((uchar*)imgcv.data, imgcv.cols, imgcv.rows, imgcv.step, QImage::Format_BGR30);
-        ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img));
+    while(isCalibrating)
+    {
+
+            // Get image
+           FlyCapture2::Image Image = takeSinglePictureFromSingleCamera();
+            unsigned int rowBytes = (double)Image.GetReceivedDataSize()/(double)Image.GetRows();
+            cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
+            // DEBUG: Show image using OpenCV's image display
+            cv::imshow("image", imgcv);
+            char key = cv::waitKey(1);
+
+            // Show image
+            if(liveFlag){
+              //  cv::Mat show = cvtC
+                QImage img((uchar*)imgcv.data, imgcv.cols, imgcv.rows, imgcv.step, QImage::Format_Mono);
+                ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img));
+                convertedImage=Image;
+            }
+
         // Save image if the user clicks on "Save"
         if(saveImageFlag) {
             saveImage(convertedImage);
             saveImageFlag = false;
+            liveFlag=true;
+        }
+        if(discardImageFlag) {
+           discardImageFlag = false;
+           liveFlag=true;
         }
     }
     // Disconnect from camera
@@ -116,7 +132,7 @@ void Intrinsic::on_startCalibrButton_clicked()
 
 void Intrinsic::on_pictureButton_clicked()
 {
-    saveImageFlag = true;
+    liveFlag = false;
     ui->pictureButton->setVisible(false);
     ui->saveImage->setVisible(true);
     ui->saveImageButton->setVisible(true);
@@ -152,6 +168,7 @@ void Intrinsic::on_loadButton_clicked()
 void Intrinsic::on_saveImageButton_clicked()
 {
     counter++;
+    saveImageFlag=true;
     ui->saveImage->setVisible(false);
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
@@ -174,6 +191,7 @@ void Intrinsic::on_saveImageButton_clicked()
 
 void Intrinsic::on_discardImageButton_clicked()
 {
+    discardImageFlag=true;
     ui->saveImage->setVisible(false);
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
