@@ -32,7 +32,7 @@ void intrinsic_compute::setupCalibration(int board_width, int board_height, int 
     char img_file[100];
 
     sprintf(img_file, "%s/%s%d.%s", imgs_directory.c_str(), imgs_filename.c_str(), k, extension.c_str());
-
+    cout << img_file << "\n";
     if(!doesExist(img_file)) //skips current iteration if img does not exist?
       continue;
 
@@ -88,10 +88,10 @@ double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_f
 {
 
         //some of these could be constant
-        int board_width = 9, board_height = 6;
-        float square_size = 0.02423;
+        int board_width = 7, board_height = 7;
+        float square_size = 1;
         char* out_file = nullptr;
-        string extension = "jpg";
+        string extension = "png";
         double err = 0;
         Mat K;
         Mat D;
