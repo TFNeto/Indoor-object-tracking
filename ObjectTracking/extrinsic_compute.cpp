@@ -18,7 +18,7 @@ extrinsic_compute::extrinsic_compute()
 
 }
 
-void load_image_points(int board_width, int board_height, int num_imgs, float square_size,
+/*void load_image_points(int board_width, int board_height, int num_imgs, float square_size,
                           char* leftimg_dir, char* rightimg_dir, char* leftimg_filename, char* rightimg_filename)
 {
 
@@ -84,9 +84,9 @@ void load_image_points(int board_width, int board_height, int num_imgs, float sq
      }
 
 
-}
+}*/
 
-void run_extrinsic(int num_imgs , char* leftcalib_file, char* rightcalib_file, char* leftimg_dir, char* rightimg_dir,
+/*void run_extrinsic(int num_imgs , char* leftcalib_file, char* rightcalib_file, char* leftimg_dir, char* rightimg_dir,
                    char* leftimg_filename, char* rightimg_filename, char* out_file)   //rotine for extrinsic pair calibration
 {
 
@@ -134,4 +134,4 @@ void run_extrinsic(int num_imgs , char* leftcalib_file, char* rightcalib_file, c
 
       printf("Done Rectification\n");
 
-}
+}*/
