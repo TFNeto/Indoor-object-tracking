@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 int counter = 0;
 int numPhoto= 0;
@@ -109,9 +110,10 @@ void Intrinsic::on_startCalibrButton_clicked()
 
             // Show image
             if(liveFlag){
-              //  cv::Mat show = cvtC
-                QImage img((uchar*)imgcv.data, imgcv.cols, imgcv.rows, imgcv.step, QImage::Format_Mono);
-                ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img));
+                cv::Mat show;
+                cv::cvtColor(imgcv,show,CV_BGR2RGB);
+                QImage img((uchar*)show.data, show.cols, show.rows, show.step, QImage::Format_RGB888);
+                ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img).scaled(630, 420, Qt::KeepAspectRatio));
                 convertedImage=Image;
             }
 
