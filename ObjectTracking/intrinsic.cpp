@@ -3,7 +3,7 @@
 #include "global.h"
 #include "camerafly.h"
 
-// #include "intrinsic_compute.h"
+#include "intrinsic_compute.h"
 #include <string>
 
 #include <iostream>
@@ -133,9 +133,14 @@ void Intrinsic::on_startCalibrButton_clicked()
                 ui->cameraChosen->setVisible(false);
                 ui->infoCalibration->setVisible(true);
 
+                cout << "Starting calib" << endl;
                 //CORRER ROTINA DE CALIBRAÇÃO
-                //intrinsic_compute i
-                //error = i.run(nr_imagens, img_folder, img_filename)
+                intrinsic_compute i;
+                int nr_imagens = 8;
+                string img_folder = "../home/dc/Downloads/seai2/build-ObjectTracking-Desktop_Qt_5_12_0_GCC_64bit-Debug";
+                string img_filename = "calib169.254.193.167_";
+                double a = i.run(nr_imagens, img_folder, img_filename);
+                cout << "intrinsic calib: " << a << endl;
                 //este filename pode ser o IP ou assim?
             isCalibrating = false;
             }
