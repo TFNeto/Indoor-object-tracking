@@ -19,6 +19,7 @@ public:
 private slots:
     void on_closeButton_clicked();
     void on_calibrateButton_clicked();
+    void on_cancelButton_clicked();
 
 private:
     Ui::extrinsic *ui;

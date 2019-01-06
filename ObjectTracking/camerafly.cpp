@@ -14,10 +14,12 @@ using namespace std;
 
 // "Global" camera object used in several methods
 // WIP: We'll probably need 4 of these for the normal mode
-FlyCapture2::GigECamera cam;
+/*FlyCapture2::GigECamera cam;
 FlyCapture2::GigECamera cam1;
 FlyCapture2::GigECamera cam2;
-FlyCapture2::GigECamera cam3;
+FlyCapture2::GigECamera cam3;*/
+FlyCapture2::GigECamera *lista ;
+unsigned int numCamInfo = 10;
 
 // Utility function to print FlyCapture errors
 void PrintError(FlyCapture2::Error error) { error.PrintErrorTrace(); }
@@ -86,7 +88,9 @@ vector<Camera> scanCameras()
     FlyCapture2::BusManager busMgr;
 
     FlyCapture2::CameraInfo camInfo[10];
-    unsigned int numCamInfo = 10;
+    FlyCapture2::CameraInfo nova;
+
+
 
     // Scan for GIGE cameras
     error = FlyCapture2::BusManager::DiscoverGigECameras(camInfo, &numCamInfo);
@@ -104,10 +108,10 @@ vector<Camera> scanCameras()
         cout << "DEBUG: No suitable GigE cameras found. Press Enter to exit..." << endl;
         return vector<Camera>();
     }
-
+    lista = new FlyCapture2::GigECamera[numCamInfo];
     for (unsigned int i = 0; i < numCamInfo; i++)
     {
-        PrintCameraInfo(&camInfo[i]); // DEBUG
+        //PrintCameraInfo(&camInfo[i]); // DEBUG
         ostringstream ipAddress;
         ipAddress << static_cast<unsigned int>(camInfo[i].ipAddress.octets[0]) << "."
                   << static_cast<unsigned int>(camInfo[i].ipAddress.octets[1]) << "."
@@ -115,8 +119,17 @@ vector<Camera> scanCameras()
                   << static_cast<unsigned int>(camInfo[i].ipAddress.octets[3]);
         // Create Camera obj and add it to the listOfCameras vector
         listOfCameras.push_back(Camera(camInfo->modelName, ipAddress.str(), 0, 0, 0, 0));
-    }
 
+        FlyCapture2::PGRGuid guid;
+        error = busMgr.GetCameraFromIndex(i, &guid);
+        error =lista[i].Connect(&guid);
+        error =lista[i].GetCameraInfo(&nova);
+        PrintCameraInfo(&nova);
+        error =lista[i].Disconnect();
+
+
+
+    }
     return listOfCameras;
 }
 
@@ -125,6 +138,25 @@ void connectToCameraByIp(FlyCapture2::IPAddress ipAddress)
     FlyCapture2::Error error;
     FlyCapture2::BusManager busMgr;
     FlyCapture2::PGRGuid guid;
+    FlyCapture2::CameraInfo *temp;
+    int index;
+
+    for (unsigned int i = 0; i < numCamInfo; i++)
+    {
+        error = busMgr.GetCameraFromIndex(i, &guid);
+        error =lista[i].Connect(&guid);
+        error =lista[i].GetCameraInfo(temp);
+        if(temp->ipAddress==ipAddress)
+        {
+            ostringstream ipAddress;
+            ipAddress << static_cast<unsigned int>(temp->ipAddress.octets[0]) << "."
+                      << static_cast<unsigned int>(temp->ipAddress.octets[1]) << "."
+                      << static_cast<unsigned int>(temp->ipAddress.octets[2]) << "."
+                      << static_cast<unsigned int>(temp->ipAddress.octets[3]);
+            index=i;
+            cout<<"index ="<<index<<"  ip="<<ipAddress.str()<<endl;
+        }
+    }
 
     error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
     if (error != FlyCapture2::PGRERROR_OK)
@@ -132,10 +164,9 @@ void connectToCameraByIp(FlyCapture2::IPAddress ipAddress)
         PrintError(error);
         throw "Couldn't get camera";
     }
-
     // Connect to a camera
     // FlyCapture2::GigECamera cam;
-    error = cam.Connect(&guid);
+    error = lista[index].Connect(&guid);
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
@@ -145,7 +176,7 @@ void connectToCameraByIp(FlyCapture2::IPAddress ipAddress)
     cout << "DEBUG: Starting image capture..." << endl;
 
     // Start capturing images
-    error = cam.StartCapture();
+    error = lista[index].StartCapture();
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
@@ -156,11 +187,23 @@ void connectToCameraByIp(FlyCapture2::IPAddress ipAddress)
 // Disconnects a single camera
 // Assumes that the camera was connected
 // Uses the "global" cam object, which is why there are no arguments
-void disconnectCamera()
+void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress)
 {
     FlyCapture2::Error error;
+    FlyCapture2::CameraInfo *temp;
+    int index=0;
+
+    for (unsigned int i = 0; i < numCamInfo; i++)
+    {
+        error=lista[i].GetCameraInfo(temp);
+        if(temp->ipAddress==ipAddress)
+        {
+            index = i;
+        }
+    }
+
     // Stop capturing images
-    error = cam.StopCapture();
+    error =  lista[index].StopCapture();
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
@@ -168,7 +211,7 @@ void disconnectCamera()
     }
 
     // Disconnect the camera
-    error = cam.Disconnect();
+    error = lista[index].Disconnect();
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
@@ -179,14 +222,26 @@ void disconnectCamera()
 // Takes a single picture from a single camera
 // Assumes that the camera is already connected
 // Uses the "global" cam object, which is why there are no arguments
-FlyCapture2::Image takeSinglePictureFromSingleCamera()
+FlyCapture2::Image takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress)
 {
     FlyCapture2::Error error;
     FlyCapture2::Image rawImage;
     FlyCapture2::Image convertedImage;
 
+    FlyCapture2::CameraInfo *temp;
+    int index=0;
+
+    for (unsigned int i = 0; i < numCamInfo; i++)
+    {
+        error=lista[i].GetCameraInfo(temp);
+        if(temp->ipAddress==ipAddress)
+        {
+            index=i;
+        }
+    }
+
     // Retrieve an image
-    error = cam.RetrieveBuffer(&rawImage);
+    error = lista[index].RetrieveBuffer(&rawImage);
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);

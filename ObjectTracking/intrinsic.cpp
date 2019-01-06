@@ -98,12 +98,13 @@ void Intrinsic::on_startCalibrButton_clicked()
     // Get its IP (in decimal)
     uint camIpNumber = listOfCameras[index].getIpNumber();
     // Connect to camera
+    cout<<"gonna connect to "<< camIpNumber<<endl;
     connectToCameraByIp(camIpNumber);
     // Start capturing
     while(isCalibrating)
     {
         // Get image
-        FlyCapture2::Image Image = takeSinglePictureFromSingleCamera();
+        FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(camIpNumber);
         unsigned int rowBytes = (double)Image.GetReceivedDataSize()/(double)Image.GetRows();
         cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
         // DEBUG: Show image using OpenCV's image display
@@ -151,7 +152,7 @@ void Intrinsic::on_startCalibrButton_clicked()
         }
     }
     // Disconnect from camera
-    disconnectCamera();
+    disconnectCameraByIp(camIpNumber);
 }
 
 void Intrinsic::on_pictureButton_clicked()

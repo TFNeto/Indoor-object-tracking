@@ -8,10 +8,10 @@
 
 void PrintError(FlyCapture2::Error error);
 void PrintCameraInfo(FlyCapture2::CameraInfo *pCamInfo);
-FlyCapture2::Image takeSinglePictureFromSingleCamera();
+FlyCapture2::Image takeSinglePictureFromSingleCamera(FlyCapture2::IPAddress ipAddress);
 vector<Camera> scanCameras();
 void connectToCameraByIp(FlyCapture2::IPAddress ipAddress);
-void disconnectCamera();
+void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress);
 void saveImage(FlyCapture2::Image img, string camIp, int imgNum);
 
 #endif // CAMERAFLY_H
