@@ -171,7 +171,7 @@ void stopRecording(int index)
         cout<< "Failed to stop capturing images"<<endl;
     }
 }
-int connectToCameraByIp(FlyCapture2::IPAddress ipAddress)
+int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
 {
     FlyCapture2::Error error;
     FlyCapture2::BusManager busMgr;
@@ -192,6 +192,8 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress)
         {
             PrintError(error);
             cout<< "Couldn't get camera"<<endl;
+            cin.ignore();
+            return -1;
         }
 
         if(guid1==guid)
@@ -202,7 +204,6 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress)
         }
     }
 
-    cout<<"connecting to cam" <<endl;
     // Connect to a camera
     // FlyCapture2::GigECamera cam;
     error = lista[index].Connect(&guid);
@@ -210,6 +211,40 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress)
     {
         PrintError(error);
         cout<< "Failed to connect to camera"<<endl;
+    }
+
+    FlyCapture2::TriggerModeInfo TriggerModeInfo;
+
+     FlyCapture2::TriggerMode triggerMode;
+
+     if(mode=='s')
+     {
+        triggerMode.mode=14;
+        triggerMode.onOff=true;
+        //GPIO pin
+        triggerMode.source = 2;
+
+        error = lista[index].SetTriggerMode(&triggerMode);
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+            cout<< "Failed to Set trigger mode"<<endl;
+           cin.ignore();
+           return -1;
+        }
+
+     }
+
+     // Turn Timestamp on
+    FlyCapture2::EmbeddedImageInfo imageInfo;
+    imageInfo.timestamp.onOff = true;
+    error = lista[index].SetEmbeddedImageInfo(&imageInfo);
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        cout << "Failed to set timestamp" << endl;
+        cin.ignore();
+        return -1;
     }
 
     cout << "DEBUG: Starting image capture..." << endl;

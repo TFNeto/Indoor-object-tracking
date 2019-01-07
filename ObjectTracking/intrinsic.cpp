@@ -100,7 +100,7 @@ void Intrinsic::on_startCalibrButton_clicked()
     // Connect to camera
     cout<<"gonna connect to "<< camIpNumber<<endl;
     cout<<"dropdown index :"<<ui->cameraDropdown->currentIndex()<<endl;
-    int rightindex = connectToCameraByIp(camIpNumber);
+    int rightindex = connectToCameraByIp(camIpNumber,'a');
     // Start capturing
     //connectToCameraByIp(listOfCameras[ui->cameraDropdown->currentIndex()].getIpNumber());
     while(isCalibrating)

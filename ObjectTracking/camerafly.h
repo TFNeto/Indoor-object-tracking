@@ -12,7 +12,7 @@ FlyCapture2::Image takeSinglePictureFromSingleCamera(int index);
 vector<Camera> scanCameras();
 void startRecording(int index);
 void stopRecording(int index);
-int connectToCameraByIp(FlyCapture2::IPAddress ipAddress);
+int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode);
 void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress);
 void saveImage(FlyCapture2::Image img, string camIp, int imgNum);
 

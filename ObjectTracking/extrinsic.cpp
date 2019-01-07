@@ -77,8 +77,8 @@ void extrinsic::on_calibrateButton_clicked()
         ui->camera2IP->setVisible(true);
         ui->calibrateButton->setVisible(false);
 
-        int index1 = connectToCameraByIp(listOfCameras[ui->comboBox->currentIndex()].getIpNumber());
-        int index2 = connectToCameraByIp(listOfCameras[ui->comboBox_2->currentIndex()].getIpNumber());
+        int index1 = connectToCameraByIp(listOfCameras[ui->comboBox->currentIndex()].getIpNumber(),'s');
+        int index2 = connectToCameraByIp(listOfCameras[ui->comboBox_2->currentIndex()].getIpNumber(),'s');
         //int index[2]={ui->comboBox->currentIndex(),ui->comboBox_2->currentIndex()};
 
         while(isCalibratingExtrinsic)
