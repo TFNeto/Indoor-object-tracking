@@ -76,34 +76,44 @@ void extrinsic::on_calibrateButton_clicked()
         ui->camera1IP->setVisible(true);
         ui->camera2IP->setVisible(true);
         ui->calibrateButton->setVisible(false);
-        /*
-        uint ip1=listOfCameras[ui->comboBox->currentIndex()].getIpNumber();
-        connectToCameraByIp(ip1);
-        //connectToCameraByIp(ui->comboBox_2->currentIndex());
+
+        int index1 = connectToCameraByIp(listOfCameras[ui->comboBox->currentIndex()].getIpNumber());
+        int index2 = connectToCameraByIp(listOfCameras[ui->comboBox_2->currentIndex()].getIpNumber());
         //int index[2]={ui->comboBox->currentIndex(),ui->comboBox_2->currentIndex()};
 
         while(isCalibratingExtrinsic)
         {
             // Get image
-            FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(listOfCameras[ui->comboBox->currentIndex()].getIpNumber());
+            FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(index1);
+            FlyCapture2::Image Image2 = takeSinglePictureFromSingleCamera(index2);
+
             unsigned int rowBytes = (double)Image.GetReceivedDataSize()/(double)Image.GetRows();
             cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
+            unsigned int rowBytes2 = (double)Image2.GetReceivedDataSize()/(double)Image2.GetRows();
+            cv::Mat imgcv2 = cv::Mat(Image2.GetRows(), Image2.GetCols(), CV_8UC3, Image2.GetData(),rowBytes);
             // DEBUG: Show image using OpenCV's image display
             cv::imshow("image", imgcv);
             char key = cv::waitKey(1);
-
+            cv::imshow("image2", imgcv2);
+            key= cv::waitKey(1);
             // Show image
             if(liveFlagExtrinsic){
                 cv::Mat show;
+                cv::Mat show2;
                 cv::cvtColor(imgcv,show,CV_BGR2RGB);
+                cv::cvtColor(imgcv2,show2,CV_BGR2RGB);
                 QImage img((uchar*)show.data, show.cols, show.rows, show.step, QImage::Format_RGB888);
-                ui->camera1Feed->setPixmap(QPixmap::fromImage(img).scaled(630, 420, Qt::KeepAspectRatio));
+                QImage img2((uchar*)show2.data, show2.cols, show2.rows, show2.step, QImage::Format_RGB888);
+                ui->camera1Feed->setPixmap(QPixmap::fromImage(img).scaled(441, 294, Qt::KeepAspectRatio));
                 ui->camera1Feed->repaint();
+                ui->camera2Feed->setPixmap(QPixmap::fromImage(img2).scaled(441, 294, Qt::KeepAspectRatio));
+                ui->camera2Feed->repaint();
                 convertedImageEX=Image;
 
             }
-        }*/
+        }
          //calibrateCameraPair();
+        disconnectCameraByIp(listOfCameras[ui->comboBox->currentIndex()].getIpNumber());
         return;
     }
     ui->errorText->setText("Chose different cameras");

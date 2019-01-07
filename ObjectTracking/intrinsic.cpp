@@ -130,12 +130,12 @@ void Intrinsic::on_startCalibrButton_clicked()
             saveImageFlag = false;
             liveFlag = true;
 
-           /* if(counter == numPhoto)
+            if(counter == numPhoto)
             {
                 ui->cameraDropdown->setVisible(true);
                 ui->cameraChosen->setVisible(false);
                 ui->infoCalibration->setVisible(true);
-
+                /*
                 cout << "Starting calib" << endl;
                 //CORRER ROTINA DE CALIBRAÇÃO
                 intrinsic_compute i;
@@ -144,9 +144,9 @@ void Intrinsic::on_startCalibrButton_clicked()
                 string img_filename = "calib169.254.193.167_";
                 double a = i.run(nr_imagens, img_folder, img_filename);
                 cout << "intrinsic calib: " << a << endl;
-                //este filename pode ser o IP ou assim?
+                //este filename pode ser o IP ou assim?*/
             isCalibrating = false;
-            }*/
+            }
         }
         if(discardImageFlag) {
            discardImageFlag = false;
