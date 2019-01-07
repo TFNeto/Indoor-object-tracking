@@ -3,8 +3,6 @@ Make sure you have installed:
     - sh install_opencv_contrib.sh
 - Flycapture 
     - sh install_flycapture.sh
-- OpenCV + Qt
-  
 - [Qt Creator](https://www.qt.io/download)
 - Boost lib
   - sudo apt install libboost-all-dev
