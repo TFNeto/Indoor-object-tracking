@@ -17,6 +17,9 @@ public:
     void calibrateCameraPair();
 
 private slots:
+    void on_takePictureButton_clicked();
+    void on_savePictureButton_clicked();
+    void on_discardPictureButton_clicked();
     void on_closeButton_clicked();
     void on_calibrateButton_clicked();
     void on_cancelButton_clicked();

@@ -221,8 +221,14 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
      {
         triggerMode.mode=14;
         triggerMode.onOff=true;
+        triggerMode.polarity=0;
         //GPIO pin
-        triggerMode.source = 2;
+        triggerMode.source = 0;
+     }
+     else {
+         triggerMode.onOff = false;
+         triggerMode.mode=0;
+     }
 
         error = lista[index].SetTriggerMode(&triggerMode);
         if (error != FlyCapture2::PGRERROR_OK)
@@ -233,7 +239,6 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
            return -1;
         }
 
-     }
 
      // Turn Timestamp on
     FlyCapture2::EmbeddedImageInfo imageInfo;

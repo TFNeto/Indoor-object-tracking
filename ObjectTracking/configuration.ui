@@ -252,19 +252,6 @@
     </property>
    </item>
   </widget>
-  <widget class="QPushButton" name="addCam_push">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>500</y>
-     <width>151</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Add camera</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="saveCon_push">
    <property name="geometry">
     <rect>
@@ -308,9 +295,9 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>450</y>
+     <y>500</y>
      <width>151</width>
-     <height>31</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="text">

@@ -13,14 +13,15 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 using namespace std;
-
-int count = 0;
+int counterEx=0;
+int numPhotoEx=0;
 
 bool isCalibratingExtrinsic = false;
 bool saveImageFlagExtrinsic = false;
 bool discardImageFlagExtrinsic = false;
 bool liveFlagExtrinsic = true;
 FlyCapture2::Image convertedImageEX;
+FlyCapture2::Image convertedImageEX2;
 
 extrinsic::extrinsic(QWidget *parent) :
     QDialog(parent),
@@ -46,6 +47,9 @@ extrinsic::extrinsic(QWidget *parent) :
     ui->camera1IP->setVisible(false);
     ui->camera2IP->setVisible(false);
     ui->saveButton->setVisible(false);
+    ui->takePictureButton->setVisible(false);
+    ui->savePictureButton->setVisible(false);
+    ui->discardPictureButton->setVisible(false);
 }
 
 extrinsic::~extrinsic()
@@ -59,12 +63,38 @@ void extrinsic::on_closeButton_clicked()
     cv::destroyAllWindows();
     this->close();
 }
+void extrinsic::on_takePictureButton_clicked()
+{
+    liveFlagExtrinsic=false;
+    ui->takePictureButton->setVisible(false);
+    ui->savePictureButton->setVisible(true);
+    ui->discardPictureButton->setVisible(true);
+
+}
+void extrinsic::on_savePictureButton_clicked()
+{
+    counterEx++;
+    ui->takePictureButton->setVisible(true);
+    ui->savePictureButton->setVisible(false);
+    ui->discardPictureButton->setVisible(false);
+    saveImageFlagExtrinsic=true;
+}
+void extrinsic::on_discardPictureButton_clicked()
+{
+    ui->takePictureButton->setVisible(true);
+    ui->savePictureButton->setVisible(false);
+    ui->discardPictureButton->setVisible(false);
+    discardImageFlagExtrinsic=true;
+}
 
 void extrinsic::on_calibrateButton_clicked()
 {
+
     if(ui->comboBox->currentIndex()!=ui->comboBox_2->currentIndex())
     {
+        numPhotoEx=ui->numPicsDropdown->value();
         isCalibratingExtrinsic = true;
+        ui->numPicsDropdown->setVisible(false);
         ui->errorText->setVisible(false);
         ui->comboBox->setVisible(false);
         ui->comboBox_2->setVisible(false);
@@ -75,6 +105,8 @@ void extrinsic::on_calibrateButton_clicked()
         ui->numPicsText->setVisible(true);
         ui->camera1IP->setVisible(true);
         ui->camera2IP->setVisible(true);
+        ui->calibrateButton->setVisible(false);
+        ui->takePictureButton->setVisible(true);
         ui->calibrateButton->setVisible(false);
 
         int index1 = connectToCameraByIp(listOfCameras[ui->comboBox->currentIndex()].getIpNumber(),'s');
@@ -89,8 +121,10 @@ void extrinsic::on_calibrateButton_clicked()
 
             unsigned int rowBytes = (double)Image.GetReceivedDataSize()/(double)Image.GetRows();
             cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
+
             unsigned int rowBytes2 = (double)Image2.GetReceivedDataSize()/(double)Image2.GetRows();
             cv::Mat imgcv2 = cv::Mat(Image2.GetRows(), Image2.GetCols(), CV_8UC3, Image2.GetData(),rowBytes);
+
             // DEBUG: Show image using OpenCV's image display
             cv::imshow("image", imgcv);
             char key = cv::waitKey(1);
@@ -109,7 +143,25 @@ void extrinsic::on_calibrateButton_clicked()
                 ui->camera2Feed->setPixmap(QPixmap::fromImage(img2).scaled(441, 294, Qt::KeepAspectRatio));
                 ui->camera2Feed->repaint();
                 convertedImageEX=Image;
+                convertedImageEX2=Image2;
+           }
+           if(saveImageFlagExtrinsic) {
 
+               string camIp = listOfCameras[ui->comboBox->currentIndex()].getIP();
+               saveImage(convertedImageEX, camIp, counterEx);
+               camIp=listOfCameras[ui->comboBox_2->currentIndex()].getIP();
+               saveImage(convertedImageEX2, camIp, counterEx);
+               saveImageFlagExtrinsic = false;
+               liveFlagExtrinsic = true;
+                if(counterEx == numPhotoEx)
+                {
+
+                }
+
+            }
+            if(discardImageFlagExtrinsic) {
+                discardImageFlagExtrinsic = false;
+                liveFlagExtrinsic = true;
             }
         }
          //calibrateCameraPair();

@@ -24,6 +24,7 @@ Configuration::Configuration(QWidget *parent) :
     ui(new Ui::Configuration)
 {
     ui->setupUi(this);
+    ui->saveCon_push->setVisible(false);
 }
 
 Configuration::~Configuration()
@@ -36,7 +37,7 @@ void Configuration::on_close_pushButton_clicked()
     this->close();
 }
 
-void Configuration::on_addCam_push_clicked()
+/*void Configuration::on_addCam_push_clicked()
 {
     ui->tableWidget->setRowCount(ui->tableWidget->rowCount()+1);
     QTableWidgetItem *item0 = new QTableWidgetItem;
@@ -65,7 +66,7 @@ void Configuration::on_addCam_push_clicked()
     item7->setText(tr("Remove"));
     item7->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 7, item7);
-}
+}*/
 
 void Configuration::on_tableWidget_cellClicked(int row, int column)
 {
@@ -159,6 +160,7 @@ void Configuration::updateTable(vector<Camera> newListOfCameras)
         connectionRemove->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidget->setItem(static_cast<int>(i), 7, connectionRemove);
     }
+    ui->saveCon_push->setVisible(true);
 }
 
 void Configuration::on_scan_push_clicked()

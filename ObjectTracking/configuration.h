@@ -22,7 +22,7 @@ public:
     bool alreadyScanned = false;
 private slots:
     void on_close_pushButton_clicked();
-    void on_addCam_push_clicked();
+   // void on_addCam_push_clicked();
     void on_tableWidget_cellClicked(int row, int column);
     void on_saveCon_push_clicked();
     void on_loadCon_push_clicked();
