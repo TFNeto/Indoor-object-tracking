@@ -99,12 +99,14 @@ void Intrinsic::on_startCalibrButton_clicked()
     uint camIpNumber = listOfCameras[index].getIpNumber();
     // Connect to camera
     cout<<"gonna connect to "<< camIpNumber<<endl;
-    connectToCameraByIp(camIpNumber);
+    cout<<"dropdown index :"<<ui->cameraDropdown->currentIndex()<<endl;
+    int rightindex = connectToCameraByIp(camIpNumber);
     // Start capturing
+    //connectToCameraByIp(listOfCameras[ui->cameraDropdown->currentIndex()].getIpNumber());
     while(isCalibrating)
     {
         // Get image
-        FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(camIpNumber);
+        FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(rightindex);
         unsigned int rowBytes = (double)Image.GetReceivedDataSize()/(double)Image.GetRows();
         cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
         // DEBUG: Show image using OpenCV's image display
@@ -123,12 +125,12 @@ void Intrinsic::on_startCalibrButton_clicked()
 
         // Save image if the user clicks on "Save"
         if(saveImageFlag) {
-            string camIp = listOfCameras[index].getIP();
+            string camIp = listOfCameras[ui->cameraDropdown->currentIndex()].getIP();
             saveImage(convertedImage, camIp, counter);
             saveImageFlag = false;
             liveFlag = true;
 
-            if(counter == numPhoto)
+           /* if(counter == numPhoto)
             {
                 ui->cameraDropdown->setVisible(true);
                 ui->cameraChosen->setVisible(false);
@@ -144,7 +146,7 @@ void Intrinsic::on_startCalibrButton_clicked()
                 cout << "intrinsic calib: " << a << endl;
                 //este filename pode ser o IP ou assim?
             isCalibrating = false;
-            }
+            }*/
         }
         if(discardImageFlag) {
            discardImageFlag = false;
@@ -152,7 +154,9 @@ void Intrinsic::on_startCalibrButton_clicked()
         }
     }
     // Disconnect from camera
+
     disconnectCameraByIp(camIpNumber);
+    //stopRecording(ui->cameraDropdown->currentIndex());
 }
 
 void Intrinsic::on_pictureButton_clicked()
