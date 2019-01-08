@@ -12,13 +12,6 @@
 
 using namespace std;
 
-// "Global" camera object used in several methods
-// WIP: We'll probably need 4 of these for the normal mode
-/*FlyCapture2::GigECamera cam;
-FlyCapture2::GigECamera cam1;
-FlyCapture2::GigECamera cam2;
-FlyCapture2::GigECamera cam3;*/
-FlyCapture2::GigECamera *lista ;
 unsigned int numCamInfo = 10;
 
 // Utility function to print FlyCapture errors
@@ -90,8 +83,6 @@ vector<Camera> scanCameras()
     FlyCapture2::CameraInfo camInfo[10];
     FlyCapture2::CameraInfo nova;
 
-
-
     // Scan for GIGE cameras
     error = FlyCapture2::BusManager::DiscoverGigECameras(camInfo, &numCamInfo);
     if (error != FlyCapture2::PGRERROR_OK)
@@ -105,7 +96,7 @@ vector<Camera> scanCameras()
     if (numCamInfo == 0)
     {
         // No cameras found
-        cout << "DEBUG: No suitable GigE cameras found. Press Enter to exit..." << endl;
+        cout << "No suitable GigE cameras found. Press Enter to exit..." << endl;
         return vector<Camera>();
     }
     lista = new FlyCapture2::GigECamera[numCamInfo];
@@ -117,37 +108,38 @@ vector<Camera> scanCameras()
                   << static_cast<unsigned int>(camInfo[i].ipAddress.octets[1]) << "."
                   << static_cast<unsigned int>(camInfo[i].ipAddress.octets[2]) << "."
                   << static_cast<unsigned int>(camInfo[i].ipAddress.octets[3]);
+
         // Create Camera obj and add it to the listOfCameras vector
         listOfCameras.push_back(Camera(camInfo->modelName, ipAddress.str(), 0, 0, 0, 0));
 
-        FlyCapture2::PGRGuid *guid;
-        error = busMgr.GetCameraFromIndex(i, guid);
-
-            error =lista[i].Connect(guid);
-            if (error != FlyCapture2::PGRERROR_OK)
-            {
-                PrintError(error);
-                return vector<Camera>();
-            }
-            error =lista[i].GetCameraInfo(&nova);
-            if (error != FlyCapture2::PGRERROR_OK)
-            {
-                PrintError(error);
-                return vector<Camera>();
-            }
-            PrintCameraInfo(&nova);
-            // Disconnect the camera
-            error = lista[i].Disconnect();
-            if (error != FlyCapture2::PGRERROR_OK)
-            {
-                PrintError(error);
-                cout<< "Failed to disconnect camera"<<endl;
-            }
-
-
+        FlyCapture2::PGRGuid guid;
+        error = busMgr.GetCameraFromIndex(i, &guid);
+        // Connect to Camera
+        error = lista[i].Connect(&guid);
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+        }
+        // Get its info
+        error = lista[i].GetCameraInfo(&nova);
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+        }
+        PrintCameraInfo(&nova);
+        // Disconnect the camera
+        error = lista[i].Disconnect();
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+            cout << "Failed to disconnect camera" << endl;
+        }
     }
     return listOfCameras;
 }
+
+// Starts capturing images from a camera
+// @param int index - Camera's index
 void startRecording(int index)
 {
     FlyCapture2::Error error;
@@ -156,9 +148,12 @@ void startRecording(int index)
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
-        cout<< "Failed to start"<<endl;;
+        cout << "Failed to start" << endl;
     }
 }
+
+// Stops capturing images from a camera
+// @param int index - Camera's index
 void stopRecording(int index)
 {
     FlyCapture2::Error error;
@@ -171,19 +166,23 @@ void stopRecording(int index)
         cout<< "Failed to stop capturing images"<<endl;
     }
 }
+
+// Connects to a camera by IP
+// @param FlyCapture2::IPAddress ipAddress - camera's ip address
+// @param char mode - Operating mode (s for external trigger)
+// @return int - Camera's index
 int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
 {
     FlyCapture2::Error error;
     FlyCapture2::BusManager busMgr;
     FlyCapture2::PGRGuid guid1,guid ;
-    FlyCapture2::CameraInfo *temp;
-    int index=0;
+    int index = 0;
 
     error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
-        cout<< "Couldn't get camera"<<endl;
+        cout << "Couldn't get camera" << endl;
     }
     for (unsigned int i = 0; i < numCamInfo; i++)
     {
@@ -191,16 +190,15 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
         if (error != FlyCapture2::PGRERROR_OK)
         {
             PrintError(error);
-            cout<< "Couldn't get camera"<<endl;
+            cout << "Couldn't get camera" << endl;
             cin.ignore();
             return -1;
         }
 
-        if(guid1==guid)
+        if(guid1 == guid)
         {
-
-            index=i;
-            cout<<"index ="<<index<<endl;
+            index = i;
+            cout << "index = " << index << endl;
         }
     }
 
@@ -214,33 +212,31 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
     }
 
     FlyCapture2::TriggerModeInfo TriggerModeInfo;
+    FlyCapture2::TriggerMode triggerMode;
 
-     FlyCapture2::TriggerMode triggerMode;
-
-     if(mode=='s')
-     {
-        triggerMode.mode=14;
-        triggerMode.onOff=true;
-        triggerMode.polarity=0;
+    if(mode == 's')
+    {
+        triggerMode.mode = 14;
+        triggerMode.onOff = true;
+        triggerMode.polarity = 0;
         //GPIO pin
         triggerMode.source = 0;
-     }
-     else {
-         triggerMode.onOff = false;
-         triggerMode.mode=0;
-     }
+    }
+    else
+    {
+        triggerMode.onOff = false;
+        triggerMode.mode = 0;
+    }
 
-        error = lista[index].SetTriggerMode(&triggerMode);
-        if (error != FlyCapture2::PGRERROR_OK)
-        {
-            PrintError(error);
-            cout<< "Failed to Set trigger mode"<<endl;
-           cin.ignore();
-           return -1;
-        }
+    error = lista[index].SetTriggerMode(&triggerMode);
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+        cout << "Failed to Set trigger mode" << endl;
+        return -1;
+    }
 
-
-     // Turn Timestamp on
+    // Turn Timestamp on
     FlyCapture2::EmbeddedImageInfo imageInfo;
     imageInfo.timestamp.onOff = true;
     error = lista[index].SetEmbeddedImageInfo(&imageInfo);
@@ -248,7 +244,6 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
     {
         PrintError(error);
         cout << "Failed to set timestamp" << endl;
-        cin.ignore();
         return -1;
     }
 
@@ -264,22 +259,21 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
     return index;
 }
 
-// Disconnects a single camera
-// Assumes that the camera was connected
-// Uses the "global" cam object, which is why there are no arguments
+// Disconnects a camera by IP
+// @param FlyCapture2::IPAddress ipAddress - Camera's IP Address
+
 void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress)
 {
     FlyCapture2::BusManager busMgr;
     FlyCapture2::Error error;
     FlyCapture2::PGRGuid guid1,guid ;
-    FlyCapture2::CameraInfo *temp;
-    int index=0;
+    int index = 0;
 
     error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
-        cout<< "Couldn't get camera"<<endl;
+        cout << "Couldn't get camera" << endl;
     }
     for (unsigned int i = 0; i < numCamInfo; i++)
     {
@@ -287,22 +281,21 @@ void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress)
         if (error != FlyCapture2::PGRERROR_OK)
         {
             PrintError(error);
-            cout<< "Couldn't get camera"<<endl;
+            cout << "Couldn't get camera" << endl;
         }
 
-        if(guid1==guid)
+        if(guid1 == guid)
         {
-
-            index=i;
-            cout<<"index ="<<index<<endl;
+            index = i;
+            cout << "index =" << index << endl;
         }
     }
     // Stop capturing images
-    error =  lista[index].StopCapture();
+    error = lista[index].StopCapture();
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
-        cout<< "Failed to stop capturing images"<<endl;
+        cout << "Failed to stop capturing images" << endl;
     }
 
     // Disconnect the camera
@@ -310,13 +303,13 @@ void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress)
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
-        cout<< "Failed to disconnect camera"<<endl;
+        cout << "Failed to disconnect camera" << endl;
     }
 }
 
 // Takes a single picture from a single camera
-// Assumes that the camera is already connected
-// Uses the "global" cam object, which is why there are no arguments
+// @param int index - Camera's index
+// @return FlyCapture2::Image - image, converted to BGR
 FlyCapture2::Image takeSinglePictureFromSingleCamera(int index)
 {
     FlyCapture2::Error error;
@@ -328,23 +321,26 @@ FlyCapture2::Image takeSinglePictureFromSingleCamera(int index)
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
-        cout<< "Failed to retrieve buffer"<<endl;
+        cout << "Failed to retrieve buffer" << endl;
     }
 
-    //cout << "DEBUG: Grabbed image" << endl;
+    cout << "DEBUG: Grabbed image" << endl;
 
     // Convert the raw image
     error = rawImage.Convert(FlyCapture2::PIXEL_FORMAT_BGR, &convertedImage);
     if (error != FlyCapture2::PGRERROR_OK)
     {
         PrintError(error);
-        cout<<"Failde to convert" <<endl;
+        cout << "Failed to convert" << endl;
     }
 
     return convertedImage;
 }
 
 // Saves an image in png format
+// @param FlyCapture2::Image img - the image itself
+// @param string camIp - Camera's ip (for the filename)
+// @param imgNum - Image number (Asc order, for the filename)
 void saveImage(FlyCapture2::Image img, string camIp, int imgNum)
 {
     string fileName = "calib" + camIp + "_" + to_string(imgNum) + ".png";

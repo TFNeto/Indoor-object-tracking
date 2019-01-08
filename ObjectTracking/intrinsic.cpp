@@ -98,8 +98,8 @@ void Intrinsic::on_startCalibrButton_clicked()
     // Get its IP (in decimal)
     uint camIpNumber = listOfCameras[index].getIpNumber();
     // Connect to camera
-    cout<<"gonna connect to "<< camIpNumber<<endl;
-    cout<<"dropdown index :"<<ui->cameraDropdown->currentIndex()<<endl;
+    cout << "gonna connect to " << camIpNumber << endl;
+    cout << "dropdown index :" << ui->cameraDropdown->currentIndex() << endl;
     int rightindex = connectToCameraByIp(camIpNumber,'a');
     // Start capturing
     //connectToCameraByIp(listOfCameras[ui->cameraDropdown->currentIndex()].getIpNumber());
@@ -120,7 +120,7 @@ void Intrinsic::on_startCalibrButton_clicked()
             QImage img((uchar*)show.data, show.cols, show.rows, show.step, QImage::Format_RGB888);
             ui->label_CameraFeed->setPixmap(QPixmap::fromImage(img).scaled(630, 420, Qt::KeepAspectRatio));
             ui->label_CameraFeed->repaint();
-            convertedImage=Image;
+            convertedImage = Image;
         }
 
         // Save image if the user clicks on "Save"
@@ -143,9 +143,15 @@ void Intrinsic::on_startCalibrButton_clicked()
                 string img_folder = "../build-ObjectTracking-Desktop-Debug";
                 string img_filename = "calib" + camIp + "_";
                 double a = i.run(nr_imagens, img_folder, img_filename);
+<<<<<<< HEAD
                 cout << "intrinsic calib: " << a << "\n";
                 //este filename pode ser o IP ou assim?
             isCalibrating = false;
+=======
+                cout << "intrinsic calib: " << a << endl;
+                //este filename pode ser o IP ou assim?*/
+                isCalibrating = false;
+>>>>>>> 207a862969abd1ad16e0b2e228e8331a4c6df120
             }
         }
         if(discardImageFlag) {
@@ -154,7 +160,6 @@ void Intrinsic::on_startCalibrButton_clicked()
         }
     }
     // Disconnect from camera
-
     disconnectCameraByIp(camIpNumber);
     //stopRecording(ui->cameraDropdown->currentIndex());
 }
@@ -166,7 +171,7 @@ void Intrinsic::on_pictureButton_clicked()
     ui->saveImage->setVisible(true);
     ui->saveImageButton->setVisible(true);
     ui->discardImageButton->setVisible(true);
-  //  tempFilename.assign(fileName);
+    //tempFilename.assign(fileName);
 }
 
 void Intrinsic::on_closeButton_clicked()

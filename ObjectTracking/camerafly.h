@@ -6,6 +6,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+extern FlyCapture2::GigECamera *lista;
+extern unsigned int numCamInfo;
 void PrintError(FlyCapture2::Error error);
 void PrintCameraInfo(FlyCapture2::CameraInfo *pCamInfo);
 FlyCapture2::Image takeSinglePictureFromSingleCamera(int index);
