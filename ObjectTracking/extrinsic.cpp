@@ -2,7 +2,7 @@
 #include "ui_extrinsic.h"
 #include "global.h"
 #include <string>
-
+#include "extrinsic_compute.h"
 #include "camerafly.h"
 #include <iostream>
 #include <sstream>
@@ -147,15 +147,29 @@ void extrinsic::on_calibrateButton_clicked()
            }
            if(saveImageFlagExtrinsic) {
 
-               string camIp = listOfCameras[ui->comboBox->currentIndex()].getIP();
-               saveImage(convertedImageEX, camIp, counterEx);
-               camIp=listOfCameras[ui->comboBox_2->currentIndex()].getIP();
-               saveImage(convertedImageEX2, camIp, counterEx);
+               string camIp1 = listOfCameras[ui->comboBox->currentIndex()].getIP();
+               saveImage(convertedImageEX, camIp1, counterEx);
+               string camIp2=listOfCameras[ui->comboBox_2->currentIndex()].getIP();
+               saveImage(convertedImageEX2, camIp2, counterEx);
                saveImageFlagExtrinsic = false;
                liveFlagExtrinsic = true;
                 if(counterEx == numPhotoEx)
                 {
+//                         ui->cameraDropdown->setVisible(true);
+//                         ui->cameraChosen->setVisible(false);
+//                         ui->infoCalibration->setVisible(true);
 
+//                        extrinsic_compute e;
+//                        //test vars
+//                        int counter = numPhotoEx; //number of photos
+//                        string leftcalib_file = "calib" +camIp1+"_"+".yml";
+//                        string rightcalib_file = "calib" +camIp2+"_"+".yml";
+//                        string leftimg_dir = "../build-ObjectTracking-Desktop-Debug";
+//                        string rightimg_dir = "../build-ObjectTracking-Desktop-Debug";
+//                        string leftimg_filename ="calib" +camIp1+ "_";
+//                        string rightimg_filename = "calib"+camIp2+ "_";
+//                        string out_file = "teste_pair.yml";
+//                        e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
                 }
 
             }
@@ -164,7 +178,7 @@ void extrinsic::on_calibrateButton_clicked()
                 liveFlagExtrinsic = true;
             }
         }
-         //calibrateCameraPair();
+         calibrateCameraPair();
         disconnectCameraByIp(listOfCameras[ui->comboBox->currentIndex()].getIpNumber());
         return;
     }
@@ -177,6 +191,17 @@ void extrinsic::calibrateCameraPair()
 
     int numOfPic = ui->numPicsDropdown->value();
 
+//    extrinsic_compute e;
+//    //test vars
+//    int counter = numOfPic; //number of photos
+//    string leftcalib_file = "cam_out_intrinsic_left.yml";
+//    string rightcalib_file = "cam_out_intrinsic_righ.yml";
+//    string leftimg_dir = "../1";
+//    string rightimg_dir = "../1";
+//    string leftimg_filename = "left";
+//    string rightimg_filename = "right";
+//    string out_file = "teste_pair.yml";
+//    e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
 
     //do the calibration
 }

@@ -167,6 +167,7 @@ void Configuration::on_scan_push_clicked()
 {
     // Note: By doing this, we are deleting/ignoring the previous list cameras
     listOfCameras = scanCameras();
+    cout<< listOfCameras[1].getIP() << "\n";
     this->updateTable(listOfCameras);
 
 }

@@ -73,14 +73,14 @@ void Calibrate::on_intrinsicButton_clicked()
     //intrinsic_compute i;
     //double errorVal = 1;
 
-    //test vars
-    //int counter = 27; //overriding for tests
-    //string imgs_directory = "../intrinsic_right";
-   // string imgs_filename = "right";
+//    test vars
+//    int counter = 27; //overriding for tests
+//    string imgs_directory = "../intrinsic_right";
+//    string imgs_filename = "right";
 
-    //função para calibração intrinseca abaixo//
-    // cout << "pepe\n";
-    // errorVal = i.run(counter, imgs_directory, imgs_filename); //compute intrinsic calibration for a single camera
+//    função para calibração intrinseca abaixo//
+//     cout << "pepe\n";
+//     errorVal = i.run(counter, imgs_directory, imgs_filename); //compute intrinsic calibration for a single camera
 }
 
 void Calibrate::on_extrinsicButton_clicked()
@@ -89,17 +89,17 @@ void Calibrate::on_extrinsicButton_clicked()
        extrinsicWindow.setModal(true);
       extrinsicWindow.exec();
 
-//        extrinsic_compute e;
+            extrinsic_compute e;
 
-//        //test vars
-//        int counter = 28; //overriding for tests
-//        string leftcalib_file = "cam_out_intrinsic_left.yml";
-//        string rightcalib_file = "cam_out_intrinsic_left.yml";
-//        string leftimg_dir = "../1";
-//        string rightimg_dir = "../1";
-//        string leftimg_filename = "left";
-//        string rightimg_filename = "right";
-//        string out_file = "teste.yml";
-//        e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
+//          //test vars
+//          int counter = 8; //overriding for tests
+//          string leftcalib_file = "cam_out_intrinsic_left.yml";
+//          string rightcalib_file = "cam_out_intrinsic_righ.yml";
+//          string leftimg_dir = "../1";
+//          string rightimg_dir = "../1";
+//          string leftimg_filename = "left";
+//          string rightimg_filename = "right";
+//          string out_file = "teste_pair.yml";
+//          e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
 
 }

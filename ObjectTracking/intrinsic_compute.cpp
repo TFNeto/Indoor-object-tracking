@@ -47,6 +47,7 @@ void intrinsic_compute::setupCalibration(int board_width, int board_height, int 
       cornerSubPix(gray, corners, cv::Size(5, 5), cv::Size(-1, -1),
                    TermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 30, 0.1));
       drawChessboardCorners(gray, board_size, corners, found);
+      cout<< "corners found :" << k << "\n";
 
         vector< Point3f > obj;
         for (int i = 0; i < board_height; i++)
@@ -90,7 +91,7 @@ double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_f
         //some of these could be constant
         int board_width = 7, board_height = 7;
         float square_size = 1;
-        char* out_file = nullptr;
+        string out_file = imgs_filename;
         string extension = "png";
         double err = 0;
         Mat K;
@@ -103,16 +104,16 @@ double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_f
         flag |= CV_CALIB_FIX_K4;
         flag |= CV_CALIB_FIX_K5;
 
-        calibrateCamera(object_points, image_points, img.size(), K, D, rvecs, tvecs, flag);
+        calibrateCamera(object_points, image_points, img.size(), K, D, rvecs, tvecs, flag);  //K-camera matrix  D - dis. coeff
         err = computeReprojectionErrors(object_points, image_points, rvecs, tvecs, K, D);
-        cout << err << "\n";
 
-        /*FileStorage fs(out_file, FileStorage::WRITE);
+        // passar para o código do bruno e de-distorcer as imagens
+        FileStorage fs(out_file.c_str(), FileStorage::WRITE);
         fs << "K" << K;
         fs << "D" << D;
         fs << "board_width" << board_width;
         fs << "board_height" << board_height;
-        fs << "square_size" << square_size;*/
+        fs << "square_size" << square_size;
 
         return err;
 }

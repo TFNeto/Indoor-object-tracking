@@ -135,16 +135,16 @@ void Intrinsic::on_startCalibrButton_clicked()
                 ui->cameraDropdown->setVisible(true);
                 ui->cameraChosen->setVisible(false);
                 ui->infoCalibration->setVisible(true);
-                /*
-                cout << "Starting calib" << endl;
+
+                cout << "Starting calib" << "\n";
                 //CORRER ROTINA DE CALIBRAÇÃO
                 intrinsic_compute i;
-                int nr_imagens = 8;
-                string img_folder = "../home/dc/Downloads/seai2/build-ObjectTracking-Desktop_Qt_5_12_0_GCC_64bit-Debug";
-                string img_filename = "calib169.254.193.167_";
+                int nr_imagens = numPhoto;
+                string img_folder = "../build-ObjectTracking-Desktop-Debug";
+                string img_filename = "calib" + camIp + "_";
                 double a = i.run(nr_imagens, img_folder, img_filename);
-                cout << "intrinsic calib: " << a << endl;
-                //este filename pode ser o IP ou assim?*/
+                cout << "intrinsic calib: " << a << "\n";
+                //este filename pode ser o IP ou assim?
             isCalibrating = false;
             }
         }
