@@ -46,7 +46,8 @@ SOURCES += \
     intrinsic_compute.cpp \
     stdafx.cpp \
     camerafly.cpp \
-    extrinsic_compute.cpp
+    extrinsic_compute.cpp \
+    triangulatepoints.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -63,7 +64,8 @@ HEADERS += \
     resource.h \ # flycapture
     stdafx.h \ # flycapture
     camerafly.h \
-    extrinsic_compute.h
+    extrinsic_compute.h \
+    triangulatepoints.h
 
 FORMS += \
     mainwindow.ui \
