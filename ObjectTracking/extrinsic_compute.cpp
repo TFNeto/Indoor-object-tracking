@@ -18,8 +18,8 @@ extrinsic_compute::extrinsic_compute()
 
 }
 
-/*void load_image_points(int board_width, int board_height, int num_imgs, float square_size,
-                          char* leftimg_dir, char* rightimg_dir, char* leftimg_filename, char* rightimg_filename)
+void extrinsic_compute::load_image_points (int board_width, int board_height, int num_imgs, float square_size,
+                          string leftimg_dir, string rightimg_dir, string leftimg_filename, string rightimg_filename)
 {
 
     Size board_size = Size(board_width, board_height);
@@ -27,8 +27,13 @@ extrinsic_compute::extrinsic_compute()
 
      for (int i = 1; i <= num_imgs; i++) {
        char left_img[100], right_img[100];
-       sprintf(left_img, "%s%s%d.jpg", leftimg_dir, leftimg_filename, i);
-       sprintf(right_img, "%s%s%d.jpg", rightimg_dir, rightimg_filename, i);
+       sprintf(left_img, "%s/%s%d.jpg", leftimg_dir.c_str(), leftimg_filename.c_str(), i);
+       sprintf(right_img, "%s/%s%d.jpg", rightimg_dir.c_str(), rightimg_filename.c_str(), i);
+
+       //test
+       /*cout << "left_img: " << left_img << "\n";
+       cout << "right_img: " << right_img  << "\n";*/
+
        img1 = imread(left_img, CV_LOAD_IMAGE_COLOR);
        img2 = imread(right_img, CV_LOAD_IMAGE_COLOR);
        cvtColor(img1, gray1, CV_BGR2GRAY);
@@ -64,37 +69,39 @@ extrinsic_compute::extrinsic_compute()
        vector< Point3f > obj;
        for (int i = 0; i < board_height; i++)
          for (int j = 0; j < board_width; j++)
-           obj.push_back(Point3f((float)j * square_size, (float)i * square_size, 0));
+           obj.push_back(Point3f(static_cast<float>(j)* square_size, static_cast<float>(i) * square_size, 0));
 
        if (found1 && found2) {
          cout << i << ". Found corners!" << endl;
          imagePoints1.push_back(corners1);
          imagePoints2.push_back(corners2);
          object_points.push_back(obj);
+
+
        }
      }
      for (int i = 0; i < imagePoints1.size(); i++) {
        vector< Point2f > v1, v2;
        for (int j = 0; j < imagePoints1[i].size(); j++) {
-         v1.push_back(Point2f((double)imagePoints1[i][j].x, (double)imagePoints1[i][j].y));
-         v2.push_back(Point2f((double)imagePoints2[i][j].x, (double)imagePoints2[i][j].y));
+         v1.push_back(Point2f(static_cast<float>(imagePoints1[i][j].x), static_cast<float>(imagePoints1[i][j].y)));
+         v2.push_back(Point2f(static_cast<float>(imagePoints2[i][j].x), static_cast<float>(imagePoints2[i][j].y)));
        }
        left_img_points.push_back(v1);
        right_img_points.push_back(v2);
      }
 
 
-}*/
+}
 
-/*void run_extrinsic(int num_imgs , char* leftcalib_file, char* rightcalib_file, char* leftimg_dir, char* rightimg_dir,
-                   char* leftimg_filename, char* rightimg_filename, char* out_file)   //rotine for extrinsic pair calibration
+void extrinsic_compute::run_extrinsic(int num_imgs , string leftcalib_file, string rightcalib_file, string leftimg_dir, string rightimg_dir,
+                   string leftimg_filename, string rightimg_filename, string out_file)   //rotine for extrinsic pair calibration
 {
 
-      FileStorage fsl(leftcalib_file, FileStorage::READ);   //lê os parâmetros obtidos na calibração intrinseca
-      FileStorage fsr(rightcalib_file, FileStorage::READ);
+      FileStorage fsl(leftcalib_file.c_str(), FileStorage::READ);   //lê os parâmetros obtidos na calibração intrinseca
+      FileStorage fsr(rightcalib_file.c_str(), FileStorage::READ);
 
       load_image_points(fsl["board_width"], fsl["board_height"], num_imgs, fsl["square_size"],
-                       leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename);
+                       leftimg_dir.c_str(), rightimg_dir.c_str(), leftimg_filename.c_str(), rightimg_filename.c_str());
 
       Mat K1, K2, R, F, E;
       Vec3d T;
@@ -109,7 +116,7 @@ extrinsic_compute::extrinsic_compute()
 
       stereoCalibrate(object_points, left_img_points, right_img_points, K1, D1, K2, D2, img1.size(), R, T, E, F);
 
-      cv::FileStorage fs1(out_file, cv::FileStorage::WRITE);
+      cv::FileStorage fs1(out_file.c_str(), cv::FileStorage::WRITE);
       fs1 << "K1" << K1;
       fs1 << "K2" << K2;
       fs1 << "D1" << D1;
@@ -119,9 +126,6 @@ extrinsic_compute::extrinsic_compute()
       fs1 << "E" << E;
       fs1 << "F" << F;
 
-      printf("Done Calibration\n");
-
-      printf("Starting Rectification\n");
 
       cv::Mat R1, R2, P1, P2, Q;
       stereoRectify(K1, D1, K2, D2, img1.size(), R, T, R1, R2, P1, P2, Q);
@@ -132,6 +136,4 @@ extrinsic_compute::extrinsic_compute()
       fs1 << "P2" << P2;
       fs1 << "Q" << Q;
 
-      printf("Done Rectification\n");
-
-}*/
+}
