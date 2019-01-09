@@ -6,6 +6,12 @@
 
 QT       += core gui
 
+QT += datavisualization
+
+contains(TARGET, qml.*) {
+    QT += qml quick
+}
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ObjectTracking
@@ -27,6 +33,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11 #use c++11 for compatibility
 INCLUDEPATH += /usr/include/opencv # found in: pkg-config --cflags opencv
 INCLUDEPATH += /usr/include/flycapture # flycapture
+LIBS += -L$$OUT_PWD/../../../lib #data visualization
 LIBS += -L/usr/lib/ -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_calib3d #found in: pkg-config --libs opencv
 LIBS += -lopencv_videoio -lopencv_video -lopencv_videostab #for videocapture
 LIBS += -L/usr/local/lib #for continuityflag
@@ -47,7 +54,8 @@ SOURCES += \
     stdafx.cpp \
     camerafly.cpp \
     extrinsic_compute.cpp \
-    triangulatepoints.cpp
+    triangulatepoints.cpp \
+    scatterdatamodifier.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -65,7 +73,8 @@ HEADERS += \
     stdafx.h \ # flycapture
     camerafly.h \
     extrinsic_compute.h \
-    triangulatepoints.h
+    triangulatepoints.h \
+    scatterdatamodifier.h
 
 FORMS += \
     mainwindow.ui \
@@ -75,3 +84,6 @@ FORMS += \
     trackinglog.ui \
     intrinsic.ui \
     extrinsic.ui
+
+target.path = $$[QT_INSTALL_EXAMPLES]/datavisualization/$$TARGET
+INSTALLS += target

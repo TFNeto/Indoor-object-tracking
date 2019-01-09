@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    camerasCalibrated = false;
+    camerasCalibrated = true;
     ui->setupUi(this);
     Configuration configWindow(this) ;
     Calibrate calibrationWindow;

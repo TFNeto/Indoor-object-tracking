@@ -2,6 +2,8 @@
 #define TRACKINGLOG_H
 
 #include <QDialog>
+#include <QtDataVisualization/q3dscatter.h>
+#include <QtDataVisualization/qabstract3dseries.h>
 
 namespace Ui {
 class TrackingLog;

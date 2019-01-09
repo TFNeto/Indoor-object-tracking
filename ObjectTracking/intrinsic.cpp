@@ -146,7 +146,7 @@ void Intrinsic::on_startCalibrButton_clicked()
 
                 cout << "intrinsic calib: " << a << "\n";
                 //este filename pode ser o IP ou assim?
-            isCalibrating = false;
+                isCalibrating = false;
 
             }
         }

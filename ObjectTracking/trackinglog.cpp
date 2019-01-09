@@ -1,10 +1,13 @@
 #include "trackinglog.h"
 #include "ui_trackinglog.h"
+#include <QtDataVisualization/q3dscatter.h>
+#include <QtDataVisualization/qabstract3dseries.h>
 
 TrackingLog::TrackingLog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TrackingLog)
 {
+
     ui->setupUi(this);
 }
 
