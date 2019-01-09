@@ -139,35 +139,6 @@ vector<Camera> scanCameras()
     return listOfCameras;
 }
 
-// Starts capturing images from a camera
-// @param int index - Camera's index
-void startRecording(int index)
-{
-    FlyCapture2::Error error;
-    // Start capturing images
-    error = lista[index].StartCapture();
-    if (error != FlyCapture2::PGRERROR_OK)
-    {
-        PrintError(error);
-        cout << "Failed to start" << endl;
-    }
-}
-
-// Stops capturing images from a camera
-// @param int index - Camera's index
-void stopRecording(int index)
-{
-    FlyCapture2::Error error;
-
-    // Stop capturing images
-    error =  lista[index].StopCapture();
-    if (error != FlyCapture2::PGRERROR_OK)
-    {
-        PrintError(error);
-        cout<< "Failed to stop capturing images"<<endl;
-    }
-}
-
 // Connects to a camera by IP
 // @param FlyCapture2::IPAddress ipAddress - camera's ip address
 // @param char mode - Operating mode (s for external trigger)
@@ -177,7 +148,7 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
     FlyCapture2::Error error;
     FlyCapture2::BusManager busMgr;
     FlyCapture2::PGRGuid guid1,guid ;
-    int index = 0;
+    unsigned int index = 0;
 
     error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
     if (error != FlyCapture2::PGRERROR_OK)
@@ -268,7 +239,7 @@ void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress)
     FlyCapture2::BusManager busMgr;
     FlyCapture2::Error error;
     FlyCapture2::PGRGuid guid1,guid ;
-    int index = 0;
+    unsigned int index = 0;
 
     error = busMgr.GetCameraFromIPAddress(ipAddress, &guid);
     if (error != FlyCapture2::PGRERROR_OK)
@@ -344,7 +315,7 @@ FlyCapture2::Image takeSinglePictureFromSingleCamera(int index)
 // @param imgNum - Image number (Asc order, for the filename)
 void saveImage(FlyCapture2::Image img, string camIp, int imgNum)
 {
-    string fileName = "calib" + camIp + "_" + to_string(imgNum) + ".png";
+    string fileName = "calib" + camIp + "_" + to_string(imgNum) + ".jpg";
     FlyCapture2::Error error;
     error = img.Save(fileName.c_str());
     if (error != FlyCapture2::PGRERROR_OK)
@@ -353,3 +324,69 @@ void saveImage(FlyCapture2::Image img, string camIp, int imgNum)
     }
     cout << "DEBUG: Image saved " + fileName << endl;
 }
+
+void connectAllCameras ()
+{
+    FlyCapture2::Error error;
+    FlyCapture2::BusManager busMgr;
+    FlyCapture2::CameraInfo camInfo[10];
+    FlyCapture2::PGRGuid guid;
+
+    // Scan for GIGE cameras
+    error = FlyCapture2::BusManager::DiscoverGigECameras(camInfo, &numCamInfo);
+    if (error != FlyCapture2::PGRERROR_OK)
+    {
+        PrintError(error);
+    }
+    cout<<"Were discovered : "<<numCamInfo<<" cameras"<<endl;
+
+    lista = new FlyCapture2::GigECamera[numCamInfo];
+    for (unsigned int i = 0; i < numCamInfo; i++)
+    {
+        error = busMgr.GetCameraFromIndex(i, &guid);
+        // Connect to Camera
+        error = lista[i].Connect(&guid);
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+        }
+        FlyCapture2::TriggerModeInfo TriggerModeInfo;
+        FlyCapture2::TriggerMode triggerMode;
+
+
+        triggerMode.mode = 14;
+        triggerMode.onOff = true;
+        triggerMode.polarity = 0;
+        //GPIO pin
+            triggerMode.source = 0;
+
+        error = lista[i].SetTriggerMode(&triggerMode);
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+            cout << "Failed to Set trigger mode" << endl;
+        }
+
+        // Turn Timestamp on
+        FlyCapture2::EmbeddedImageInfo imageInfo;
+        imageInfo.timestamp.onOff = true;
+        error = lista[i].SetEmbeddedImageInfo(&imageInfo);
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+            cout << "Failed to set timestamp" << endl;
+        }
+    }
+    for (unsigned int i = 0; i < numCamInfo; i++)
+    {
+        error = lista[i].StartCapture();
+        if (error != FlyCapture2::PGRERROR_OK)
+        {
+            PrintError(error);
+           cout<< "Failed to start"<<endl;
+        }
+    }
+}
+
+
+

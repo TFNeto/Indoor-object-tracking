@@ -270,8 +270,8 @@
   <widget class="QPushButton" name="savePictureButton">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>80</y>
+     <x>410</x>
+     <y>490</y>
      <width>89</width>
      <height>25</height>
     </rect>
@@ -283,8 +283,8 @@
   <widget class="QPushButton" name="discardPictureButton">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>80</y>
+     <x>520</x>
+     <y>490</y>
      <width>89</width>
      <height>25</height>
     </rect>

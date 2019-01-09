@@ -31,13 +31,19 @@ void intrinsic_compute::setupCalibration(int board_width, int board_height, int 
     bool found = false;
     char img_file[100];
 
-    sprintf(img_file, "%s/%s%d.%s", imgs_directory.c_str(), imgs_filename.c_str(), k, extension.c_str());
-    cout << img_file << "\n";
+    sprintf(img_file, "%s%s%d.%s", imgs_directory.c_str(), imgs_filename.c_str(), k, extension.c_str());
+    //cout << img_file << "\n";
     if(!doesExist(img_file)) //skips current iteration if img does not exist?
-      continue;
+    {   cout << img_file << "\n";
+        continue;
+    }
 
     img = imread(img_file, CV_LOAD_IMAGE_COLOR); //read current image
     cvtColor(img, gray, CV_BGR2GRAY);
+
+
+    imshow("teste",img);
+    char key=waitKey(2000);
 
     //find chessboard corners
     found = findChessboardCorners(img, board_size, corners, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
@@ -92,7 +98,7 @@ double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_f
         int board_width = 7, board_height = 7;
         float square_size = 1;
         string out_file = imgs_filename;
-        string extension = "png";
+        string extension = "jpg";
         double err = 0;
         Mat K;
         Mat D;
