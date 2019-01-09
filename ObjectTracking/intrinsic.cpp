@@ -102,7 +102,7 @@ void Intrinsic::on_startCalibrButton_clicked()
     int rightindex = connectToCameraByIp(camIpNumber,'a');
     // Start capturing
     //connectToCameraByIp(listOfCameras[ui->cameraDropdown->currentIndex()].getIpNumber());
-    while(isCalibrating)
+    while (isCalibrating)
     {
         // Get image
         FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(rightindex);
@@ -113,7 +113,8 @@ void Intrinsic::on_startCalibrButton_clicked()
         char key = cv::waitKey(1);
 
         // Show image
-        if(liveFlag){
+        if (liveFlag)
+        {
             cv::Mat show;
             cv::cvtColor(imgcv,show,CV_BGR2RGB);
             QImage img((uchar*)show.data, show.cols, show.rows, show.step, QImage::Format_RGB888);
@@ -123,7 +124,8 @@ void Intrinsic::on_startCalibrButton_clicked()
         }
 
         // Save image if the user clicks on "Save"
-        if(saveImageFlag) {
+        if saveImageFlag)
+        {
             string camIp = listOfCameras[ui->cameraDropdown->currentIndex()].getIP();
             saveImage(convertedImage, camIp, counter);
             saveImageFlag = false;
@@ -135,29 +137,31 @@ void Intrinsic::on_startCalibrButton_clicked()
                 ui->cameraChosen->setVisible(false);
                 ui->infoCalibration->setVisible(true);
 
-                cout << "Starting calib" << "\n";
-                //CORRER ROTINA DE CALIBRAÇÃO
+                cout << "DEBUF: Starting intrinsic calibation on camera ip" << camIp << endl;
+
                 intrinsic_compute i;
-                int nr_imagens = numPhoto;
                 string img_folder = "";
                 string img_filename = "calib" + camIp + "_";
-                double a = i.run(nr_imagens, img_folder, img_filename);
+                double intrinsicCalib = i.run(numPhoto, img_folder, img_filename);
 
-                cout << "intrinsic calib: " << a << "\n";
-                //este filename pode ser o IP ou assim?
+                cout << "DEBUG: Instrinsic calibration result: " << intrinsicCalib << endl;
+
                 isCalibrating = false;
                 ui->infoCalibration->setVisible(false);
-
+                // TODO: Set Camera's isCalibratedIntrinsic to true. How to get the correct camera's index from the vector ?
+                // Possible search for the ip in the vector and get the index from there ?
             }
         }
-        if(discardImageFlag) {
-           discardImageFlag = false;
-           liveFlag = true;
+        // Discard image if the user clicks on "Discard"
+        if (discardImageFlag)
+        {
+            discardImageFlag = false;
+            liveFlag = true;
         }
     }
-    // Disconnect from camera
+    // Disconnect camera
     disconnectCameraByIp(camIpNumber);
-    //stopRecording(ui->cameraDropdown->currentIndex());
+    // stopRecording(ui->cameraDropdown->currentIndex());
 }
 
 void Intrinsic::on_pictureButton_clicked()
@@ -198,7 +202,7 @@ void Intrinsic::on_loadButton_clicked()
 void Intrinsic::on_saveImageButton_clicked()
 {
     counter++;
-    saveImageFlag=true;
+    saveImageFlag = true;
     ui->saveImage->setVisible(false);
     ui->saveImageButton->setVisible(false);
     ui->discardImageButton->setVisible(false);
@@ -220,8 +224,8 @@ void Intrinsic::on_cancelCalibrationButton_clicked()
 {
     // Stop calibration (this stops the live feed)
     isCalibrating = false;
-    cv::destroyAllWindows();
-    counter=0;
+    cv::destroyAllWindows(); // Debug. Remove after testing.
+    counter = 0;
     ui->pictureButton->setVisible(false);
     ui->numPicsDropdown->setValue(30);
     ui->imageProgressBar->setVisible(false);

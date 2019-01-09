@@ -165,12 +165,12 @@ void extrinsic::on_calibrateButton_clicked()
                     extrinsic_compute e;
                     //test vars
                     int counter = numPhotoEx; //number of photos
-                    string leftcalib_file = "calib" +camIp1+"_"+".yml";
-                    string rightcalib_file = "calib" +camIp2+"_"+".yml";
+                    string leftcalib_file = "calib" + camIp1 + "_" + ".yml";
+                    string rightcalib_file = "calib" + camIp2 + "_" + ".yml";
                     string leftimg_dir = "";
                     string rightimg_dir = "";
-                    string leftimg_filename ="calib" +camIp1+ "_";
-                    string rightimg_filename = "calib"+camIp2+ "_";
+                    string leftimg_filename = "calib" + camIp1 + "_";
+                    string rightimg_filename = "calib" + camIp2 + "_";
                     string out_file = "teste_pair.yml";
                     e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
                     isCalibratingExtrinsic=false;
