@@ -14,6 +14,8 @@ private:
     string IPaddress;
     float xPosition, yPosition, zPosition;
     float pointingAngle;
+    bool isCalibratedIntrinsic = false;
+    bool isCalibratedExtrinsic = false;
 public:
     Camera(string name, string IPaddress, float xPosition, float yPosition, float zPosition, float pointingAngle);
     Camera();
