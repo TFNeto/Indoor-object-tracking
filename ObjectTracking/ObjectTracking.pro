@@ -68,7 +68,7 @@ HEADERS += \
     extrinsic.h \
     intrinsic_compute.h \ # computations for intrinsic parameters
     serial.h \ # for serial communication
-    resource.h \ # flycapture
+    \ resource.h \ # flycapture
     \ # stdafx.h # flycapture
     camerafly.h \
     extrinsic_compute.h \
