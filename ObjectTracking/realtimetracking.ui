@@ -37,6 +37,19 @@
    </property>
    <layout class="QGridLayout" name="gridLayout"/>
   </widget>
+  <widget class="QPushButton" name="RandomizeButton">
+   <property name="geometry">
+    <rect>
+     <x>730</x>
+     <y>350</y>
+     <width>151</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Randomize Data</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

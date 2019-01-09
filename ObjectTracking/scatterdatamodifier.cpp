@@ -75,6 +75,9 @@ ScatterDataModifier::ScatterDataModifier(Q3DScatter *scatter)
 
     //! [3]
     //addData();
+    m_graph->axisX()->setTitle("X");
+    m_graph->axisY()->setTitle("Y");
+    m_graph->axisZ()->setTitle("Z");
     //! [3]
 }
 
@@ -84,9 +87,6 @@ ScatterDataModifier::~ScatterDataModifier()
 }
 
 void ScatterDataModifier::addData(){
-    m_graph->axisX()->setTitle("X");
-    m_graph->axisY()->setTitle("Y");
-    m_graph->axisZ()->setTitle("Z");
     QScatterDataArray *dataArray = new QScatterDataArray;
     dataArray->resize(m_itemCount);
     QScatterDataItem *ptr = &dataArray->first();
@@ -101,9 +101,6 @@ void ScatterDataModifier::addData(){
 }
 
 void ScatterDataModifier::setData(QVector<QVector3D> vec){
-    m_graph->axisX()->setTitle("X");
-    m_graph->axisY()->setTitle("Y");
-    m_graph->axisZ()->setTitle("Z");
     QScatterDataArray *dataArray = new QScatterDataArray;
     dataArray->resize(m_itemCount);
     QScatterDataItem *ptr = &dataArray->first();
