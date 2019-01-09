@@ -26,8 +26,6 @@ private slots:
 
 private:
     Ui::RealTimeTracking *ui;
-
-
     QtDataVisualization::Q3DScatter * graph;
     ScatterDataModifier *modifier;
     QWidget *container;

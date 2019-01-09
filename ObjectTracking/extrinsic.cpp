@@ -65,6 +65,7 @@ void extrinsic::on_closeButton_clicked()
     cv::destroyAllWindows();
     this->close();
 }
+
 void extrinsic::on_takePictureButton_clicked()
 {
     liveFlagExtrinsic=false;
@@ -73,6 +74,7 @@ void extrinsic::on_takePictureButton_clicked()
     ui->discardPictureButton->setVisible(true);
 
 }
+
 void extrinsic::on_savePictureButton_clicked()
 {
     counterEx++;
@@ -82,6 +84,7 @@ void extrinsic::on_savePictureButton_clicked()
     ui->discardPictureButton->setVisible(false);
     saveImageFlagExtrinsic=true;
 }
+
 void extrinsic::on_discardPictureButton_clicked()
 {
     ui->takePictureButton->setVisible(true);
@@ -93,7 +96,7 @@ void extrinsic::on_discardPictureButton_clicked()
 void extrinsic::on_calibrateButton_clicked()
 {
 
-    if(ui->comboBox->currentIndex()!=ui->comboBox_2->currentIndex())
+    if(ui->comboBox->currentIndex() != ui->comboBox_2->currentIndex())
     {
         ui->imageProgressBar->setVisible(true);
         numPhotoEx=ui->numPicsDropdown->value();
@@ -115,7 +118,6 @@ void extrinsic::on_calibrateButton_clicked()
 
         int index1 = connectToCameraByIp(listOfCameras[ui->comboBox->currentIndex()].getIpNumber(),'s');
         int index2 = connectToCameraByIp(listOfCameras[ui->comboBox_2->currentIndex()].getIpNumber(),'s');
-        //int index[2]={ui->comboBox->currentIndex(),ui->comboBox_2->currentIndex()};
 
         while(isCalibratingExtrinsic)
         {
@@ -133,9 +135,10 @@ void extrinsic::on_calibrateButton_clicked()
             cv::imshow("image", imgcv);
             char key = cv::waitKey(1);
             cv::imshow("image2", imgcv2);
-            key= cv::waitKey(1);
+            key = cv::waitKey(1);
             // Show image
-            if(liveFlagExtrinsic){
+            if(liveFlagExtrinsic)
+            {
                 cv::Mat show;
                 cv::Mat show2;
                 cv::cvtColor(imgcv,show,CV_BGR2RGB);
@@ -149,8 +152,8 @@ void extrinsic::on_calibrateButton_clicked()
                 convertedImageEX=Image;
                 convertedImageEX2=Image2;
            }
-           if(saveImageFlagExtrinsic) {
-
+           if(saveImageFlagExtrinsic)
+           {
                string camIp1 = listOfCameras[ui->comboBox->currentIndex()].getIP();
                saveImage(convertedImageEX, camIp1, counterEx);
                string camIp2=listOfCameras[ui->comboBox_2->currentIndex()].getIP();
@@ -159,29 +162,29 @@ void extrinsic::on_calibrateButton_clicked()
                liveFlagExtrinsic = true;
                 if(counterEx == numPhotoEx)
                 {
-                        extrinsic_compute e;
-                        //test vars
-                        int counter = numPhotoEx; //number of photos
-                        string leftcalib_file = "calib" +camIp1+"_"+".yml";
-                        string rightcalib_file = "calib" +camIp2+"_"+".yml";
-                        string leftimg_dir = "";
-                        string rightimg_dir = "";
-                        string leftimg_filename ="calib" +camIp1+ "_";
-                        string rightimg_filename = "calib"+camIp2+ "_";
-                        string out_file = "teste_pair.yml";
-                        e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
-                        isCalibratingExtrinsic=false;
+                    extrinsic_compute e;
+                    //test vars
+                    int counter = numPhotoEx; //number of photos
+                    string leftcalib_file = "calib" +camIp1+"_"+".yml";
+                    string rightcalib_file = "calib" +camIp2+"_"+".yml";
+                    string leftimg_dir = "";
+                    string rightimg_dir = "";
+                    string leftimg_filename ="calib" +camIp1+ "_";
+                    string rightimg_filename = "calib"+camIp2+ "_";
+                    string out_file = "teste_pair.yml";
+                    e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
+                    isCalibratingExtrinsic=false;
                 }
-
             }
-            if(discardImageFlagExtrinsic) {
+            if (discardImageFlagExtrinsic)
+            {
                 discardImageFlagExtrinsic = false;
                 liveFlagExtrinsic = true;
             }
         }
-         calibrateCameraPair();
+        calibrateCameraPair();
         disconnectCameraByIp(listOfCameras[ui->comboBox->currentIndex()].getIpNumber());
-        return;
+        return; // TODO: This is useless ?
     }
     ui->errorText->setText("Chose different cameras");
     ui->errorText->setVisible(true);
@@ -189,7 +192,6 @@ void extrinsic::on_calibrateButton_clicked()
 
 void extrinsic::calibrateCameraPair()
 {
-
     int numOfPic = ui->numPicsDropdown->value();
 
 //    extrinsic_compute e;

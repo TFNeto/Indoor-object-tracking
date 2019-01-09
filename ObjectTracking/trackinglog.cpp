@@ -7,7 +7,6 @@ TrackingLog::TrackingLog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TrackingLog)
 {
-
     ui->setupUi(this);
 }
 

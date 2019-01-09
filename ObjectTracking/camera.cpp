@@ -1,8 +1,9 @@
-#include "camera.h"
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "camera.h"
 
 Camera::Camera(string name, string IPaddress, float xPosition, float yPosition, float zPosition, float pointingAngle)
 {

@@ -34,7 +34,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_configure_pushButton_clicked()
 {
-
     configWindow.setModal(true);
     configWindow.exec();
 }
@@ -55,6 +54,7 @@ void MainWindow::on_start_pushButton_clicked()
 
 void MainWindow::on_calibrate_pushButton_clicked()
 {
+    // Commented out to test. Uncomment after testing.
     /*if (listOfCameras.size()!=0)
     {
     */
@@ -90,15 +90,4 @@ void MainWindow::disablePushButtons()
     ui->configure_pushButton->setDisabled(true);
     ui->calibrate_pushButton->setDisabled(true);
     ui->log_pushButton->setDisabled(true);
-}
-
-
-vector<Camera> MainWindow::loadCameraMock(){
-    vector<Camera> mockCameras;
-    Camera cam1("cam1", "IP1", 0,0,2.5,0);
-    Camera cam2("cam2", "IP2", 0,5,2.5,0);
-
-    mockCameras.push_back(cam1);
-    mockCameras.push_back(cam2);
-    return mockCameras;
 }

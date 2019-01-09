@@ -99,8 +99,6 @@ void Intrinsic::on_startCalibrButton_clicked()
     // Get its IP (in decimal)
     uint camIpNumber = listOfCameras[index].getIpNumber();
     // Connect to camera
-    cout << "gonna connect to " << camIpNumber << endl;
-    cout << "dropdown index :" << ui->cameraDropdown->currentIndex() << endl;
     int rightindex = connectToCameraByIp(camIpNumber,'a');
     // Start capturing
     //connectToCameraByIp(listOfCameras[ui->cameraDropdown->currentIndex()].getIpNumber());
@@ -169,7 +167,7 @@ void Intrinsic::on_pictureButton_clicked()
     ui->saveImage->setVisible(true);
     ui->saveImageButton->setVisible(true);
     ui->discardImageButton->setVisible(true);
-    //tempFilename.assign(fileName);
+    // tempFilename.assign(fileName);
 }
 
 void Intrinsic::on_closeButton_clicked()

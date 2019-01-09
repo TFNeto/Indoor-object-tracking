@@ -1,13 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+
+#include <QMainWindow>
+#include <string>
+#include <vector>
+
 #include "configuration.h"
 #include "calibrate.h"
 #include "realtimetracking.h"
 #include "trackinglog.h"
 #include "camera.h"
-#include <QMainWindow>
-#include <string>
-#include <vector>
 
 using namespace std;
 
@@ -24,7 +26,6 @@ public:
     ~MainWindow();
     void enablePushButtons();
     void disablePushButtons();
-    vector<Camera> loadCameraMock();
 
 private slots:
     void on_configure_pushButton_clicked();

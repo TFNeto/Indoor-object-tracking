@@ -139,10 +139,12 @@ vector<Camera> scanCameras()
     return listOfCameras;
 }
 
-// Connects to a camera by IP
-// @param FlyCapture2::IPAddress ipAddress - camera's ip address
-// @param char mode - Operating mode (s for external trigger)
-// @return int - Camera's index
+/*
+* Connects to a camera by IP
+* @param FlyCapture2::IPAddress ipAddress - camera's ip address
+* @param char mode - Operating mode (s for external trigger)
+* @return int - Camera's index
+*/
 int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
 {
     FlyCapture2::Error error;
@@ -175,7 +177,6 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
     }
 
     // Connect to a camera
-    // FlyCapture2::GigECamera cam;
     error = lista[index].Connect(&guid);
     if (error != FlyCapture2::PGRERROR_OK)
     {
@@ -191,8 +192,7 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
         triggerMode.mode = 14;
         triggerMode.onOff = true;
         triggerMode.polarity = 0;
-        //GPIO pin
-        triggerMode.source = 0;
+        triggerMode.source = 0; // GPIO pin
     }
     else
     {
@@ -231,9 +231,10 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
     return index;
 }
 
-// Disconnects a camera by IP
-// @param FlyCapture2::IPAddress ipAddress - Camera's IP Address
-
+/*
+* Disconnects a camera by IP
+* @param FlyCapture2::IPAddress ipAddress - Camera's IP Address
+*/
 void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress)
 {
     FlyCapture2::BusManager busMgr;
@@ -279,9 +280,11 @@ void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress)
     }
 }
 
-// Takes a single picture from a single camera
-// @param int index - Camera's index
-// @return FlyCapture2::Image - image, converted to BGR
+/*
+* Takes a single picture from a single camera
+* @param int index - Camera's index
+* @return FlyCapture2::Image - image, converted to BGR
+*/
 FlyCapture2::Image takeSinglePictureFromSingleCamera(int index)
 {
     FlyCapture2::Error error;
@@ -325,7 +328,7 @@ void saveImage(FlyCapture2::Image img, string camIp, int imgNum)
     cout << "DEBUG: Image saved " + fileName << endl;
 }
 
-void connectAllCameras ()
+void connectAllCameras()
 {
     FlyCapture2::Error error;
     FlyCapture2::BusManager busMgr;
@@ -357,8 +360,7 @@ void connectAllCameras ()
         triggerMode.mode = 14;
         triggerMode.onOff = true;
         triggerMode.polarity = 0;
-        //GPIO pin
-            triggerMode.source = 0;
+        triggerMode.source = 0; // GPIO pin
 
         error = lista[i].SetTriggerMode(&triggerMode);
         if (error != FlyCapture2::PGRERROR_OK)
@@ -383,10 +385,7 @@ void connectAllCameras ()
         if (error != FlyCapture2::PGRERROR_OK)
         {
             PrintError(error);
-           cout<< "Failed to start"<<endl;
+            cout<< "Failed to start"<<endl;
         }
     }
 }
-
-
-

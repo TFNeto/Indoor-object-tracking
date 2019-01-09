@@ -13,23 +13,19 @@ using namespace cv;
 #ifndef EXTRINSIC_COMPUTE_H
 #define EXTRINSIC_COMPUTE_H
 
-
 class extrinsic_compute
 {
 public:
     explicit extrinsic_compute();
     void load_image_points(int board_width, int board_height, int num_imgs, float square_size,string leftimg_dir, string rightimg_dir, string leftimg_filename, string rightimg_filename);
-
-    void run_extrinsic(int num_imgs , string leftcalib_file, string rightcalib_file, string leftimg_dir, string rightimg_dir,string leftimg_filename, string rightimg_filename, string out_file);
+    void run_extrinsic(int num_imgs, string leftcalib_file, string rightcalib_file, string leftimg_dir, string rightimg_dir,string leftimg_filename, string rightimg_filename, string out_file);
 
 private:
-
-    vector< vector< Point3f >> object_points;
-    vector< vector< Point2f >> imagePoints1, imagePoints2;
-    vector< Point2f > corners1, corners2;
-    vector< vector< Point2f >> left_img_points;
+    vector<vector<Point3f>> object_points;
+    vector<vector<Point2f>> imagePoints1, imagePoints2;
+    vector<Point2f> corners1, corners2;
+    vector<vector<Point2f>> left_img_points;
     vector<vector<Point2f>> right_img_points;
-
     Mat img1, img2, gray1, gray2;
 
 };
