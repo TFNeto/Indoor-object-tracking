@@ -22,13 +22,13 @@ void extrinsic_compute::load_image_points (int board_width, int board_height, in
                           string leftimg_dir, string rightimg_dir, string leftimg_filename, string rightimg_filename)
 {
 
-    Size board_size = Size(board_width, board_height);
+    Size board_size = Size(7, 7);
      int board_n = board_width * board_height;
 
      for (int i = 1; i <= num_imgs; i++) {
        char left_img[100], right_img[100];
-       sprintf(left_img, "%s/%s%d.jpg", leftimg_dir.c_str(), leftimg_filename.c_str(), i);
-       sprintf(right_img, "%s/%s%d.jpg", rightimg_dir.c_str(), rightimg_filename.c_str(), i);
+       sprintf(left_img, "%s%s%d.jpg", leftimg_dir.c_str(), leftimg_filename.c_str(), i);
+       sprintf(right_img, "%s%s%d.jpg", rightimg_dir.c_str(), rightimg_filename.c_str(), i);
 
        //test
        /*cout << "left_img: " << left_img << "\n";
@@ -40,6 +40,9 @@ void extrinsic_compute::load_image_points (int board_width, int board_height, in
        cvtColor(img2, gray2, CV_BGR2GRAY);
 
        bool found1 = false, found2 = false;
+
+       cout << "board_size width" << board_size.width << endl;
+       cout << "board_size heigh" << board_size.height << endl;
 
        found1 = cv::findChessboardCorners(img1, board_size, corners1,
      CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
@@ -102,6 +105,8 @@ void extrinsic_compute::run_extrinsic(int num_imgs , string leftcalib_file, stri
 
       load_image_points(fsl["board_width"], fsl["board_height"], num_imgs, fsl["square_size"],
                        leftimg_dir.c_str(), rightimg_dir.c_str(), leftimg_filename.c_str(), rightimg_filename.c_str());
+
+      //cout << "load_image_points " << fsl["board_width"] << endl;
 
       Mat K1, K2, R, F, E;
       Vec3d T;

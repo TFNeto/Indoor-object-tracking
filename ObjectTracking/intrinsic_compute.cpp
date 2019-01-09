@@ -41,10 +41,6 @@ void intrinsic_compute::setupCalibration(int board_width, int board_height, int 
     img = imread(img_file, CV_LOAD_IMAGE_COLOR); //read current image
     cvtColor(img, gray, CV_BGR2GRAY);
 
-
-    imshow("teste",img);
-    char key=waitKey(2000);
-
     //find chessboard corners
     found = findChessboardCorners(img, board_size, corners, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
 

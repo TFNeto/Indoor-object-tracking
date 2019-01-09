@@ -50,6 +50,8 @@ extrinsic::extrinsic(QWidget *parent) :
     ui->takePictureButton->setVisible(false);
     ui->savePictureButton->setVisible(false);
     ui->discardPictureButton->setVisible(false);
+    ui->imageProgressBar->setValue(0);
+    ui->imageProgressBar->setVisible(false);
 }
 
 extrinsic::~extrinsic()
@@ -74,6 +76,7 @@ void extrinsic::on_takePictureButton_clicked()
 void extrinsic::on_savePictureButton_clicked()
 {
     counterEx++;
+    ui->imageProgressBar->setValue(counterEx);
     ui->takePictureButton->setVisible(true);
     ui->savePictureButton->setVisible(false);
     ui->discardPictureButton->setVisible(false);
@@ -92,6 +95,7 @@ void extrinsic::on_calibrateButton_clicked()
 
     if(ui->comboBox->currentIndex()!=ui->comboBox_2->currentIndex())
     {
+        ui->imageProgressBar->setVisible(true);
         numPhotoEx=ui->numPicsDropdown->value();
         isCalibratingExtrinsic = true;
         ui->numPicsDropdown->setVisible(false);
@@ -155,21 +159,18 @@ void extrinsic::on_calibrateButton_clicked()
                liveFlagExtrinsic = true;
                 if(counterEx == numPhotoEx)
                 {
-//                         ui->cameraDropdown->setVisible(true);
-//                         ui->cameraChosen->setVisible(false);
-//                         ui->infoCalibration->setVisible(true);
-
-//                        extrinsic_compute e;
-//                        //test vars
-//                        int counter = numPhotoEx; //number of photos
-//                        string leftcalib_file = "calib" +camIp1+"_"+".yml";
-//                        string rightcalib_file = "calib" +camIp2+"_"+".yml";
-//                        string leftimg_dir = "../build-ObjectTracking-Desktop-Debug";
-//                        string rightimg_dir = "../build-ObjectTracking-Desktop-Debug";
-//                        string leftimg_filename ="calib" +camIp1+ "_";
-//                        string rightimg_filename = "calib"+camIp2+ "_";
-//                        string out_file = "teste_pair.yml";
-//                        e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
+                        extrinsic_compute e;
+                        //test vars
+                        int counter = numPhotoEx; //number of photos
+                        string leftcalib_file = "calib" +camIp1+"_"+".yml";
+                        string rightcalib_file = "calib" +camIp2+"_"+".yml";
+                        string leftimg_dir = "";
+                        string rightimg_dir = "";
+                        string leftimg_filename ="calib" +camIp1+ "_";
+                        string rightimg_filename = "calib"+camIp2+ "_";
+                        string out_file = "teste_pair.yml";
+                        e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
+                        isCalibratingExtrinsic=false;
                 }
 
             }
