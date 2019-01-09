@@ -51,7 +51,6 @@ SOURCES += \
     intrinsic.cpp \
     extrinsic.cpp \
     intrinsic_compute.cpp \
-    stdafx.cpp \
     camerafly.cpp \
     extrinsic_compute.cpp \
     triangulatepoints.cpp \
@@ -70,7 +69,7 @@ HEADERS += \
     intrinsic_compute.h \ # computations for intrinsic parameters
     serial.h \ # for serial communication
     resource.h \ # flycapture
-    stdafx.h \ # flycapture
+    \ # stdafx.h # flycapture
     camerafly.h \
     extrinsic_compute.h \
     triangulatepoints.h \

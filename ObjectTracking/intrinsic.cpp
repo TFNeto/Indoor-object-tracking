@@ -50,6 +50,7 @@ Intrinsic::Intrinsic(QWidget *parent) :
 
     ui->pictureButton->setVisible(false);
     ui->numPicsDropdown->setValue(30);
+    ui->numPicsDropdown->setMinimum(25);
     ui->imageProgressBar->setVisible(false);
     ui->saveButton->setVisible(false);
     ui->repeatButton->setVisible(false);
@@ -140,13 +141,14 @@ void Intrinsic::on_startCalibrButton_clicked()
                 //CORRER ROTINA DE CALIBRAÇÃO
                 intrinsic_compute i;
                 int nr_imagens = numPhoto;
-                string img_folder = "../build-ObjectTracking-Desktop-Debug";
+                string img_folder = "";
                 string img_filename = "calib" + camIp + "_";
                 double a = i.run(nr_imagens, img_folder, img_filename);
 
                 cout << "intrinsic calib: " << a << "\n";
                 //este filename pode ser o IP ou assim?
                 isCalibrating = false;
+                ui->infoCalibration->setVisible(false);
 
             }
         }

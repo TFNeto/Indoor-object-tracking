@@ -8,6 +8,7 @@
 
 extern FlyCapture2::GigECamera *lista;
 extern unsigned int numCamInfo;
+
 void PrintError(FlyCapture2::Error error);
 void PrintCameraInfo(FlyCapture2::CameraInfo *pCamInfo);
 FlyCapture2::Image takeSinglePictureFromSingleCamera(int index);
@@ -17,5 +18,6 @@ void stopRecording(int index);
 int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode);
 void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress);
 void saveImage(FlyCapture2::Image img, string camIp, int imgNum);
+void connectAllCameras();
 
 #endif // CAMERAFLY_H
