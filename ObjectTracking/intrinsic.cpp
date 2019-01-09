@@ -143,15 +143,11 @@ void Intrinsic::on_startCalibrButton_clicked()
                 string img_folder = "../build-ObjectTracking-Desktop-Debug";
                 string img_filename = "calib" + camIp + "_";
                 double a = i.run(nr_imagens, img_folder, img_filename);
-<<<<<<< HEAD
+
                 cout << "intrinsic calib: " << a << "\n";
                 //este filename pode ser o IP ou assim?
             isCalibrating = false;
-=======
-                cout << "intrinsic calib: " << a << endl;
-                //este filename pode ser o IP ou assim?*/
-                isCalibrating = false;
->>>>>>> 207a862969abd1ad16e0b2e228e8331a4c6df120
+
             }
         }
         if(discardImageFlag) {

@@ -13,6 +13,7 @@
 using namespace std;
 
 unsigned int numCamInfo = 10;
+FlyCapture2::GigECamera *lista;
 
 // Utility function to print FlyCapture errors
 void PrintError(FlyCapture2::Error error) { error.PrintErrorTrace(); }
