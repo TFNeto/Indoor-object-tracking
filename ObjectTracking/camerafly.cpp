@@ -318,7 +318,7 @@ FlyCapture2::Image takeSinglePictureFromSingleCamera(int index)
 // @param imgNum - Image number (Asc order, for the filename)
 void saveImage(FlyCapture2::Image img, string camIp, int imgNum)
 {
-    string fileName = "calib" + camIp + "_" + to_string(imgNum) + ".jpg";
+    string fileName = "calib" + camIp + "_" + to_string(imgNum) + ".png";
     FlyCapture2::Error error;
     error = img.Save(fileName.c_str());
     if (error != FlyCapture2::PGRERROR_OK)

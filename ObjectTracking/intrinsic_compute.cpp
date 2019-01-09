@@ -99,7 +99,7 @@ double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_f
     int board_width = 7, board_height = 7;
     float square_size = 1;
     string out_file = imgs_filename;
-    string extension = "jpg";
+    string extension = "png";
     double err = 0;
     Mat K; // Camera Matrix
     Mat D; // Dist coeff

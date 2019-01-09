@@ -27,8 +27,8 @@ void extrinsic_compute::load_image_points (int board_width, int board_height, in
 
     for (int i = 1; i <= num_imgs; i++) {
         char left_img[100], right_img[100];
-        sprintf(left_img, "%s%s%d.jpg", leftimg_dir.c_str(), leftimg_filename.c_str(), i);
-        sprintf(right_img, "%s%s%d.jpg", rightimg_dir.c_str(), rightimg_filename.c_str(), i);
+        sprintf(left_img, "%s%s%d.png", leftimg_dir.c_str(), leftimg_filename.c_str(), i);
+        sprintf(right_img, "%s%s%d.png", rightimg_dir.c_str(), rightimg_filename.c_str(), i);
 
         //test
         /*cout << "left_img: " << left_img << "\n";
