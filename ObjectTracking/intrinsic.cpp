@@ -134,7 +134,8 @@ void Intrinsic::on_startCalibrButton_clicked()
 
                 intrinsic_compute i;
                 string img_folder = "";
-                string img_filename = "calib" + camIp;
+                string img_filename = "calib" + camIp +"_";
+                img_filename.erase(std::remove(img_filename.begin(), img_filename.end(), '.'), img_filename.end());
                 double intrinsicCalibError = i.run(numPhoto, img_folder, img_filename);
 
                 cout << "DEBUG: Instrinsic calibration (error) result: " << intrinsicCalibError << endl;
@@ -151,6 +152,8 @@ void Intrinsic::on_startCalibrButton_clicked()
                     listOfCameras[index].setCameraMatrix(i.getCameraMatrix());
                 }
                 this->isCalibrating = false;
+                ui->cancelCalibrationButton->setVisible(false);
+                ui->startCalibrButton->setVisible(true);
                 ui->infoCalibration->setVisible(false);
             }
         }
@@ -198,7 +201,20 @@ void Intrinsic::on_saveButton_clicked()
 
 void Intrinsic::on_loadButton_clicked()
 {
-    //load parameters from xml file
+    string camIp ="calib"+ listOfCameras[ui->cameraDropdown->currentIndex()].getIP()+"_";
+    camIp.erase(std::remove(camIp.begin(), camIp.end(), '.'), camIp.end());
+    cout<<camIp<<endl;
+    FileStorage fsl(camIp, FileStorage::READ);
+    Mat K ,D ;
+    fsl["K"] >> K;
+    fsl["D"] >> D;
+    listOfCameras[ui->cameraDropdown->currentIndex()].setDistCoeffs(D);
+    listOfCameras[ui->cameraDropdown->currentIndex()].setCameraMatrix(K);
+
+    cout<<listOfCameras[ui->cameraDropdown->currentIndex()].getCameraMatrix()<<endl;
+
+
+
 }
 
 void Intrinsic::on_saveImageButton_clicked()

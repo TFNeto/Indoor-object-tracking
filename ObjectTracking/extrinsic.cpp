@@ -148,8 +148,10 @@ void extrinsic::on_calibrateButton_clicked()
            if(this->saveImageFlagExtrinsic)
            {
                string camIp1 = listOfCameras[ui->comboBox->currentIndex()].getIP();
+               camIp1.erase(std::remove(camIp1.begin(), camIp1.end(), '.'), camIp1.end());
                saveImage(this->convertedImageEX, camIp1, this->counterEx);
                string camIp2=listOfCameras[ui->comboBox_2->currentIndex()].getIP();
+               camIp2.erase(std::remove(camIp2.begin(), camIp2.end(), '.'), camIp2.end());
                saveImage(this->convertedImageEX2, camIp2, this->counterEx);
                this->saveImageFlagExtrinsic = false;
                this->liveFlagExtrinsic = true;
@@ -158,8 +160,8 @@ void extrinsic::on_calibrateButton_clicked()
                     extrinsic_compute e;
                     //test vars
                     int counter = this->numPhotoEx; //number of photos
-                    string leftcalib_file = "calib" + camIp1 + ".yml";
-                    string rightcalib_file = "calib" + camIp2 + ".yml";
+                    string leftcalib_file = "calib" + camIp1  ;
+                    string rightcalib_file = "calib" + camIp2 ;
                     string leftimg_dir = "";
                     string rightimg_dir = "";
                     string leftimg_filename = "calib" + camIp1;
