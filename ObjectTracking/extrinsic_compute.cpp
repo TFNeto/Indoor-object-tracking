@@ -12,7 +12,6 @@
 using namespace std;
 using namespace cv;
 
-
 extrinsic_compute::extrinsic_compute()
 {
 
@@ -23,7 +22,6 @@ void extrinsic_compute::load_image_points (int board_width, int board_height, in
 {
     // Size board_size = Size(board_width, board_height); NOT WORKING DUE TO BAD READING FROM YML FILE
     Size board_size = Size(7, 7);
-    int board_n = board_width * board_height;
 
     for (int i = 1; i <= num_imgs; i++) {
         char left_img[100], right_img[100];
@@ -79,9 +77,9 @@ void extrinsic_compute::load_image_points (int board_width, int board_height, in
             object_points.push_back(obj);
         }
     }
-    for (int i = 0; i < imagePoints1.size(); i++) {
+    for (size_t i = 0; i < imagePoints1.size(); i++) {
         vector<Point2f> v1, v2;
-        for (int j = 0; j < imagePoints1[i].size(); j++)
+        for (size_t j = 0; j < imagePoints1[i].size(); j++)
         {
             v1.push_back(Point2f(static_cast<float>(imagePoints1[i][j].x), static_cast<float>(imagePoints1[i][j].y)));
             v2.push_back(Point2f(static_cast<float>(imagePoints2[i][j].x), static_cast<float>(imagePoints2[i][j].y)));
