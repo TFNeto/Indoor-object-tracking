@@ -19,6 +19,12 @@ public:
     serial.set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
   }
 
+  ~SimpleSerial()
+  {
+      serial.close();
+      io.stop();
+  }
+
   /**
      * Write a string to the serial device.
      * \param s string to write
