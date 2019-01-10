@@ -58,12 +58,9 @@ void MainWindow::on_calibrate_pushButton_clicked()
     /*if (listOfCameras.size()!=0)
     {
     */
-        calibrationWindow.setCameraInfo(this->loadCameraMock());
-        calibrationWindow.setCameraInfo(listOfCameras);
         calibrationWindow.setModal(true);
         calibrationWindow.exec();
-    /*
-    }
+    /*}
     else
     {
         QMessageBox::critical(this, tr("Error"), tr("There is no camera information. Go to Configuration to enter camera information."));
