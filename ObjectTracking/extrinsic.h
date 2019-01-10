@@ -2,6 +2,7 @@
 #define EXTRINSIC_H
 
 #include <QDialog>
+#include "FlyCapture2.h"
 
 namespace Ui {
 class extrinsic;
@@ -15,6 +16,14 @@ public:
     explicit extrinsic(QWidget *parent = nullptr);
     ~extrinsic();
     void calibrateCameraPair();
+    int counterEx = 0;
+    int numPhotoEx = 0;
+    bool isCalibratingExtrinsic = false;
+    bool saveImageFlagExtrinsic = false;
+    bool discardImageFlagExtrinsic = false;
+    bool liveFlagExtrinsic = true;
+    FlyCapture2::Image convertedImageEX;
+    FlyCapture2::Image convertedImageEX2;
 
 private slots:
     void on_takePictureButton_clicked();

@@ -13,15 +13,6 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 using namespace std;
-int counterEx=0;
-int numPhotoEx=0;
-
-bool isCalibratingExtrinsic = false;
-bool saveImageFlagExtrinsic = false;
-bool discardImageFlagExtrinsic = false;
-bool liveFlagExtrinsic = true;
-FlyCapture2::Image convertedImageEX;
-FlyCapture2::Image convertedImageEX2;
 
 extrinsic::extrinsic(QWidget *parent) :
     QDialog(parent),
@@ -61,14 +52,14 @@ extrinsic::~extrinsic()
 
 void extrinsic::on_closeButton_clicked()
 {
-    isCalibratingExtrinsic = false;
+    this->isCalibratingExtrinsic = false;
     cv::destroyAllWindows();
     this->close();
 }
 
 void extrinsic::on_takePictureButton_clicked()
 {
-    liveFlagExtrinsic=false;
+    this->liveFlagExtrinsic=false;
     ui->takePictureButton->setVisible(false);
     ui->savePictureButton->setVisible(true);
     ui->discardPictureButton->setVisible(true);
@@ -77,12 +68,12 @@ void extrinsic::on_takePictureButton_clicked()
 
 void extrinsic::on_savePictureButton_clicked()
 {
-    counterEx++;
-    ui->imageProgressBar->setValue(counterEx);
+    this->counterEx++;
+    ui->imageProgressBar->setValue(this->counterEx);
     ui->takePictureButton->setVisible(true);
     ui->savePictureButton->setVisible(false);
     ui->discardPictureButton->setVisible(false);
-    saveImageFlagExtrinsic=true;
+    this->saveImageFlagExtrinsic=true;
 }
 
 void extrinsic::on_discardPictureButton_clicked()
@@ -90,17 +81,16 @@ void extrinsic::on_discardPictureButton_clicked()
     ui->takePictureButton->setVisible(true);
     ui->savePictureButton->setVisible(false);
     ui->discardPictureButton->setVisible(false);
-    discardImageFlagExtrinsic=true;
+    this->discardImageFlagExtrinsic=true;
 }
 
 void extrinsic::on_calibrateButton_clicked()
 {
-
     if(ui->comboBox->currentIndex() != ui->comboBox_2->currentIndex())
     {
         ui->imageProgressBar->setVisible(true);
-        numPhotoEx=ui->numPicsDropdown->value();
-        isCalibratingExtrinsic = true;
+        this->numPhotoEx=ui->numPicsDropdown->value();
+        this->isCalibratingExtrinsic = true;
         ui->numPicsDropdown->setVisible(false);
         ui->errorText->setVisible(false);
         ui->comboBox->setVisible(false);
@@ -119,17 +109,17 @@ void extrinsic::on_calibrateButton_clicked()
         int index1 = connectToCameraByIp(listOfCameras[ui->comboBox->currentIndex()].getIpNumber(),'s');
         int index2 = connectToCameraByIp(listOfCameras[ui->comboBox_2->currentIndex()].getIpNumber(),'s');
 
-        while(isCalibratingExtrinsic)
+        while(this->isCalibratingExtrinsic)
         {
             // Get image
             FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(index1);
             FlyCapture2::Image Image2 = takeSinglePictureFromSingleCamera(index2);
 
-            unsigned int rowBytes = (double)Image.GetReceivedDataSize()/(double)Image.GetRows();
+            unsigned int rowBytes = static_cast<double>(Image.GetReceivedDataSize())/static_cast<double>(Image.GetRows());
             cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
 
-            unsigned int rowBytes2 = (double)Image2.GetReceivedDataSize()/(double)Image2.GetRows();
-            cv::Mat imgcv2 = cv::Mat(Image2.GetRows(), Image2.GetCols(), CV_8UC3, Image2.GetData(),rowBytes);
+            unsigned int rowBytes2 = static_cast<double>(Image2.GetReceivedDataSize())/static_cast<double>(Image2.GetRows());
+            cv::Mat imgcv2 = cv::Mat(Image2.GetRows(), Image2.GetCols(), CV_8UC3, Image2.GetData(),rowBytes2);
 
             // DEBUG: Show image using OpenCV's image display
             cv::imshow("image", imgcv);
@@ -137,34 +127,34 @@ void extrinsic::on_calibrateButton_clicked()
             cv::imshow("image2", imgcv2);
             key = cv::waitKey(1);
             // Show image
-            if(liveFlagExtrinsic)
+            if(this->liveFlagExtrinsic)
             {
                 cv::Mat show;
                 cv::Mat show2;
-                cv::cvtColor(imgcv,show,CV_BGR2RGB);
-                cv::cvtColor(imgcv2,show2,CV_BGR2RGB);
-                QImage img((uchar*)show.data, show.cols, show.rows, show.step, QImage::Format_RGB888);
-                QImage img2((uchar*)show2.data, show2.cols, show2.rows, show2.step, QImage::Format_RGB888);
+                cv::cvtColor(imgcv, show, CV_BGR2RGB);
+                cv::cvtColor(imgcv2, show2, CV_BGR2RGB);
+                QImage img(static_cast<uchar*>(show.data), show.cols, show.rows, show.step, QImage::Format_RGB888);
+                QImage img2(static_cast<uchar*>(show2.data), show2.cols, show2.rows, show2.step, QImage::Format_RGB888);
                 ui->camera1Feed->setPixmap(QPixmap::fromImage(img).scaled(441, 294, Qt::KeepAspectRatio));
                 ui->camera1Feed->repaint();
                 ui->camera2Feed->setPixmap(QPixmap::fromImage(img2).scaled(441, 294, Qt::KeepAspectRatio));
                 ui->camera2Feed->repaint();
-                convertedImageEX=Image;
-                convertedImageEX2=Image2;
+                this->convertedImageEX = Image;
+                this->convertedImageEX2 = Image2;
            }
-           if(saveImageFlagExtrinsic)
+           if(this->saveImageFlagExtrinsic)
            {
                string camIp1 = listOfCameras[ui->comboBox->currentIndex()].getIP();
-               saveImage(convertedImageEX, camIp1, counterEx);
+               saveImage(this->convertedImageEX, camIp1, this->counterEx);
                string camIp2=listOfCameras[ui->comboBox_2->currentIndex()].getIP();
-               saveImage(convertedImageEX2, camIp2, counterEx);
-               saveImageFlagExtrinsic = false;
-               liveFlagExtrinsic = true;
-                if(counterEx == numPhotoEx)
+               saveImage(this->convertedImageEX2, camIp2, this->counterEx);
+               this->saveImageFlagExtrinsic = false;
+               this->liveFlagExtrinsic = true;
+                if(this->counterEx == this->numPhotoEx)
                 {
                     extrinsic_compute e;
                     //test vars
-                    int counter = numPhotoEx; //number of photos
+                    int counter = this->numPhotoEx; //number of photos
                     string leftcalib_file = "calib" + camIp1 + "_" + ".yml";
                     string rightcalib_file = "calib" + camIp2 + "_" + ".yml";
                     string leftimg_dir = "";
@@ -173,13 +163,13 @@ void extrinsic::on_calibrateButton_clicked()
                     string rightimg_filename = "calib" + camIp2 + "_";
                     string out_file = "teste_pair.yml";
                     e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
-                    isCalibratingExtrinsic=false;
+                    this->isCalibratingExtrinsic = false;
                 }
             }
-            if (discardImageFlagExtrinsic)
+            if (this->discardImageFlagExtrinsic)
             {
-                discardImageFlagExtrinsic = false;
-                liveFlagExtrinsic = true;
+                this->discardImageFlagExtrinsic = false;
+                this->liveFlagExtrinsic = true;
             }
         }
         calibrateCameraPair();
@@ -192,7 +182,7 @@ void extrinsic::on_calibrateButton_clicked()
 
 void extrinsic::calibrateCameraPair()
 {
-    int numOfPic = ui->numPicsDropdown->value();
+    // int numOfPic = ui->numPicsDropdown->value();
 
 //    extrinsic_compute e;
 //    //test vars
@@ -211,7 +201,7 @@ void extrinsic::calibrateCameraPair()
 
 void extrinsic::on_cancelButton_clicked()
 {
-    isCalibratingExtrinsic = false;
+    this->isCalibratingExtrinsic = false;
     cv::destroyAllWindows();
     ui->numPicsDropdown->setValue(30);
     ui->numPicsDropdown->setVisible(true);
