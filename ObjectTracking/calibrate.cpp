@@ -74,7 +74,7 @@ void Calibrate::on_intrinsicButton_clicked()
 
 void Calibrate::on_extrinsicButton_clicked()
 {
-
+    /*
     for (uint i = 0; i<listOfCameras.size();i++ )
     {
         if(!listOfCameras[i].isIntrinsicCalibrated())
@@ -83,6 +83,7 @@ void Calibrate::on_extrinsicButton_clicked()
             return ;
         }
     }
+    */
 
     extrinsic extrinsicWindow;
     extrinsicWindow.setModal(true);
