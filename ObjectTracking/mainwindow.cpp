@@ -56,11 +56,13 @@ void MainWindow::on_start_pushButton_clicked()
 
 void MainWindow::on_calibrate_pushButton_clicked()
 {
+    /*
     if(listOfCameras.empty())
     {
         QMessageBox::critical(this, tr("Error"), tr("There is no camera information. Go to Configuration to enter camera information."));
         return ;
     }
+    */
 
         calibrationWindow.setModal(true);
         calibrationWindow.exec();
