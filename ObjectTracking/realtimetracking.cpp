@@ -1,5 +1,44 @@
 #include "realtimetracking.h"
 #include "ui_realtimetracking.h"
+#include <thread>
+#include "camerafly.h"
+#include "camera.h"
+#include "CamTracking.hpp"
+#include <string>
+
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+
+//pontosPorCam[4]
+//[vector<cv::Rect2d>, vector<cv::Rect2d>, vector<cv::Rect2d>, vector<cv::Rect2d>]
+
+void trackingthread(int id)
+{
+    cv::Mat undistortedImg;
+    // Get image from camera
+    FlyCapture2::Image camImg = takeSinglePictureFromSingleCamera(id);
+    // Get intrinsic calib values
+    //cv::Mat cameraMatrix = listOfCameras[id].
+    //cv::Mat distCoeffs = listOfCameras[id].
+    // Undistort image
+    //cv::undistort(camImg, undistortedImg, cameraMatrix, distCoeffs);
+    // Start tracking
+    std::string trackerType = "CSRT";
+    CamTracking ct(id, trackerType, undistortedImg);
+    while(true)
+    {
+        cv::Mat undistortedImg;
+        // Get image from camera
+        FlyCapture2::Image camImg = takeSinglePictureFromSingleCamera(id);
+        // Undistort image
+        //cv::undistort(camImg, undistortedImg, cameraMatrix, distCoeffs);
+        vector<cv::Rect2d> pontos = ct.track(undistortedImg);
+        // Send signal/pontos to main thread
+        //pontosPorCam[id] = pontos
+        //send ABC1
+    }
+}
 
 RealTimeTracking::RealTimeTracking(QWidget *parent) :
     QDialog(parent),
@@ -12,6 +51,13 @@ RealTimeTracking::RealTimeTracking(QWidget *parent) :
     ui->setupUi(this);
     ui->gridLayout->addWidget(container);
     ui->stopRec_pushButton->setVisible(false);
+    // TODO: Call connectToAllCameras()
+    int numCams = 4; // TODO: Get numCams from the listOfCameras vector
+    for(int i=0;i<numCams;i++){
+        std::thread t(trackingthread,i);
+        tvec.push_back(t);
+    }
+    if ()
 }
 
 RealTimeTracking::~RealTimeTracking()
@@ -28,6 +74,11 @@ void RealTimeTracking::on_startRec_pushButton_clicked()
 {
     ui->stopRec_pushButton->setVisible(true);
     ui->startRec_pushButton->setVisible(false);
+
+    for(int i=0;i<tvec.size();i++){
+        tvec[i].join();
+    }
+
 }
 
 void RealTimeTracking::on_stopRec_pushButton_clicked()

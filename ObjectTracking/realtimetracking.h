@@ -8,6 +8,7 @@
 #include <QSize>
 #include <QMessageBox>
 #include <QtGui/QScreen>
+#include <thread>
 
 namespace Ui {
 class RealTimeTracking;
@@ -33,6 +34,7 @@ private:
     QtDataVisualization::Q3DScatter * graph;
     ScatterDataModifier *modifier;
     QWidget *container;
+    std::vector<std::thread> tvec;
 };
 
 #endif // REALTIMETRACKING_H
