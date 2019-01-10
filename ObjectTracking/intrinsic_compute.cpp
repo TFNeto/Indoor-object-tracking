@@ -98,7 +98,7 @@ double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_f
 {
     int board_width = 7, board_height = 7;
     float square_size = 1;
-    string out_file = imgs_filename;
+    string out_file = imgs_filename; // TODO: Remove _ from end of name
     string extension = "png";
     double err = 0;
     Mat K; // Camera Matrix
