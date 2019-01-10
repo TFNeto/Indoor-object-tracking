@@ -8,3 +8,4 @@ ObjectTracking/ObjectTracking.pro.*
 **/ui_*
 **/moc_*
 **/*.autosave
+opencv_and_contrib/
