@@ -12,7 +12,6 @@ RealTimeTracking::RealTimeTracking(QWidget *parent) :
     ui->setupUi(this);
     ui->gridLayout->addWidget(container);
     ui->stopRec_pushButton->setVisible(false);
-    //ui->startRec_pushButton->setVisible(true);
 }
 
 RealTimeTracking::~RealTimeTracking()
