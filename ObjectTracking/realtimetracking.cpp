@@ -2,27 +2,28 @@
 #include "ui_realtimetracking.h"
 #include <thread>
 #include "camerafly.h"
-#include "camera.h"
 #include "CamTracking.hpp"
 #include <string>
+
+#include "global.h"
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
-//pontosPorCam[4]
-//[vector<cv::Rect2d>, vector<cv::Rect2d>, vector<cv::Rect2d>, vector<cv::Rect2d>]
-
 void trackingthread(int id)
 {
     cv::Mat undistortedImg;
     // Get image from camera
-    FlyCapture2::Image camImg = takeSinglePictureFromSingleCamera(id);
+    FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(id);
+    // Convert image to OpenCV Mat
+    unsigned int rowBytes = static_cast<double>(Image.GetReceivedDataSize())/static_cast<double>(Image.GetRows());
+    cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
     // Get intrinsic calib values
-    //cv::Mat cameraMatrix = listOfCameras[id].
-    //cv::Mat distCoeffs = listOfCameras[id].
+    cv::Mat cameraMatrix = listOfCameras[id].getCameraMatrix();
+    cv::Mat distCoeffs = listOfCameras[id].getDistCoeffs();
     // Undistort image
-    //cv::undistort(camImg, undistortedImg, cameraMatrix, distCoeffs);
+    cv::undistort(imgcv, undistortedImg, cameraMatrix, distCoeffs);
     // Start tracking
     std::string trackerType = "CSRT";
     CamTracking ct(id, trackerType, undistortedImg);
@@ -30,13 +31,14 @@ void trackingthread(int id)
     {
         cv::Mat undistortedImg;
         // Get image from camera
-        FlyCapture2::Image camImg = takeSinglePictureFromSingleCamera(id);
+        FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(id);
+        // Convert image to OpenCV Mat
+        unsigned int rowBytes = static_cast<double>(Image.GetReceivedDataSize())/static_cast<double>(Image.GetRows());
+        cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
         // Undistort image
-        //cv::undistort(camImg, undistortedImg, cameraMatrix, distCoeffs);
+        cv::undistort(imgcv, undistortedImg, cameraMatrix, distCoeffs);
         vector<cv::Rect2d> pontos = ct.track(undistortedImg);
-        // Send signal/pontos to main thread
-        //pontosPorCam[id] = pontos
-        //send ABC1
+        // TODO: Set flag, or vector, or send some sort of signal to the parent thread
     }
 }
 
@@ -68,23 +70,24 @@ void RealTimeTracking::on_startRec_pushButton_clicked()
     ui->stopRec_pushButton->setVisible(true);
     ui->startRec_pushButton->setVisible(false);
 
-    for(size_t i=0;i<tvec.size();i++){
+    for(size_t i = 0; i < tvec.size(); i++)
+    {
         tvec[i]->detach();
     }
-
 }
 
 void RealTimeTracking::on_stopRec_pushButton_clicked()
 {
     ui->stopRec_pushButton->setVisible(false);
     ui->startRec_pushButton->setVisible(true);
-    // TODO: Call connectToAllCameras()
-    int numCams = 4; // TODO: Get numCams from the listOfCameras vector
-    for(int i=0;i<numCams;i++){
-        std::thread *t = new std::thread(trackingthread,i);
+    connectAllCameras();
+    for(int i = 0; i < listOfCameras.size(); i++)
+    {
+        std::thread *t = new std::thread(trackingthread, i);
         tvec.push_back(t);
     }
-    for(size_t i=0;i<tvec.size();i++){
+    for(size_t i=0; i < tvec.size(); i++)
+    {
         tvec[i]->detach();
     }
 }
