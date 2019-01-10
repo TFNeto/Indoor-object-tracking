@@ -7,3 +7,4 @@ ObjectTracking/ObjectTracking.pro.*
 .qmake.stash
 **/ui_*
 **/moc_*
+**/*.autosave
