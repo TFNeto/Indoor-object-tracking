@@ -5,3 +5,5 @@ ObjectTracking/ObjectTracking.pro.*
 **/*.raw
 **/*.o
 .qmake.stash
+**/ui_*
+**/moc_*
