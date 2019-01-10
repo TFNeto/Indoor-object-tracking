@@ -34,7 +34,7 @@ private:
     QtDataVisualization::Q3DScatter * graph;
     ScatterDataModifier *modifier;
     QWidget *container;
-    std::vector<std::thread> tvec;
+    std::vector<std::thread*> tvec;
 };
 
 #endif // REALTIMETRACKING_H

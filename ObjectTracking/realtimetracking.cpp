@@ -51,13 +51,6 @@ RealTimeTracking::RealTimeTracking(QWidget *parent) :
     ui->setupUi(this);
     ui->gridLayout->addWidget(container);
     ui->stopRec_pushButton->setVisible(false);
-    // TODO: Call connectToAllCameras()
-    int numCams = 4; // TODO: Get numCams from the listOfCameras vector
-    for(int i=0;i<numCams;i++){
-        std::thread t(trackingthread,i);
-        tvec.push_back(t);
-    }
-    if ()
 }
 
 RealTimeTracking::~RealTimeTracking()
@@ -75,8 +68,8 @@ void RealTimeTracking::on_startRec_pushButton_clicked()
     ui->stopRec_pushButton->setVisible(true);
     ui->startRec_pushButton->setVisible(false);
 
-    for(int i=0;i<tvec.size();i++){
-        tvec[i].join();
+    for(size_t i=0;i<tvec.size();i++){
+        tvec[i]->detach();
     }
 
 }
@@ -85,4 +78,13 @@ void RealTimeTracking::on_stopRec_pushButton_clicked()
 {
     ui->stopRec_pushButton->setVisible(false);
     ui->startRec_pushButton->setVisible(true);
+    // TODO: Call connectToAllCameras()
+    int numCams = 4; // TODO: Get numCams from the listOfCameras vector
+    for(int i=0;i<numCams;i++){
+        std::thread *t = new std::thread(trackingthread,i);
+        tvec.push_back(t);
+    }
+    for(size_t i=0;i<tvec.size();i++){
+        tvec[i]->detach();
+    }
 }
