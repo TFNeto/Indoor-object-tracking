@@ -11,6 +11,35 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
+//contains data for the last result of each tracking operation.
+//if you want to add this to the class private members, you'll have to add trackingthread as a friend
+static std::vector<std::vector<cv::Rect2d>> g_2dData;
+
+/*
+Maybe the code for the stop recording button:
+    for(size_t i=0; i < tvec.size(); i++)
+    {
+        delete tvec[i]; //threads were allocated dinamically so just dealloc and hope it doesn't cause the pc to explode?
+    }
+*/
+
+QVector3D CvtoQtCoordinates(cv::Point3d rect){
+    QVector3D out;
+    out.setX((float)rect.x);
+    out.setY((float)rect.y);
+    out.setZ((float)rect.z);
+    return out;
+}
+
+QVector<QVector3D> cvtCoordinates(std::vector<cv::Point3d> vec){
+    QVector<QVector3D> out;
+    for(size_t i = 0; i<vec.size();i++)
+    {
+        out.push_back(CvtoQtCoordinates(vec[i]));
+    }
+    return out;
+}
+
 void trackingthread(int id)
 {
     cv::Mat undistortedImg;
@@ -37,9 +66,27 @@ void trackingthread(int id)
         cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
         // Undistort image
         cv::undistort(imgcv, undistortedImg, cameraMatrix, distCoeffs);
-        vector<cv::Rect2d> pontos = ct.track(undistortedImg);
-        // TODO: Set flag, or vector, or send some sort of signal to the parent thread
+        g_2dData[id] = ct.track(undistortedImg);
     }
+}
+
+void updatethread(RealTimeTracking* rtt){
+
+    bool toUpdate=false;
+    while(!toUpdate){
+        toUpdate=true;
+        for(size_t i=0;i<g_2dData.size();i++)
+            toUpdate = toUpdate && !g_2dData[i].empty();
+    }
+    //----------triangulate here---------
+    //you can convert Rect2D to Point2D with Point2D(Rect2D.x,Rect2D.y)
+
+    for(size_t i=0;i<g_2dData.size();i++){
+        g_2dData[i] = std::vector<cv::Rect2d>(); //empty the vectors
+    }
+    std::vector<cv::Point3d> data3d; //output triangulation to here
+    //data3d.push_back() // add cameras position or extreme points to keep the graphic always on same dimensions
+    rtt->modifier->setData(cvtCoordinates(data3d));
 }
 
 RealTimeTracking::RealTimeTracking(QWidget *parent) :
@@ -83,9 +130,11 @@ void RealTimeTracking::on_stopRec_pushButton_clicked()
     connectAllCameras();
     for(int i = 0; i < listOfCameras.size(); i++)
     {
+        g_2dData.push_back(std::vector<cv::Rect2d>()); //adds empty vector to avoid segfault
         std::thread *t = new std::thread(trackingthread, i);
         tvec.push_back(t);
     }
+    tvec.push_back(new std::thread(updatethread,this));
     for(size_t i=0; i < tvec.size(); i++)
     {
         tvec[i]->detach();
