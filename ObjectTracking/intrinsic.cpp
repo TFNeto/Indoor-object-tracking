@@ -14,6 +14,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include <QMessageBox>
+
 Intrinsic::Intrinsic(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Intrinsic)
@@ -119,6 +121,7 @@ void Intrinsic::on_startCalibrButton_clicked()
 
             if(counter == numPhoto)
             {
+                // Start calibration
                 ui->cameraDropdown->setVisible(true);
                 ui->cameraChosen->setVisible(false);
                 ui->infoCalibration->setVisible(true);
@@ -127,15 +130,24 @@ void Intrinsic::on_startCalibrButton_clicked()
 
                 intrinsic_compute i;
                 string img_folder = "";
-                string img_filename = "calib" + camIp + "_";
-                double intrinsicCalib = i.run(numPhoto, img_folder, img_filename);
+                string img_filename = "calib" + camIp;
+                double intrinsicCalibError = i.run(numPhoto, img_folder, img_filename);
 
-                cout << "DEBUG: Instrinsic calibration result: " << intrinsicCalib << endl;
+                cout << "DEBUG: Instrinsic calibration (error) result: " << intrinsicCalibError << endl;
 
+                if (intrinsicCalibError <= 0)
+                {
+                    QMessageBox::critical(this, tr("Error"), tr("Intrinsic calibration failed."));
+                } else
+                {
+                    string infoMessage = "Intrinsic calibration succeeded. Error value: " + to_string(intrinsicCalibError);
+                    QMessageBox::information(this, tr("Intrinsic calibration"), tr(infoMessage.c_str()));
+                    listOfCameras[index].setIsCalibratedIntrinsic();
+                    listOfCameras[index].setDistCoeffs(i.getDistCoeffs());
+                    listOfCameras[index].setCameraMatrix(i.getCameraMatrix());
+                }
                 this->isCalibrating = false;
                 ui->infoCalibration->setVisible(false);
-                // TODO: Set Camera's isCalibratedIntrinsic to true. How to get the correct camera's index from the vector ?
-                // Possible search for the ip in the vector and get the index from there ?
             }
         }
         // Discard image if the user clicks on "Discard"

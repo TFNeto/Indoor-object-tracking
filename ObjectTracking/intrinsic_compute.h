@@ -26,6 +26,8 @@ public:
                               const vector< Mat >& rvecs, const vector< Mat >& tvecs,
                               const Mat& cameraMatrix , const Mat& distCoeffs);
     double run(int num_imgs, string imgs_directory, string imgs_filename);
+    Mat getCameraMatrix(void);
+    Mat getDistCoeffs(void);
 
 private:
     vector<vector<Point3f>> object_points;
@@ -34,6 +36,9 @@ private:
     vector<vector<Point2f>> left_img_points;
     Mat img, gray;
     Size im_size;
+    Mat cameraMatrix, distCoeffs;
+    // void setCameraMatrix(Mat cameraMatrix);
+    // void setDistCoeffs(Mat distCoeffs);
 };
 
 #endif // INTRINSIC_COMPUTE_H

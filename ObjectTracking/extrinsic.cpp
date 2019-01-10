@@ -156,12 +156,12 @@ void extrinsic::on_calibrateButton_clicked()
                     extrinsic_compute e;
                     //test vars
                     int counter = this->numPhotoEx; //number of photos
-                    string leftcalib_file = "calib" + camIp1 + "_" + ".yml";
-                    string rightcalib_file = "calib" + camIp2 + "_" + ".yml";
+                    string leftcalib_file = "calib" + camIp1 + ".yml";
+                    string rightcalib_file = "calib" + camIp2 + ".yml";
                     string leftimg_dir = "";
                     string rightimg_dir = "";
-                    string leftimg_filename = "calib" + camIp1 + "_";
-                    string rightimg_filename = "calib" + camIp2 + "_";
+                    string leftimg_filename = "calib" + camIp1;
+                    string rightimg_filename = "calib" + camIp2;
                     string out_file = "teste_pair.yml";
                     e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
                     this->isCalibratingExtrinsic = false;
@@ -173,31 +173,11 @@ void extrinsic::on_calibrateButton_clicked()
                 this->liveFlagExtrinsic = true;
             }
         }
-        calibrateCameraPair();
         disconnectCameraByIp(listOfCameras[ui->comboBox->currentIndex()].getIpNumber());
         return; // TODO: This is useless ?
     }
     ui->errorText->setText("Chose different cameras");
     ui->errorText->setVisible(true);
-}
-
-void extrinsic::calibrateCameraPair()
-{
-    // int numOfPic = ui->numPicsDropdown->value();
-
-//    extrinsic_compute e;
-//    //test vars
-//    int counter = numOfPic; //number of photos
-//    string leftcalib_file = "cam_out_intrinsic_left.yml";
-//    string rightcalib_file = "cam_out_intrinsic_righ.yml";
-//    string leftimg_dir = "../1";
-//    string rightimg_dir = "../1";
-//    string leftimg_filename = "left";
-//    string rightimg_filename = "right";
-//    string out_file = "teste_pair.yml";
-//    e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
-
-    //do the calibration
 }
 
 void extrinsic::on_cancelButton_clicked()

@@ -18,6 +18,26 @@ intrinsic_compute::intrinsic_compute()
 
 }
 
+Mat intrinsic_compute::getCameraMatrix(void)
+{
+    return this->cameraMatrix;
+}
+
+Mat intrinsic_compute::getDistCoeffs(void)
+{
+    return this->distCoeffs;
+}
+
+// void intrinsic_compute::setCameraMatrix(Mat cameraMatrix)
+// {
+//     this->cameraMatrix = cameraMatrix;
+// }
+
+// void intrinsic_compute::setDistCoeffs(Mat distCoeffs)
+// {
+//     this->distCoeffs = distCoeffs;
+// }
+
 bool intrinsic_compute::doesExist(const std::string& name) {
     struct stat buffer;
     return (stat (name.c_str(), &buffer) == 0);
@@ -98,7 +118,7 @@ double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_f
 {
     int board_width = 7, board_height = 7;
     float square_size = 1;
-    string out_file = imgs_filename; // TODO: Remove _ from end of name
+    string out_file = imgs_filename;
     string extension = "png";
     double err = 0;
     Mat K; // Camera Matrix
@@ -114,7 +134,11 @@ double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_f
     calibrateCamera(object_points, image_points, img.size(), K, D, rvecs, tvecs, flag);
     err = computeReprojectionErrors(object_points, image_points, rvecs, tvecs, K, D);
 
-    // passar para o código do bruno e de-distorcer as imagens
+    // this->setCameraMatrix(K);
+    // this->setDistCoeffs(D);
+    this->cameraMatrix = K;
+    this->distCoeffs = D;
+    // Save intrinsic calibration data to file
     FileStorage fs(out_file.c_str(), FileStorage::WRITE);
     fs << "K" << K;
     fs << "D" << D;

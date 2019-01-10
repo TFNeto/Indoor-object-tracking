@@ -5,6 +5,10 @@
 
 #include "camera.h"
 
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+
 Camera::Camera(string name, string IPaddress, float xPosition, float yPosition, float zPosition, float pointingAngle)
 {
     this->name = name;
@@ -86,3 +90,34 @@ bool Camera::isExtrinsicCalibrated(void)
 {
     return this->isCalibratedExtrinsic;
 }
+
+cv::Mat Camera::getCameraMatrix(void)
+{
+    return this->cameraMatrix;
+}
+
+cv::Mat Camera::getDistCoeffs(void)
+{
+    return this->distCoeffs;
+}
+
+void Camera::setIsCalibratedIntrinsic(void)
+{
+    this->isCalibratedIntrinsic = true;
+}
+
+void Camera::setIsCalibratedExtrinsic(void)
+{
+    this->isCalibratedExtrinsic = true;
+}
+
+void Camera::setDistCoeffs(cv::Mat distCoeffs)
+{
+    this->distCoeffs = distCoeffs;
+}
+
+void Camera::setCameraMatrix(cv::Mat cameraMatrix)
+{
+    this->cameraMatrix = cameraMatrix;
+}
+
