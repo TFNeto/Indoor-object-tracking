@@ -1,2 +1,5 @@
 build*/
 ObjectTracking/ObjectTracking.pro.*
+*.png
+*.jpg
+*.raw
