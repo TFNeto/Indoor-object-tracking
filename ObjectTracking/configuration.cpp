@@ -133,6 +133,7 @@ void Configuration::on_scan_push_clicked()
     ui->scanning_label->setVisible(true);
     // Note: By doing this, we are deleting/ignoring the previous list cameras
     listOfCameras = scanCameras();
+    // cout << "listOfCameras: " << listOfCameras.size() << endl;
     ui->scanning_label->setVisible(false);
     if (listOfCameras.size() > 0)
     {

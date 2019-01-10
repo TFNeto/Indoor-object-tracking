@@ -11,6 +11,8 @@ RealTimeTracking::RealTimeTracking(QWidget *parent) :
     modifier->addData();
     ui->setupUi(this);
     ui->gridLayout->addWidget(container);
+    ui->stopRec_pushButton->setVisible(false);
+    //ui->startRec_pushButton->setVisible(true);
 }
 
 RealTimeTracking::~RealTimeTracking()
@@ -21,4 +23,16 @@ RealTimeTracking::~RealTimeTracking()
 void RealTimeTracking::on_RandomizeButton_clicked()
 {
     modifier->addData();
+}
+
+void RealTimeTracking::on_startRec_pushButton_clicked()
+{
+    ui->stopRec_pushButton->setVisible(true);
+    ui->startRec_pushButton->setVisible(false);
+}
+
+void RealTimeTracking::on_stopRec_pushButton_clicked()
+{
+    ui->stopRec_pushButton->setVisible(false);
+    ui->startRec_pushButton->setVisible(true);
 }

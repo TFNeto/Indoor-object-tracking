@@ -40,15 +40,17 @@ void MainWindow::on_configure_pushButton_clicked()
 
 void MainWindow::on_start_pushButton_clicked()
 {
+    /*
     if (this->camerasCalibrated)
     {
+    */
         trackWindow.setModal(true);
         trackWindow.exec();
-    }
+    /*}
     else
     {
         QMessageBox::critical(this, tr("Error"), tr("Cameras must be calibrated first."));
-    }
+    }*/
 }
 
 

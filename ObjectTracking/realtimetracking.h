@@ -24,6 +24,10 @@ public:
 private slots:
     void on_RandomizeButton_clicked();
 
+    void on_startRec_pushButton_clicked();
+
+    void on_stopRec_pushButton_clicked();
+
 private:
     Ui::RealTimeTracking *ui;
     QtDataVisualization::Q3DScatter * graph;
