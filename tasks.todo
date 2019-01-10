@@ -1,0 +1,31 @@
+Bugs:
+- Scanning without any cameras connected will throw an error on the 2nd call
+	This is probably caused by the vector not being empty on the 2nd call
+- Scanning label doesnt show up, when the scan button is pressed
+
+Todo:
+- Extrinsic calibration UI
+- Add validation
+	- Check if camera's are already calibrated when going to the calibration menus
+	- Check if the camera's are calibrated (intrinsic) when going to the extrinsic calib 
+	- Check if X,Y,Z coordinates in the Configuration UI are changed after scanning. If not, alert the user.
+	- Implement Load/Save in both Configuration and Calibration UI's
+
+- Save calibration data on the Camera's object
+-  
+
+thread (1 a 4)
+	pedir 1 imagem de 1 camara
+	// calib intrinseca
+	CamTracking ct(id, "CSRT", IMAGEM_AQUI);
+
+	for(::)
+		// pedir 1 imagem de 1 camara
+		<cv::Rect2d> pontos = ct.track(nova_imagem);
+		// enviar sinal para thread_A a dizer que tem pontos
+
+thread main
+	// esperar por sinal das 4 threads com os pontos
+	// calib extrinseca 
+	// triangular
+	update3d()
