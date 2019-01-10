@@ -89,6 +89,8 @@ void extrinsic::on_calibrateButton_clicked()
 {
     if(ui->comboBox->currentIndex() != ui->comboBox_2->currentIndex())
     {
+        ui->imageProgressBar->setFormat("%v");
+        ui->imageProgressBar->setRange(0,numPhotoEx);
         ui->imageProgressBar->setVisible(true);
         this->numPhotoEx=ui->numPicsDropdown->value();
         this->isCalibratingExtrinsic = true;
@@ -165,6 +167,8 @@ void extrinsic::on_calibrateButton_clicked()
                     string out_file = "teste_pair.yml";
                     e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
                     this->isCalibratingExtrinsic = false;
+                    ui->cancelButton->setVisible(false);
+                    ui->calibrateButton->setVisible(true);
                 }
             }
             if (this->discardImageFlagExtrinsic)

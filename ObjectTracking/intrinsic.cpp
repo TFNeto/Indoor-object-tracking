@@ -62,6 +62,10 @@ Intrinsic::~Intrinsic()
 
 void Intrinsic::on_startCalibrButton_clicked()
 {
+    if(listOfCameras[ui->cameraDropdown->currentIndex()].isIntrinsicCalibrated())
+    {
+        return;
+    }
     this->numPhoto = ui->numPicsDropdown->value();
     this->counter = 0;
     cout << "DEBUG: Photos to be taken: " << numPhoto << endl;
