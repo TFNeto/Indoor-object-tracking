@@ -63,7 +63,7 @@ void MainWindow::on_calibrate_pushButton_clicked()
         return ;
     }
     */
-
+        calibrationWindow.setCameraInfo();
         calibrationWindow.setModal(true);
         calibrationWindow.exec();
 

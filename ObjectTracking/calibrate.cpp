@@ -27,35 +27,32 @@ void Calibrate::on_close_button_clicked()
     this->close();
 }
 
-void Calibrate::setCameraInfo(vector<Camera> listOfCameras)
+void Calibrate::setCameraInfo()
 {
     // Set number of table row's
     ui->tableWidget->setRowCount(static_cast<int>(listOfCameras.size()));
 
     for (size_t i = 0; i < listOfCameras.size(); i++)
     {
-        // Create a camera object, so we can access its methods
-        Camera camObj = listOfCameras[i];
-
         // Set name
         QTableWidgetItem *name = new QTableWidgetItem;
-        name->setText(QString::fromStdString(camObj.getName()));
+        name->setText(QString::fromStdString(listOfCameras[i].getName()));
         name->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidget->setItem(static_cast<int>(i), 0, name);
         // Set IP Address
         QTableWidgetItem *ip = new QTableWidgetItem;
         ip->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        ip->setText(QString::fromStdString(camObj.getIP()));
+        ip->setText(QString::fromStdString(listOfCameras[i].getIP()));
         ui->tableWidget->setItem(static_cast<int>(i), 1, ip);
         // Set position X
         QTableWidgetItem *position = new QTableWidgetItem;
         position->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        position->setText(QString::fromStdString(to_string(camObj.getX()) + ", " + to_string(camObj.getY()) + ", " + to_string(camObj.getZ())));
+        position->setText(QString::fromStdString(to_string(listOfCameras[i].getX()) + ", " + to_string(listOfCameras[i].getY()) + ", " + to_string(listOfCameras[i].getZ())));
         ui->tableWidget->setItem(static_cast<int>(i), 2, position);
         // Set angle
         QTableWidgetItem *angle = new QTableWidgetItem;
         angle->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        angle->setText(QString::fromStdString(to_string(camObj.getAngle())));
+        angle->setText(QString::fromStdString(to_string(listOfCameras[i].getAngle())));
         ui->tableWidget->setItem(static_cast<int>(i), 5, angle);
         // Edit
         QTableWidgetItem *edit = new QTableWidgetItem;
@@ -80,7 +77,7 @@ void Calibrate::on_extrinsicButton_clicked()
         if(!listOfCameras[i].isIntrinsicCalibrated())
         {
             QMessageBox::critical(this, tr("Error"), tr("All cameras must be intrinsic calibrated"));
-            return ;
+            return;
         }
     }
     */
@@ -88,16 +85,4 @@ void Calibrate::on_extrinsicButton_clicked()
     extrinsic extrinsicWindow;
     extrinsicWindow.setModal(true);
     extrinsicWindow.exec();
-
-    extrinsic_compute e;
-
-    // int counter = 8; //overriding for tests
-    // string leftcalib_file = "cam_out_intrinsic_left.yml";
-    // string rightcalib_file = "cam_out_intrinsic_righ.yml";
-    // string leftimg_dir = "../1";
-    // string rightimg_dir = "../1";
-    // string leftimg_filename = "left";
-    // string rightimg_filename = "right";
-    // string out_file = "teste_pair.yml";
-    // e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
 }

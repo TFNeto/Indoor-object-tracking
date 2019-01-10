@@ -20,7 +20,7 @@ class Calibrate : public QDialog
 public:
     explicit Calibrate(QWidget *parent = nullptr);
     ~Calibrate();
-    void  setCameraInfo(vector<Camera> listOfCameras);
+    void setCameraInfo();
 private slots:
     void on_close_button_clicked();
     void on_intrinsicButton_clicked();
