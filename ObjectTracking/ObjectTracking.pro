@@ -54,7 +54,9 @@ SOURCES += \
     camerafly.cpp \
     extrinsic_compute.cpp \
     triangulatepoints.cpp \
-    scatterdatamodifier.cpp
+    scatterdatamodifier.cpp \
+    CamTracking.cpp \
+    detection.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -68,12 +70,12 @@ HEADERS += \
     extrinsic.h \
     intrinsic_compute.h \ # computations for intrinsic parameters
     serial.h \ # for serial communication
-    \ resource.h \ # flycapture
-    \ # stdafx.h # flycapture
     camerafly.h \
     extrinsic_compute.h \
     triangulatepoints.h \
-    scatterdatamodifier.h
+    scatterdatamodifier.h \
+    CamTracking.hpp \
+    detection.hpp
 
 FORMS += \
     mainwindow.ui \
