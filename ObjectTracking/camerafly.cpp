@@ -97,7 +97,6 @@ vector<Camera> scanCameras()
     if (numCamInfo == 0)
     {
         // No cameras found
-        cout << "No suitable GigE cameras found. Press Enter to exit..." << endl;
         return vector<Camera>();
     }
     lista = new FlyCapture2::GigECamera[numCamInfo];
