@@ -129,6 +129,7 @@ void Configuration::updateTable(vector<Camera> newListOfCameras)
 
 void Configuration::on_scan_push_clicked()
 {
+    ui->tableWidget->setVisible(false);
     ui->scan_nocams->setVisible(false);
     ui->scanning_label->setVisible(true);
     // Note: By doing this, we are deleting/ignoring the previous list cameras

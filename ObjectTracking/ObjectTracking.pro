@@ -39,6 +39,7 @@ LIBS += -lopencv_videoio -lopencv_video -lopencv_videostab #for videocapture
 LIBS += -L/usr/local/lib #for continuityflag
 LIBS += -lboost_system # serial communication
 LIBS += /usr/lib/libflycapture* # flycapture
+LIBS += -lopencv_tracking
 
 SOURCES += \
     main.cpp \
