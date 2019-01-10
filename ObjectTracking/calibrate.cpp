@@ -6,6 +6,7 @@
 #include "extrinsic.h"
 #include "intrinsic_compute.h"
 #include "extrinsic_compute.h"
+#include <QMessageBox>
 
 using namespace std;
 
@@ -73,6 +74,16 @@ void Calibrate::on_intrinsicButton_clicked()
 
 void Calibrate::on_extrinsicButton_clicked()
 {
+
+    for (uint i = 0; i<listOfCameras.size();i++ )
+    {
+        if(!listOfCameras[i].isIntrinsicCalibrated())
+        {
+            QMessageBox::critical(this, tr("Error"), tr("All cameras must be intrinsic calibrated"));
+            return ;
+        }
+    }
+
     extrinsic extrinsicWindow;
     extrinsicWindow.setModal(true);
     extrinsicWindow.exec();

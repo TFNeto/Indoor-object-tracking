@@ -18,6 +18,7 @@ extrinsic::extrinsic(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::extrinsic)
 {
+
     ui->setupUi(this);
     for (uint i = 0; i<listOfCameras.size();i++ )
     {

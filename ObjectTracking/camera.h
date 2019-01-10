@@ -26,6 +26,8 @@ public:
     float getZ(void);
     float getAngle(void);
     uint getIpNumber(void);
+    bool isIntrinsicCalibrated(void);
+    bool isExtrinsicCalibrated(void);
 };
 
 QDataStream &operator<<(QDataStream &out, const Camera &cam);

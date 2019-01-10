@@ -77,3 +77,12 @@ QDataStream &operator>>(QDataStream &in, Camera &cam)
     in.readRawData(reinterpret_cast<char*>(&cam), sizeof(cam));
     return in;
 }
+
+bool Camera::isIntrinsicCalibrated(void)
+{
+    return this->isCalibratedIntrinsic;
+}
+bool Camera::isExtrinsicCalibrated(void)
+{
+    return this->isCalibratedExtrinsic;
+}

@@ -54,17 +54,15 @@ void MainWindow::on_start_pushButton_clicked()
 
 void MainWindow::on_calibrate_pushButton_clicked()
 {
-    // Commented out to test. Uncomment after testing.
-    /*if (listOfCameras.size()!=0)
-    {
-    */
-        calibrationWindow.setModal(true);
-        calibrationWindow.exec();
-    /*}
-    else
+    if(listOfCameras.empty())
     {
         QMessageBox::critical(this, tr("Error"), tr("There is no camera information. Go to Configuration to enter camera information."));
-    }*/
+        return ;
+    }
+
+        calibrationWindow.setModal(true);
+        calibrationWindow.exec();
+
 }
 
 void MainWindow::on_log_pushButton_clicked()
