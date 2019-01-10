@@ -10,9 +10,11 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#define MAXCAMERAS 20
+
 using namespace std;
 
-unsigned int numCamInfo = 10;
+unsigned int numCamInfo = MAXCAMERAS;
 FlyCapture2::GigECamera *lista;
 
 // Utility function to print FlyCapture errors
@@ -83,6 +85,8 @@ vector<Camera> scanCameras()
 
     FlyCapture2::CameraInfo camInfo[10];
     FlyCapture2::CameraInfo nova;
+
+    numCamInfo = MAXCAMERAS;
 
     // Scan for GIGE cameras
     error = FlyCapture2::BusManager::DiscoverGigECameras(camInfo, &numCamInfo);
