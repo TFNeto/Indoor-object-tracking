@@ -1,5 +1,7 @@
 build*/
 ObjectTracking/ObjectTracking.pro.*
-*.png
-*.jpg
-*.raw
+**/*.png
+**/*.jpg
+**/*.raw
+**/*.o
+.qmake.stash
