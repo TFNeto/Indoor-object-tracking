@@ -175,7 +175,6 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
         if(guid1 == guid)
         {
             index = i;
-            cout << "index = " << index << endl;
         }
     }
 
@@ -263,7 +262,6 @@ void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress)
         if(guid1 == guid)
         {
             index = i;
-            cout << "index =" << index << endl;
         }
     }
     // Stop capturing images
@@ -321,7 +319,9 @@ FlyCapture2::Image takeSinglePictureFromSingleCamera(int index)
 // @param imgNum - Image number (Asc order, for the filename)
 void saveImage(FlyCapture2::Image img, string camIp, int imgNum)
 {
-    string fileName = "calib" + camIp + "_" + to_string(imgNum) + ".png";
+    string fileName = "calib" + camIp + "_" + to_string(imgNum);
+    fileName.erase(std::remove(fileName.begin(), fileName.end(), '.'), fileName.end());
+    fileName = fileName+ ".png";
     FlyCapture2::Error error;
     error = img.Save(fileName.c_str());
     if (error != FlyCapture2::PGRERROR_OK)

@@ -22,6 +22,8 @@ public:
     explicit RealTimeTracking(QWidget *parent = nullptr);
     ~RealTimeTracking();
 
+    friend void updatethread(RealTimeTracking* rtt);
+
 private slots:
     void on_RandomizeButton_clicked();
 

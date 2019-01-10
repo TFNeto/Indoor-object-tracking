@@ -62,6 +62,10 @@ Intrinsic::~Intrinsic()
 
 void Intrinsic::on_startCalibrButton_clicked()
 {
+    if(listOfCameras[ui->cameraDropdown->currentIndex()].isIntrinsicCalibrated())
+    {
+        return;
+    }
     this->numPhoto = ui->numPicsDropdown->value();
     this->counter = 0;
     cout << "DEBUG: Photos to be taken: " << numPhoto << endl;
@@ -130,7 +134,7 @@ void Intrinsic::on_startCalibrButton_clicked()
 
                 intrinsic_compute i;
                 string img_folder = "";
-                string img_filename = "calib" + camIp;
+                string img_filename = "calib" + camIp + "_";
                 double intrinsicCalibError = i.run(numPhoto, img_folder, img_filename);
 
                 cout << "DEBUG: Instrinsic calibration (error) result: " << intrinsicCalibError << endl;

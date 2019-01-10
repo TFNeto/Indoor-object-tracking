@@ -156,13 +156,17 @@ void extrinsic::on_calibrateButton_clicked()
                     extrinsic_compute e;
                     //test vars
                     int counter = this->numPhotoEx; //number of photos
-                    string leftcalib_file = "calib" + camIp1 + ".yml";
+                    string leftcalib_file = "calib" + camIp1;
+                    leftcalib_file.erase(std::remove(leftcalib_file.begin(), leftcalib_file.end(), '.'), leftcalib_file.end());
                     string rightcalib_file = "calib" + camIp2 + ".yml";
+                    rightcalib_file.erase(std::remove(rightcalib_file.begin(), rightcalib_file.end(), '.'), rightcalib_file.end());
                     string leftimg_dir = "";
                     string rightimg_dir = "";
-                    string leftimg_filename = "calib" + camIp1;
-                    string rightimg_filename = "calib" + camIp2;
-                    string out_file = "teste_pair.yml";
+                    string leftimg_filename = "calib" + camIp1 + "_";
+                    leftimg_filename.erase(std::remove(leftimg_filename.begin(), leftimg_filename.end(), '.'), leftimg_filename.end());
+                    string rightimg_filename = "calib" + camIp2 + "_";
+                    rightimg_filename.erase(std::remove(rightimg_filename.begin(), rightimg_filename.end(), '.'), rightimg_filename.end());
+                    string out_file = "extrinsic.yml"; // TODO: This shouldnt be hardcoded, but since we're using only 1 pair of cameras, there's no need to do it properly atm
                     e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
                     this->isCalibratingExtrinsic = false;
                 }

@@ -11,7 +11,18 @@
 #include <utility>
 #include "global.h"
 
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+
+#include "FlyCapture2.h"
+#include "camerafly.h"
+
+#include "CamTracking.hpp"
+
 using namespace std;
+
+static std::vector<std::vector<cv::Rect2d>> g_2dData;
 
 vector<Camera> listOfCameras;
 
@@ -89,4 +100,50 @@ void MainWindow::disablePushButtons()
     ui->configure_pushButton->setDisabled(true);
     ui->calibrate_pushButton->setDisabled(true);
     ui->log_pushButton->setDisabled(true);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    cout << "Begin test" << endl;
+    FileStorage fsl("a", FileStorage::READ);
+    cv::Mat K, D;
+    fsl["K"] >> K;
+    fsl["D"] >> D;
+    cv::Mat undistortedImg;
+    // Get image from camera
+    int id = connectToCameraByIp(listOfCameras[0].getIpNumber(), 'a');
+    FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(id);
+    // Convert image to OpenCV Mat
+    cout << "111111111111111" << endl;
+    unsigned int rowBytes = static_cast<double>(Image.GetReceivedDataSize())/static_cast<double>(Image.GetRows());
+    cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
+    cout << "2222222222222222222" << endl;
+    cv::imshow("before image", imgcv);
+    char key = cv::waitKey(10);
+    // Get intrinsic calib values
+    //cv::Mat cameraMatrix = listOfCameras[0].getCameraMatrix();
+    //cv::Mat distCoeffs = listOfCameras[0].getDistCoeffs();
+    // Undistort image
+    cout << "K size: " << K.size() << endl;
+    cout << "D size: " << D.size() << endl;
+
+    cv::undistort(imgcv, undistortedImg, K, D);
+    cv::imshow("after image", undistortedImg);
+    key = cv::waitKey(10);
+    cout << "Mid test" << endl;
+
+    std::string trackerType = "CSRT";
+    CamTracking ct(id, trackerType, undistortedImg);
+    while(true)
+    {
+        cv::Mat undistortedImg;
+        // Get image from camera
+        FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(id);
+        // Convert image to OpenCV Mat
+        unsigned int rowBytes = static_cast<double>(Image.GetReceivedDataSize())/static_cast<double>(Image.GetRows());
+        cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
+        // Undistort image
+        cv::undistort(imgcv, undistortedImg, K, D);
+        g_2dData[id] = ct.track(undistortedImg);
+    }
 }
