@@ -21,6 +21,8 @@ Configuration::Configuration(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->saveCon_push->setVisible(false);
+    ui->scanning_label->setVisible(false);
+    ui->scan_nocams->setVisible(false);
 }
 
 Configuration::~Configuration()
@@ -127,7 +129,20 @@ void Configuration::updateTable(vector<Camera> newListOfCameras)
 
 void Configuration::on_scan_push_clicked()
 {
+    ui->scan_nocams->setVisible(false);
+    ui->scanning_label->setVisible(true);
     // Note: By doing this, we are deleting/ignoring the previous list cameras
     listOfCameras = scanCameras();
-    this->updateTable(listOfCameras);
+    ui->scanning_label->setVisible(false);
+    if (listOfCameras.size() > 0)
+    {
+        ui->tableWidget->setVisible(true);
+        this->updateTable(listOfCameras);
+    } else
+    {
+        // Hide table
+        ui->tableWidget->setVisible(false);
+        // Show error (no cameras found)
+        ui->scan_nocams->setVisible(true);
+    }
 }
