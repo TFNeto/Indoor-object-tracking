@@ -9,6 +9,7 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <algorithm>
 
 #define MAXCAMERAS 20
 
@@ -321,7 +322,7 @@ void saveImage(FlyCapture2::Image img, string camIp, int imgNum)
 {
     string fileName = "calib" + camIp + "_" + to_string(imgNum);
     fileName.erase(std::remove(fileName.begin(), fileName.end(), '.'), fileName.end());
-    fileName = fileName+ ".png";
+    fileName=fileName+ ".png";
     FlyCapture2::Error error;
     error = img.Save(fileName.c_str());
     if (error != FlyCapture2::PGRERROR_OK)

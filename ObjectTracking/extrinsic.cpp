@@ -145,15 +145,17 @@ void extrinsic::on_calibrateButton_clicked()
                 ui->camera2Feed->repaint();
                 this->convertedImageEX = Image;
                 this->convertedImageEX2 = Image2;
-            }
-            if(this->saveImageFlagExtrinsic)
-            {
-                string camIp1 = listOfCameras[ui->comboBox->currentIndex()].getIP();
-                saveImage(this->convertedImageEX, camIp1, this->counterEx);
-                string camIp2=listOfCameras[ui->comboBox_2->currentIndex()].getIP();
-                saveImage(this->convertedImageEX2, camIp2, this->counterEx);
-                this->saveImageFlagExtrinsic = false;
-                this->liveFlagExtrinsic = true;
+           }
+           if(this->saveImageFlagExtrinsic)
+           {
+               string camIp1 = listOfCameras[ui->comboBox->currentIndex()].getIP();
+               camIp1.erase(std::remove(camIp1.begin(), camIp1.end(), '.'), camIp1.end());
+               saveImage(this->convertedImageEX, camIp1, this->counterEx);
+               string camIp2=listOfCameras[ui->comboBox_2->currentIndex()].getIP();
+               camIp2.erase(std::remove(camIp2.begin(), camIp2.end(), '.'), camIp2.end());
+               saveImage(this->convertedImageEX2, camIp2, this->counterEx);
+               this->saveImageFlagExtrinsic = false;
+               this->liveFlagExtrinsic = true;
                 if(this->counterEx == this->numPhotoEx)
                 {
                     extrinsic_compute e;
