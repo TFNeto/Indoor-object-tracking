@@ -60,3 +60,11 @@ std::vector<cv::Rect> CamTracking::getObjects(cv::Mat frame){
 #endif
     return vec;
 }
+
+void CamTracking::detect(cv::Mat frame){
+    std::vector<cv::Rect> bboxes = getObjects(frame);
+    multiTracker = cv::MultiTracker::create();
+    for(int i=0; i < bboxes.size(); i++){
+        multiTracker->add(createTracker(trackerType), frame, cv::Rect2d(bboxes[i]));
+    }
+}
