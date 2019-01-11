@@ -131,7 +131,7 @@ void MainWindow::on_pushButton_clicked()
     cv::imshow("after image", undistortedImg);
     key = cv::waitKey(10);
     cout << "Mid test" << endl;
-
+    /*
     std::string trackerType = "CSRT";
     CamTracking ct(id, trackerType, undistortedImg);
     while(true)
@@ -146,4 +146,5 @@ void MainWindow::on_pushButton_clicked()
         cv::undistort(imgcv, undistortedImg, K, D);
         g_2dData[id] = ct.track(undistortedImg);
     }
+    */
 }
