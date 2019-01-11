@@ -1,38 +1,18 @@
 Bugs:
-- Scanning without any cameras connected will throw an error on the 2nd call
-    This is probably caused by the vector not being empty on the 2nd call
 - Scanning label doesnt show up, when the scan button is pressed
-- Table in calibration is showing empty
 
 Todo:
 - Extrinsic calibration UI
+	- Show matrix's on successful calibration
 - Add validation
-    - Check if camera's are already calibrated when going to the calibration menus
-    - Check if the camera's are calibrated (intrinsic) when going to the extrinsic calib
-    - Check if X,Y,Z coordinates in the Configuration UI are changed after scanning. If not, alert the user.
-    - Implement Load/Save in both Configuration and Calibration UI's
+	- Check if camera's are already calibrated when going to the calibration menus
+	- Check if the camera's are calibrated (intrinsic) when going to the extrinsic calib 
+	- Check if X,Y,Z coordinates in the Configuration UI are changed after scanning. If not, alert the user.
+	- Implement Load/Save in Configuration UI
+	- Implement Load in Calibration UI
+- Search for "TODO" in the codebase
 
-- Save calibration data on the Camera's object
-- Trocar % no progress bar da extrinseca
-- UI intrinseca apos calibracao (botao cancel, perguntar se aceita o erro ou nao)
-- UI extrinseca apos calibracao (botao cancel, mostrar matrizes ?? e perguntar se aceita ??)
-- Tirar _ e . dos ficheiros de configs
+- No intrinsic_compute, ver o comentario do imshow gray, que mostra a overlay dos corners na imagem
+- Falar com o Ricardo sobre por o programa dele a correr através de um botão no nosso programa.. grava-se um video manualmente pela gui do flycapture
 
 
-thread (1 a 4)
-    pedir 1 imagem de 1 camara
-    // calib intrinseca
-    CamTracking ct(id, "CSRT", IMAGEM_AQUI);
-
-    for(::)
-        // pedir 1 imagem de 1 camara
-        <cv::Rect2d> pontos = ct.track(nova_imagem);
-        // enviar sinal para thread_A a dizer que tem pontos
-
-thread main
-    // esperar por sinal das 4 threads com os pontos
-    // calib extrinseca
-    // triangular (opencv triangulatePoints ?)
-    update3d()
-
-- Validar erro da intrinseca, nao crashar programa
