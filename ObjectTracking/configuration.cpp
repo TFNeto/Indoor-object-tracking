@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <QIODevice>
 #include <QDataStream>
+#include "opencv2/opencv.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -32,6 +33,7 @@ Configuration::~Configuration()
 
 void Configuration::on_close_pushButton_clicked()
 {
+
     this->close();
 }
 
@@ -70,6 +72,7 @@ void Configuration::on_tableWidget_cellClicked(int row, int column)
 
 void Configuration::on_saveCon_push_clicked()
 {
+
 }
 
 void Configuration::on_loadCon_push_clicked()

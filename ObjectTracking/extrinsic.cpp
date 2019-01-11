@@ -216,3 +216,10 @@ void extrinsic::on_cancelButton_clicked()
     ui->comboBox_2->setVisible(true);
     ui->calibrateButton->setVisible(false);
 }
+
+void extrinsic::on_loadButton_clicked()
+{
+    FileStorage fsl("extrinsic", FileStorage::READ);
+    Mat K1 ,K2 ,D1 ,D2,R ,T,E,F, R1, R2,P1,P2,Q ;
+
+}

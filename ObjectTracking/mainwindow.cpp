@@ -67,13 +67,13 @@ void MainWindow::on_start_pushButton_clicked()
 
 void MainWindow::on_calibrate_pushButton_clicked()
 {
-    /*
+
     if(listOfCameras.empty())
     {
         QMessageBox::critical(this, tr("Error"), tr("There is no camera information. Go to Configuration to enter camera information."));
         return ;
     }
-    */
+
         calibrationWindow.setCameraInfo();
         calibrationWindow.setModal(true);
         calibrationWindow.exec();
@@ -114,10 +114,8 @@ void MainWindow::on_pushButton_clicked()
     int id = connectToCameraByIp(listOfCameras[0].getIpNumber(), 'a');
     FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(id);
     // Convert image to OpenCV Mat
-    cout << "111111111111111" << endl;
     unsigned int rowBytes = static_cast<double>(Image.GetReceivedDataSize())/static_cast<double>(Image.GetRows());
     cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
-    cout << "2222222222222222222" << endl;
     cv::imshow("before image", imgcv);
     char key = cv::waitKey(10);
     // Get intrinsic calib values
