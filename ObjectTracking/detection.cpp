@@ -2,13 +2,15 @@
 
 #define standalone 0
 
+
+
 std::vector<cv::Rect2d> object_shape_detection (cv::Mat &im) //the image is the input
 {
     cv::Mat im2=im;
     cvtColor(im2,im2,cv::COLOR_BGR2GRAY);
 
     std::vector<cv::Vec3f> circles;
-    HoughCircles( im2, circles, CV_HOUGH_GRADIENT, 2, im.rows/8, 200, 100, 1, 200 );
+    HoughCircles( im2, circles, CV_HOUGH_GRADIENT, 2.5, im.rows/8, 200, 100, 1, 100 );
 
 
     std::vector<cv::Rect2d> markers; //used to pass to next step
