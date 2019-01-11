@@ -46,13 +46,20 @@ void trackingthread(int id)
     // Get image from camera
     FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(id);
     // Convert image to OpenCV Mat
+
     unsigned int rowBytes = static_cast<double>(Image.GetReceivedDataSize())/static_cast<double>(Image.GetRows());
     cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
     // Get intrinsic calib values
+
+
     cv::Mat cameraMatrix = listOfCameras[id].getCameraMatrix();
     cv::Mat distCoeffs = listOfCameras[id].getDistCoeffs();
     // Undistort image
     cv::undistort(imgcv, undistortedImg, cameraMatrix, distCoeffs);
+
+    imshow("test",undistortedImg);
+    cv::waitKey(0);
+
     // Start tracking
     std::string trackerType = "CSRT";
     CamTracking ct(id, trackerType, undistortedImg);
@@ -67,6 +74,10 @@ void trackingthread(int id)
         // Undistort image
         cv::undistort(imgcv, undistortedImg, cameraMatrix, distCoeffs);
         g_2dData[id] = ct.track(undistortedImg);
+        for(size_t i=0;i<g_2dData[id].size();i++){
+            cv::rectangle(undistortedImg,g_2dData[id][i],cv::Scalar(0,255,255));
+        }
+        imshow("test",undistortedImg);
     }
 }
 
@@ -129,6 +140,8 @@ void RealTimeTracking::on_startRec_pushButton_clicked()
     ui->startRec_pushButton->setVisible(false);
 
     connectAllCameras();
+    trackingthread(0);
+    /*
     for(int i = 0; i < listOfCameras.size(); i++)
     {
         g_2dData.push_back(std::vector<cv::Rect2d>()); //adds empty vector to avoid segfault
@@ -140,4 +153,5 @@ void RealTimeTracking::on_startRec_pushButton_clicked()
     {
         tvec[i]->detach();
     }
+    */
 }

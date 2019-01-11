@@ -5,14 +5,10 @@ Todo:
 - Extrinsic calibration UI
 	- Show matrix's on successful calibration
 - Add validation
-	- Check if camera's are already calibrated when going to the calibration menus
-	- Check if the camera's are calibrated (intrinsic) when going to the extrinsic calib 
 	- Check if X,Y,Z coordinates in the Configuration UI are changed after scanning. If not, alert the user.
 	- Implement Load/Save in Configuration UI
-	- Implement Load in Calibration UI
+	- Implement Load in Calibration extrinsic UI (No sure if possible)
 - Search for "TODO" in the codebase
 
 - No intrinsic_compute, ver o comentario do imshow gray, que mostra a overlay dos corners na imagem
 - Falar com o Ricardo sobre por o programa dele a correr através de um botão no nosso programa.. grava-se um video manualmente pela gui do flycapture
-
-
