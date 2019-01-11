@@ -64,6 +64,7 @@ void Intrinsic::on_startCalibrButton_clicked()
 {
     if(listOfCameras[ui->cameraDropdown->currentIndex()].isIntrinsicCalibrated())
     {
+        QMessageBox::critical(this, tr("Error"), tr("This camera is calibrated, please choose other."));
         return;
     }
     this->numPhoto = ui->numPicsDropdown->value();
@@ -210,11 +211,7 @@ void Intrinsic::on_loadButton_clicked()
     fsl["D"] >> D;
     listOfCameras[ui->cameraDropdown->currentIndex()].setDistCoeffs(D);
     listOfCameras[ui->cameraDropdown->currentIndex()].setCameraMatrix(K);
-
-    cout<<listOfCameras[ui->cameraDropdown->currentIndex()].getCameraMatrix()<<endl;
-
-
-
+    listOfCameras[ui->cameraDropdown->currentIndex()].setIsCalibratedIntrinsic();
 }
 
 void Intrinsic::on_saveImageButton_clicked()
