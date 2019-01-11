@@ -22,6 +22,9 @@ void extrinsic_compute::load_image_points (int board_width, int board_height, in
 {
     // Size board_size = Size(board_width, board_height); NOT WORKING DUE TO BAD READING FROM YML FILE
     Size board_size = Size(7, 7);
+    square_size = 1;
+    board_height = 7;
+    board_width = 7;
 
     for (int i = 1; i <= num_imgs; i++) {
         char left_img[100], right_img[100];
@@ -29,8 +32,8 @@ void extrinsic_compute::load_image_points (int board_width, int board_height, in
         sprintf(right_img, "%s%s%d.png", rightimg_dir.c_str(), rightimg_filename.c_str(), i);
 
         //test
-        /*cout << "left_img: " << left_img << "\n";
-        cout << "right_img: " << right_img  << "\n";*/
+        cout << "left_img: " << left_img << endl;
+        cout << "right_img: " << right_img  << endl;
 
         img1 = imread(left_img, CV_LOAD_IMAGE_COLOR);
         img2 = imread(right_img, CV_LOAD_IMAGE_COLOR);
@@ -40,9 +43,10 @@ void extrinsic_compute::load_image_points (int board_width, int board_height, in
         bool found1 = false, found2 = false;
 
         // DEBUG:
+        /*
         cout << "board_size width" << board_size.width << endl;
         cout << "board_size heigh" << board_size.height << endl;
-
+*/
         found1 = cv::findChessboardCorners(img1, board_size, corners1,
      CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
         found2 = cv::findChessboardCorners(img2, board_size, corners2,
@@ -93,8 +97,11 @@ void extrinsic_compute::run_extrinsic(int num_imgs , string leftcalib_file, stri
                    string leftimg_filename, string rightimg_filename, string out_file)
 {
     // Get parameters from (past) intrinsic calibration
-    FileStorage fsl(leftcalib_file.c_str(), FileStorage::READ);
-    FileStorage fsr(rightcalib_file.c_str(), FileStorage::READ);
+    FileStorage fsl("a.yml", FileStorage::READ);
+    FileStorage fsr("b.yml", FileStorage::READ);
+
+    cout << "leftcalib:" << leftcalib_file << endl;
+    cout << "rightcalib:" << rightcalib_file << endl;
 
     load_image_points(fsl["board_width"], fsl["board_height"], num_imgs, fsl["square_size"],
                        leftimg_dir.c_str(), rightimg_dir.c_str(), leftimg_filename.c_str(), rightimg_filename.c_str());
@@ -111,7 +118,26 @@ void extrinsic_compute::run_extrinsic(int num_imgs , string leftcalib_file, stri
     int flag = 0;
     flag |= CV_CALIB_FIX_INTRINSIC;
 
+    cout << "K1: " << K1.size() << endl;
+    cout << "K2: " << K2.size() << endl;
+
+    cout << "Antes stereocalibrate" << endl;
+    cout << "object_points: " << object_points.size() << endl;
+    cout << "OP0 size: " << object_points[0].size() << endl;
+    cout << "OP0 inside: " << object_points[0] << endl;
+    cout << "OP1 size: " << object_points[1].size() << endl;
+    for(auto const& value: object_points) {
+         cout << "valor: " << value << endl;
+    }
+    cout << "left_img_points: " << left_img_points.size() << endl;
+    cout << "right_img_points: " << right_img_points.size() << endl;
+
+    cout << "left_img_points 0: " << left_img_points[0] << endl;
+    cout << "right_img_points 0: " << right_img_points[0] << endl;
+
     stereoCalibrate(object_points, left_img_points, right_img_points, K1, D1, K2, D2, img1.size(), R, T, E, F);
+
+    cout << "depois" << endl;
 
     cv::FileStorage fs1(out_file.c_str(), cv::FileStorage::WRITE);
     fs1 << "K1" << K1;

@@ -33,6 +33,8 @@ private slots:
     void on_calibrate_pushButton_clicked();
     void on_log_pushButton_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     bool camerasCalibrated;
     Ui::MainWindow *ui;

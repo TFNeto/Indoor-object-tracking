@@ -73,6 +73,7 @@ void intrinsic_compute::setupCalibration(int board_width, int board_height, int 
             drawChessboardCorners(gray, board_size, corners, found);
             cout << "corners found :" << k << endl;
 
+            // imshow("test", gray); // Show opencv overlay on image
             vector<Point3f> obj;
             for (int i = 0; i < board_height; i++)
                 for (int j = 0; j < board_width; j++)
@@ -130,6 +131,11 @@ double intrinsic_compute::run(int num_imgs, string imgs_directory, string imgs_f
 
     flag |= CV_CALIB_FIX_K4;
     flag |= CV_CALIB_FIX_K5;
+
+    if (object_points.size() == 0 || image_points.size() == 0)
+    {
+        return 0;
+    }
 
     calibrateCamera(object_points, image_points, img.size(), K, D, rvecs, tvecs, flag);
     err = computeReprojectionErrors(object_points, image_points, rvecs, tvecs, K, D);

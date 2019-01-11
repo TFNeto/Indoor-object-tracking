@@ -13,7 +13,7 @@
 class CamTracking{
 public:
     CamTracking(int id, std::string &trackerType, cv::Mat firstFrame);
-    ~CamTracking(){};
+    ~CamTracking(){}
     std::vector<cv::Rect2d> track(cv::Mat frame);
 private:
     cv::Ptr<cv::Tracker> createTracker(std::string trackerType);

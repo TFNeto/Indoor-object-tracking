@@ -112,10 +112,10 @@ void RealTimeTracking::on_RandomizeButton_clicked()
     modifier->addData();
 }
 
-void RealTimeTracking::on_startRec_pushButton_clicked()
+void RealTimeTracking::on_stopRec_pushButton_clicked()
 {
-    ui->stopRec_pushButton->setVisible(true);
-    ui->startRec_pushButton->setVisible(false);
+    ui->stopRec_pushButton->setVisible(false);
+    ui->startRec_pushButton->setVisible(true);
 
     for(size_t i = 0; i < tvec.size(); i++)
     {
@@ -123,10 +123,11 @@ void RealTimeTracking::on_startRec_pushButton_clicked()
     }
 }
 
-void RealTimeTracking::on_stopRec_pushButton_clicked()
+void RealTimeTracking::on_startRec_pushButton_clicked()
 {
-    ui->stopRec_pushButton->setVisible(false);
-    ui->startRec_pushButton->setVisible(true);
+    ui->stopRec_pushButton->setVisible(true);
+    ui->startRec_pushButton->setVisible(false);
+
     connectAllCameras();
     for(int i = 0; i < listOfCameras.size(); i++)
     {

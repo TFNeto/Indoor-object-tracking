@@ -176,7 +176,6 @@ int connectToCameraByIp(FlyCapture2::IPAddress ipAddress, char mode)
         if(guid1 == guid)
         {
             index = i;
-            cout << "index = " << index << endl;
         }
     }
 
@@ -264,7 +263,6 @@ void disconnectCameraByIp(FlyCapture2::IPAddress ipAddress)
         if(guid1 == guid)
         {
             index = i;
-            cout << "index =" << index << endl;
         }
     }
     // Stop capturing images
