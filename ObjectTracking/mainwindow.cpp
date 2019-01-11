@@ -105,10 +105,10 @@ void MainWindow::disablePushButtons()
 void MainWindow::on_pushButton_clicked()
 {
     cout << "Begin test" << endl;
-    FileStorage fsl("a", FileStorage::READ);
+  /*  FileStorage fsl("a", FileStorage::READ);
     cv::Mat K, D;
     fsl["K"] >> K;
-    fsl["D"] >> D;
+    fsl["D"] >> D;*/
     cv::Mat undistortedImg;
     // Get image from camera
     int id = connectToCameraByIp(listOfCameras[0].getIpNumber(), 'a');
@@ -119,8 +119,8 @@ void MainWindow::on_pushButton_clicked()
     cv::imshow("before image", imgcv);
     char key = cv::waitKey(10);
     // Get intrinsic calib values
-    //cv::Mat cameraMatrix = listOfCameras[0].getCameraMatrix();
-    //cv::Mat distCoeffs = listOfCameras[0].getDistCoeffs();
+    cv::Mat K = listOfCameras[0].getCameraMatrix();
+    cv::Mat D = listOfCameras[0].getDistCoeffs();
     // Undistort image
     cout << "K size: " << K.size() << endl;
     cout << "D size: " << D.size() << endl;
@@ -130,18 +130,4 @@ void MainWindow::on_pushButton_clicked()
     key = cv::waitKey(10);
     cout << "Mid test" << endl;
 
-    std::string trackerType = "CSRT";
-    CamTracking ct(id, trackerType, undistortedImg);
-    while(true)
-    {
-        cv::Mat undistortedImg;
-        // Get image from camera
-        FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(id);
-        // Convert image to OpenCV Mat
-        unsigned int rowBytes = static_cast<double>(Image.GetReceivedDataSize())/static_cast<double>(Image.GetRows());
-        cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
-        // Undistort image
-        cv::undistort(imgcv, undistortedImg, K, D);
-        g_2dData[id] = ct.track(undistortedImg);
-    }
 }

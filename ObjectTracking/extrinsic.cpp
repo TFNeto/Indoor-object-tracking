@@ -91,10 +91,10 @@ void extrinsic::on_calibrateButton_clicked()
     if(ui->comboBox->currentIndex() != ui->comboBox_2->currentIndex())
     {
         ui->imageProgressBar->setFormat("%v");
-        ui->imageProgressBar->setRange(0,numPhotoEx);
         ui->imageProgressBar->setVisible(true);
         this->numPhotoEx=ui->numPicsDropdown->value();
         this->isCalibratingExtrinsic = true;
+        ui->imageProgressBar->setRange(0,this->numPhotoEx);
         ui->numPicsDropdown->setVisible(false);
         ui->errorText->setVisible(false);
         ui->comboBox->setVisible(false);

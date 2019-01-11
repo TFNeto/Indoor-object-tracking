@@ -222,6 +222,7 @@ void Intrinsic::on_loadButton_clicked()
         listOfCameras[ui->cameraDropdown->currentIndex()].setDistCoeffs(D);
         listOfCameras[ui->cameraDropdown->currentIndex()].setCameraMatrix(K);
         listOfCameras[ui->cameraDropdown->currentIndex()].setIsCalibratedIntrinsic();
+        string infoMessage = "Calibration loaded. ";
         return;
     }
     QMessageBox::critical(this, tr("Error"), tr("There is no calibration saved for this camera"));
