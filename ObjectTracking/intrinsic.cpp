@@ -203,12 +203,17 @@ void Intrinsic::on_saveButton_clicked()
 
 void Intrinsic::on_loadButton_clicked()
 {
+    if(listOfCameras[ui->cameraDropdown->currentIndex()].isIntrinsicCalibrated())
+    {
+        QMessageBox::critical(this, tr("Error"), tr("This camera is calibrated, please choose other."));
+        return;
+    }
+
     string camIp ="calib"+ listOfCameras[ui->cameraDropdown->currentIndex()].getIP()+"_";
     camIp.erase(std::remove(camIp.begin(), camIp.end(), '.'), camIp.end());
-    cout<<camIp<<endl;
-     char filename[100];
-     sprintf (filename,"%s",camIp.c_str());
-     intrinsic_compute a;
+    char filename[100];
+    sprintf (filename,"%s",camIp.c_str());
+    intrinsic_compute a;
     if(a.doesExist(filename)){
         FileStorage fsl(camIp, FileStorage::READ);
         Mat K ,D ;
@@ -217,7 +222,11 @@ void Intrinsic::on_loadButton_clicked()
         listOfCameras[ui->cameraDropdown->currentIndex()].setDistCoeffs(D);
         listOfCameras[ui->cameraDropdown->currentIndex()].setCameraMatrix(K);
         listOfCameras[ui->cameraDropdown->currentIndex()].setIsCalibratedIntrinsic();
+        return;
     }
+    QMessageBox::critical(this, tr("Error"), tr("There is no calibration saved for this camera"));
+    return;
+
 }
 
 void Intrinsic::on_saveImageButton_clicked()
