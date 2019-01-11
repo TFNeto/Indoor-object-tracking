@@ -11,6 +11,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <QMessageBox>
 
 using namespace std;
 
@@ -144,19 +145,19 @@ void extrinsic::on_calibrateButton_clicked()
                 ui->camera2Feed->repaint();
                 this->convertedImageEX = Image;
                 this->convertedImageEX2 = Image2;
-           }
-           if(this->saveImageFlagExtrinsic)
-           {
-               string camIp1 = listOfCameras[ui->comboBox->currentIndex()].getIP();
-               saveImage(this->convertedImageEX, camIp1, this->counterEx);
-               string camIp2=listOfCameras[ui->comboBox_2->currentIndex()].getIP();
-               saveImage(this->convertedImageEX2, camIp2, this->counterEx);
-               this->saveImageFlagExtrinsic = false;
-               this->liveFlagExtrinsic = true;
+            }
+            if(this->saveImageFlagExtrinsic)
+            {
+                string camIp1 = listOfCameras[ui->comboBox->currentIndex()].getIP();
+                saveImage(this->convertedImageEX, camIp1, this->counterEx);
+                string camIp2=listOfCameras[ui->comboBox_2->currentIndex()].getIP();
+                saveImage(this->convertedImageEX2, camIp2, this->counterEx);
+                this->saveImageFlagExtrinsic = false;
+                this->liveFlagExtrinsic = true;
                 if(this->counterEx == this->numPhotoEx)
                 {
                     extrinsic_compute e;
-                    //test vars
+                    // test vars
                     int counter = this->numPhotoEx; //number of photos
                     string leftcalib_file = "calib" + camIp1;
                     leftcalib_file.erase(std::remove(leftcalib_file.begin(), leftcalib_file.end(), '.'), leftcalib_file.end());
@@ -169,7 +170,15 @@ void extrinsic::on_calibrateButton_clicked()
                     string rightimg_filename = "calib" + camIp2 + "_";
                     rightimg_filename.erase(std::remove(rightimg_filename.begin(), rightimg_filename.end(), '.'), rightimg_filename.end());
                     string out_file = "extrinsic.yml"; // TODO: This shouldnt be hardcoded, but since we're using only 1 pair of cameras, there's no need to do it properly atm
-                    e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
+                    int res = e.run_extrinsic(counter, leftcalib_file, rightcalib_file, leftimg_dir, rightimg_dir, leftimg_filename, rightimg_filename, out_file);
+                    if (res == -1)
+                    {
+                        // Error on extrinsic calibration
+                        QMessageBox::critical(this, tr("Error"), tr("Error on extrinsic calibration. Try again."));
+                    } else {
+                        // Success
+                        // TODO: Show matrix values
+                    }
                     this->isCalibratingExtrinsic = false;
                     ui->cancelButton->setVisible(false);
                     ui->calibrateButton->setVisible(true);

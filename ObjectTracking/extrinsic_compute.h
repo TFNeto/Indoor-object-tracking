@@ -17,8 +17,8 @@ class extrinsic_compute
 {
 public:
     explicit extrinsic_compute();
-    void load_image_points(int board_width, int board_height, int num_imgs, float square_size,string leftimg_dir, string rightimg_dir, string leftimg_filename, string rightimg_filename);
-    void run_extrinsic(int num_imgs, string leftcalib_file, string rightcalib_file, string leftimg_dir, string rightimg_dir,string leftimg_filename, string rightimg_filename, string out_file);
+    void load_image_points(int num_imgs, string leftimg_dir, string rightimg_dir, string leftimg_filename, string rightimg_filename);
+    int run_extrinsic(int num_imgs, string leftcalib_file, string rightcalib_file, string leftimg_dir, string rightimg_dir,string leftimg_filename, string rightimg_filename, string out_file);
 
 private:
     vector<vector<Point3f>> object_points;
