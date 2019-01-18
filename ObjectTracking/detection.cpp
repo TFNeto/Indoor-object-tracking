@@ -2,6 +2,8 @@
 
 #define standalone 0
 
+
+
 std::vector<cv::Rect2d> object_shape_detection (cv::Mat &im) //the image is the input
 {
     cv::Mat im2=im;

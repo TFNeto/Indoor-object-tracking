@@ -129,5 +129,20 @@ void MainWindow::on_pushButton_clicked()
     cv::imshow("after image", undistortedImg);
     key = cv::waitKey(10);
     cout << "Mid test" << endl;
-
+    /*
+    std::string trackerType = "CSRT";
+    CamTracking ct(id, trackerType, undistortedImg);
+    while(true)
+    {
+        cv::Mat undistortedImg;
+        // Get image from camera
+        FlyCapture2::Image Image = takeSinglePictureFromSingleCamera(id);
+        // Convert image to OpenCV Mat
+        unsigned int rowBytes = static_cast<double>(Image.GetReceivedDataSize())/static_cast<double>(Image.GetRows());
+        cv::Mat imgcv = cv::Mat(Image.GetRows(), Image.GetCols(), CV_8UC3, Image.GetData(),rowBytes);
+        // Undistort image
+        cv::undistort(imgcv, undistortedImg, K, D);
+        g_2dData[id] = ct.track(undistortedImg);
+    }
+    */
 }

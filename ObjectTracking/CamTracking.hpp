@@ -15,6 +15,8 @@ public:
     CamTracking(int id, std::string &trackerType, cv::Mat firstFrame);
     ~CamTracking(){}
     std::vector<cv::Rect2d> track(cv::Mat frame);
+    void detect(cv::Mat frame);
+
 private:
     cv::Ptr<cv::Tracker> createTracker(std::string trackerType);
     std::vector<cv::Rect> getObjects(cv::Mat frame);
